@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import StarfieldBackground from '../effects/StarfieldBackground';
 
 const HeroSection = () => {
-  // Terminal text effect
+  // Terminal text effect - updated with Swarm Resistance story
   const [typedText, setTypedText] = useState('');
-  const fullText = 'Born from the ashes of the old crypto gaming paradigm, Meda Portal focuses on what truly matters: engaging gameplay, sustainable economics, and community ownership.';
+  const fullText = 'The Swarm has consumed our empire... Cryptomeda lies in ruins... But from collapse comes rebirth... Renegades and Goliaths now fight as one... The resistance needs heroes willing to reclaim what was lost.';
   
   useEffect(() => {
     let index = 0;
@@ -17,7 +17,7 @@ const HeroSection = () => {
       if (index > fullText.length) {
         clearInterval(intervalId);
       }
-    }, 30);
+    }, 35);
     
     return () => clearInterval(intervalId);
   }, []);
@@ -321,27 +321,27 @@ const HeroSection = () => {
       <div className="section-content relative z-10">
         <div className="content-wrapper flex items-center justify-center min-h-screen">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Main Headline with underline */}
+            {/* Main Headline with underline - Updated */}
             <motion.h1
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="section-title text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
             >
-              Welcome to <span className="text-gradient-gold">Meda Portal</span>
+              The Universe <span className="text-gradient-gold">Collapses</span>
             </motion.h1>
             
-            {/* Tagline */}
+            {/* Tagline - Updated */}
             <motion.p
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
               className="text-2xl md:text-3xl font-medium mb-10 text-stellar-white/90"
             >
-              Own Your Universe, Fuel Your Adventure
+              Unite Against Extinction
             </motion.p>
             
-            {/* Animated Description - Terminal text effect */}
+            {/* Animated Description - Terminal text effect - Updated */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -354,7 +354,7 @@ const HeroSection = () => {
               </p>
             </motion.div>
             
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Updated */}
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -374,7 +374,7 @@ const HeroSection = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Explore the Universe
+                  Join the Resistance
                 </motion.button>
               </Link>
             </motion.div>
