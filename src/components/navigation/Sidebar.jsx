@@ -1,29 +1,48 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, ShoppingBag, Gamepad2, Book, Bot, MessageSquare, Twitter, Gem } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { User, ShoppingBag, Gamepad2, Book, Bot, Gem } from 'lucide-react';
 
 const Sidebar = () => {
   const [hoveredItem, setHoveredItem] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   
+  // Navigation items with routes
   const navItems = [
     { icon: <User size={24} />, text: 'Profile', path: '/profile' },
+    { icon: <Gamepad2 size={24} />, text: 'Gaming', path: '/gaming' },
     { icon: <Gem size={24} />, text: 'NFT', path: '/nft' },
     { icon: <ShoppingBag size={24} />, text: 'Marketplace', path: '/marketplace' },
-    { icon: <Gamepad2 size={24} />, text: 'Gaming', path: '/gaming' },
     { icon: <Book size={24} />, text: 'Story', path: '/story' },
     { icon: <Bot size={24} />, text: 'AI Assistant', path: '/chatbot' },
   ];
 
+  // Social icons
   const socialIcons = [
-    { icon: <MessageSquare size={22} className="rotate-180" />, link: '#', label: 'Telegram' },
-    { icon: <Twitter size={22} />, link: '#', label: 'X (Twitter)' },
-    { icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-400">
-        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor" />
-        <path d="M12 9C10.9 9 10 9.9 10 11V15C10 16.1 10.9 17 12 17C13.1 17 14 16.1 14 15V11C14 9.9 13.1 9 12 9Z" fill="currentColor" />
-        <path d="M12 7C12.55 7 13 6.55 13 6C13 5.45 12.55 5 12 5C11.45 5 11 5.45 11 6C11 6.55 11.45 7 12 7Z" fill="currentColor" />
-      </svg>, link: '#', label: 'Coingecko' },
+    { 
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-.38.24-1.09.76-.98.7-1.96 1.99-2.07 2.04-.17.08-.49.05-.49.05s-.69-.23-.69-.23-.43-.27-.43-.27-.63-.39-.63-.39c.91-.59 2.66-1.7 2.66-1.7s.18-.14.35-.21c.16-.06.43-.12.43-.12s.18-.04.33-.04.30.04.30.04.12 0 .23.06c.11.05.24.15.24.15l3.5 2.4s.64.43.64 1.03z"/>
+        </svg>
+      ), 
+      link: '#', 
+      label: 'Telegram' 
+    },
+    { 
+      icon: (
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.736-8.84L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      ), 
+      link: '#', 
+      label: 'X (Twitter)' 
+    },
   ];
+
+  const handleNavClick = (path) => {
+    navigate(path);
+  };
 
   return (
     <motion.aside 
@@ -42,7 +61,7 @@ const Sidebar = () => {
       >
         <motion.img 
           src="/logo.png" 
-          alt="Cryptomeda Logo" 
+          alt="Swarm Resistance Logo" 
           className="w-36" 
           whileHover={{ 
             scale: 1.05,
@@ -54,18 +73,18 @@ const Sidebar = () => {
       {/* Navigation Links with hover effects */}
       <nav className="mt-5 px-2 flex-grow">
         {navItems.map((item, index) => (
-          <NavLink 
+          <div
             key={index} 
-            to={item.path}
-            className={({ isActive }) => 
-              `sidebar-link relative overflow-hidden group ${isActive ? 'active' : ''}`
-            }
+            className={`sidebar-link relative overflow-hidden group cursor-pointer rounded-lg hover:bg-meda-gold/10 transition-colors ${
+              location.pathname === item.path ? 'bg-meda-gold/20 border-l-2 border-meda-gold' : ''
+            }`}
             onMouseEnter={() => setHoveredItem(index)}
             onMouseLeave={() => setHoveredItem(null)}
+            onClick={() => handleNavClick(item.path)}
           >
             {hoveredItem === index && (
               <motion.div 
-                className="absolute inset-0 bg-cosmic-purple/10 -z-10"
+                className="absolute inset-0 bg-cosmic-purple/10 -z-10 rounded-lg"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -74,38 +93,55 @@ const Sidebar = () => {
               />
             )}
             <motion.div 
-              className="relative"
-              whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="relative flex items-center p-3"
+              whileHover={{ 
+                scale: 1.02
+              }}
+              transition={{ 
+                duration: 0.2
+              }}
             >
-              {item.icon}
-              <motion.div 
-                className={`absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-meda-gold`}
-                initial={{ scale: 0 }}
-                animate={{ scale: hoveredItem === index ? 1 : 0 }}
-                transition={{ duration: 0.2 }}
-              />
+              <motion.div
+                whileHover={{ 
+                  scale: 1.3,
+                  rotate: [0, -3, 3, -3, 0]
+                }}
+                transition={{ 
+                  duration: 0.5,
+                  rotate: { duration: 0.5, ease: "easeInOut" }
+                }}
+              >
+                {item.icon}
+                <motion.div 
+                  className={`absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-meda-gold`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: hoveredItem === index ? 1 : 0 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.div>
+              <span className={`ml-4 text-xl font-medium group-hover:text-meda-gold transition-colors ${
+                location.pathname === item.path ? 'text-meda-gold' : 'text-gray-400'
+              }`}>
+                {item.text}
+              </span>
             </motion.div>
-            <span className="ml-4 text-xl font-medium group-hover:text-meda-gold transition-colors">
-              {item.text}
-            </span>
-          </NavLink>
+          </div>
         ))}
       </nav>
       
       {/* Social Media Icons with hover animations */}
-      <div className="border-t border-cosmic-purple/30 pt-5 mt-auto mb-8 px-4">
-        <div className="flex justify-around">
+      <div className="border-t border-cosmic-purple/30 pt-6 mt-auto mb-8 px-4">
+        <div className="flex justify-center space-x-8">
           {socialIcons.map((item, index) => (
             <motion.a 
               key={index} 
               href={item.link} 
-              className="text-gray-400 hover:text-neon-cyan transition-colors p-2"
+              className="text-gray-400 hover:text-meda-gold transition-colors p-3 rounded-lg hover:bg-meda-gold/10"
               title={item.label}
               whileHover={{ 
-                scale: 1.2, 
+                scale: 1.3, 
                 rotate: [0, -5, 5, -5, 0],
-                color: '#00F0FF'
+                color: '#FFB61E'
               }}
               transition={{ 
                 duration: 0.5,

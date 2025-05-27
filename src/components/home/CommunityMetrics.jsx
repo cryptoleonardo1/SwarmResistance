@@ -7,11 +7,11 @@ import SectionWrapper from '../layout/SectionWrapper';
 const metricsData = [
   {
     icon: <Users size={24} className="text-neon-cyan" />,
-    title: "ACTIVE EXPLORERS",
+    title: "ACTIVE RESISTANCE FIGHTERS",
     value: 0,
-    target: 20000,
+    target: 8000,
     suffix: "+",
-    description: "Daily active users across web and Telegram platforms",
+    description: "Combat-ready operatives deployed across web and Telegram battlefronts",
     iconBackground: "bg-neon-cyan/20",
     textColor: "text-neon-cyan",
     color: "#00F0FF",
@@ -19,11 +19,11 @@ const metricsData = [
   },
   {
     icon: <Shield size={24} className="text-meda-gold" />,
-    title: "NFT HEROES",
+    title: "DEPLOYED HEROES",
     value: 0,
     target: 5000,
     suffix: "+",
-    description: "Unique characters with special abilities and histories",
+    description: "Legendary warriors with specialized combat abilities and battle histories",
     iconBackground: "bg-meda-gold/20",
     textColor: "text-meda-gold",
     color: "#FFB61E",
@@ -31,11 +31,11 @@ const metricsData = [
   },
   {
     icon: <MapPin size={24} className="text-nebula-pink" />,
-    title: "LAND PARCELS CLAIMED",
+    title: "LIBERATED TERRITORIES",
     value: 0,
     target: 12000,
     suffix: "+",
-    description: "Territory controlled by players across multiple sectors",
+    description: "Strategic zones reclaimed from Swarm control across multiple sectors",
     iconBackground: "bg-nebula-pink/20",
     textColor: "text-nebula-pink",
     color: "#FF3E8A",
@@ -43,11 +43,11 @@ const metricsData = [
   },
   {
     icon: <Zap size={24} className="text-energy-green" />,
-    title: "MEDA GAS PRODUCED DAILY",
+    title: "MEDA GAS EXTRACTED DAILY",
     value: 0,
     target: 250000,
     suffix: "+",
-    description: "The lifeblood of the Meda economy",
+    description: "Critical energy resources powering the resistance war machine",
     iconBackground: "bg-energy-green/20",
     textColor: "text-energy-green",
     color: "#39FF14",
@@ -116,8 +116,8 @@ const CommunityMetrics = () => {
 
   return (
     <SectionWrapper
-      title="Live Metrics"
-      subtitle="Real-time stats from our expanding gaming multiverse"
+      title="Battle Status Report"
+      subtitle="Real-time intelligence from our resistance operations"
       className="relative"
     >
       <div className="relative w-full flex flex-col justify-end flex-1" style={{ minHeight: 'calc(100vh - 200px)' }}>

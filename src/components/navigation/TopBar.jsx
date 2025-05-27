@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wallet, Menu, ChevronDown } from 'lucide-react';
 
@@ -9,6 +9,7 @@ const TopBar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Sample user data
   const userData = {
@@ -27,15 +28,30 @@ const TopBar = () => {
 
   // Handle section scrolling
   const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    // If not on homepage, navigate to home first
+    if (location.pathname !== '/') {
+      navigate('/', { replace: true });
+      // Wait a bit for navigation, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
   // Track active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
+      // Only track scroll on homepage
+      if (location.pathname !== '/') return;
+      
       const sections = sectionItems.map(item => ({
         id: item.id,
         element: document.getElementById(item.id)
@@ -56,14 +72,11 @@ const TopBar = () => {
     handleScroll();
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.pathname]);
 
   const connectWallet = () => {
     setWalletConnected(true);
   };
-
-  // Only show section navigation on homepage
-  const isHomePage = location.pathname === '/';
 
   return (
     <motion.header 
@@ -99,34 +112,34 @@ const TopBar = () => {
           </Link>
         </div>
         
-        {/* Center Section - Navigation (Desktop) */}
-        {isHomePage && (
-          <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
-            {sectionItems.map((item) => (
-              <motion.a
-                key={item.id}
-                href={item.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(item.id);
-                }}
-                className={`relative text-xl font-medium transition-colors duration-300 ${
-                  activeSection === item.id ? 'text-meda-gold' : 'text-gray-400 hover:text-neon-cyan'
-                }`}
-                whileHover={{ y: -2 }}
-              >
-                {item.name}
-                {activeSection === item.id && (
-                  <motion.div
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-meda-gold"
-                    layoutId="activeSection"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </motion.a>
-            ))}
-          </nav>
-        )}
+        {/* Center Section - Navigation (Desktop) - Always visible */}
+        <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
+          {sectionItems.map((item) => (
+            <motion.a
+              key={item.id}
+              href={item.href}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection(item.id);
+              }}
+              className={`relative text-xl font-medium transition-colors duration-300 ${
+                activeSection === item.id && location.pathname === '/' 
+                  ? 'text-meda-gold' 
+                  : 'text-gray-400 hover:text-neon-cyan'
+              }`}
+              whileHover={{ y: -2 }}
+            >
+              {item.name}
+              {activeSection === item.id && location.pathname === '/' && (
+                <motion.div
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-meda-gold"
+                  layoutId="activeSection"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+            </motion.a>
+          ))}
+        </nav>
         
         {/* Right Section */}
         <div className="flex items-center space-x-4">
@@ -227,8 +240,8 @@ const TopBar = () => {
         </div>
       </div>
       
-      {/* Mobile Section Navigation */}
-      {isHomePage && mobileMenuOpen && (
+      {/* Mobile Section Navigation - Always visible when menu is open */}
+      {mobileMenuOpen && (
         <motion.div
           className="md:hidden absolute top-16 left-0 right-0 bg-void-black/90 backdrop-blur-md border-b border-cosmic-purple/30 py-2"
           initial={{ opacity: 0, y: -10 }}
@@ -245,7 +258,9 @@ const TopBar = () => {
                 setMobileMenuOpen(false);
               }}
               className={`block px-4 py-2 text-xl ${
-                activeSection === item.id ? 'text-neon-cyan bg-space-blue/30' : 'text-gray-400'
+                activeSection === item.id && location.pathname === '/' 
+                  ? 'text-neon-cyan bg-space-blue/30' 
+                  : 'text-gray-400'
               }`}
             >
               {item.name}

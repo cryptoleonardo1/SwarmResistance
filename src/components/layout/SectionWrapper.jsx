@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
 
-const SectionWrapper = ({ children, className = "", title, subtitle }) => {
+const SectionWrapper = forwardRef(({ children, className = "", title, subtitle }, ref) => {
   return (
-    <div className={`min-h-screen w-full relative overflow-hidden ${className}`}>
+    <div ref={ref} className={`min-h-screen w-full relative overflow-hidden ${className}`}>
       <div className="section-content">
         <div className="content-wrapper">
           {/* Section Header - Standardized */}
@@ -27,7 +28,9 @@ const SectionWrapper = ({ children, className = "", title, subtitle }) => {
       </div>
     </div>
   );
-};
+});
+
+SectionWrapper.displayName = 'SectionWrapper';
 
 SectionWrapper.propTypes = {
   children: PropTypes.node.isRequired,

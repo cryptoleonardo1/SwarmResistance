@@ -21,7 +21,7 @@ const EcosystemOverview = () => {
   const features = [
     {
       icon: <Gamepad2 size={40} className="text-neon-cyan" />,
-      title: "MULTIVERSE GAMING",
+      title: "TACTICAL COMBAT MISSIONS",
       description: "Battle in our 2D shooter, compete in tournaments, and explore strategic gameplay across multiple platforms and games.",
       color: "from-neon-cyan/10 to-transparent",
       borderColor: "border-neon-cyan/30",
@@ -34,8 +34,8 @@ const EcosystemOverview = () => {
         <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>,
-      title: "NFT GAMING ASSETS",
-      description: "Own Heroes, Weapons, and Lands with unique stories. Trade in our marketplace and use across games as your collection grows.",
+      title: "RESISTANCE ARMORY",
+      description: "Command Elite Heroes, wield Legendary Weapons, and fortify Strategic Outposts. Trade war assets and deploy them across missions as your arsenal grows.",
       color: "from-meda-gold/10 to-transparent",
       borderColor: "border-meda-gold/30",
       shadowColor: "0 0 20px rgba(255, 182, 30, 0.3)",
@@ -43,8 +43,8 @@ const EcosystemOverview = () => {
     },
     {
       icon: <Zap size={40} className="text-nebula-pink" />,
-      title: "COMMUNITY POWER",
-      description: "True community ownership with voting rights, rewards for active members, and no VCs - built by gamers, for gamers.",
+      title: "UNITED RESISTANCE",
+      description: "True brotherhood in arms with democratic command structure, battle rewards for active fighters, and no corporate overlords.",
       color: "from-nebula-pink/10 to-transparent",
       borderColor: "border-nebula-pink/30",
       shadowColor: "0 0 20px rgba(255, 62, 138, 0.3)",
@@ -164,8 +164,8 @@ const EcosystemOverview = () => {
       {/* Section content */}
       <SectionWrapper
         ref={sectionRef}
-        title="Gaming Multiverse Awaits"
-        subtitle="Multiple platforms, multiple games, endless possibilities to earn and own in the expanding Meda multiverse."
+        title="Resistance Command Center"
+        subtitle="Multiple battlefronts, tactical games, endless ways to fight the Swarm and reclaim the universe."
         className="relative z-10"
       >
         <div className="flex-1 flex flex-col justify-center">
@@ -229,7 +229,7 @@ const EcosystemOverview = () => {
                 {/* Left side - Platforms */}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-6">
                   <div className="text-center mb-4">
-                    <h4 className="text-lg font-bold text-stellar-white mb-2">PLATFORMS</h4>
+                    <h4 className="text-lg font-bold text-stellar-white mb-2">BATTLEFRONTS</h4>
                   </div>
                   {[
                     { title: "Web Portal", icon: "/portal-city.png", color: "rgba(0, 240, 255, 0.8)" },

@@ -10,8 +10,8 @@ export default {
         // Primary Colors
         'space-blue': '#1C133A',
         'cosmic-purple': '#4A2B9F',
-        'meda-gold': '#FFB61E',
-        'neon-cyan': '#00F0FF',
+        'meda-gold': '#FF6B00',
+        'neon-cyan': '#FF6B00',
         'stellar-white': '#FFFFFF',
         
         // Secondary Colors

@@ -9,13 +9,13 @@ import MobileNav from './components/navigation/MobileNav';
 import OptimizedGpuBackground from './components/effects/OptimizedGpuBackground';
 import HomePage from './pages/HomePage';
 import ChatbotPage from './pages/ChatbotPage';
+import StoryPage from './pages/StoryPage';
 
 // Placeholder for future page components
 const ProfilePage = () => <div className="p-8">Profile Page (Coming Soon)</div>;
 const NFTPage = () => <div className="p-8">NFT Explanations & Concepts (Coming Soon)</div>;
 const MarketplacePage = () => <div className="p-8">Marketplace (Coming Soon)</div>;
 const GamingPage = () => <div className="p-8">Gaming Hub - Meda Wars, Meda Shooter & More (Coming Soon)</div>;
-const StoryPage = () => <div className="p-8">Story Page (Coming Soon)</div>;
 
 // Main App Wrapper
 function App() {

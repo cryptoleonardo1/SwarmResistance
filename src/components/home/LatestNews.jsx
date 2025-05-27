@@ -65,7 +65,7 @@ const LatestNews = () => {
 
   return (
     <SectionWrapper
-      title="Multiverse Updates"
+      title="Resistance Updates"
       subtitle="Latest developments across our expanding gaming ecosystem"
       className="relative"
     >
@@ -158,9 +158,9 @@ const LatestNews = () => {
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                MEDA COMMAND CENTER
+                COMMAND CENTER
               </motion.h3>
-              <p className="text-gray-400 text-xs">Real-time multiverse monitoring system</p>
+              <p className="text-gray-400 text-xs">Resistance monitoring system</p>
             </div>
 
             {/* Command Center Grid - Now 5 columns */}

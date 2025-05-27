@@ -58,8 +58,8 @@ const OnboardingSteps = () => {
 
   return (
     <SectionWrapper
-      title="Join the Multiverse"
-      subtitle="Ready to start your adventure? Here's how to become part of our gaming community."
+      title="Join the Resistance"
+      subtitle="Ready to start your fight to save the universe? Here's how to become part of the fight against the Swarm enemies."
       className="relative overflow-hidden"
     >
       <div className="flex-1 flex flex-col justify-center">
@@ -157,10 +157,10 @@ const OnboardingSteps = () => {
           transition={{ duration: 0.6 }}
         >
           <h4 className="text-2xl font-bold text-stellar-white mb-2">
-            Meda Mining Operations
+            Resistance Operations
           </h4>
           <p className="text-gray-300">
-            Your gateway to the multiverse economy
+            Reclaim our territories ocupated by the Swarm entities.
           </p>
         </motion.div>
 
@@ -206,7 +206,7 @@ const OnboardingSteps = () => {
 
         {/* Footer text */}
         <div className="text-center mt-6">
-          <p className="text-xs text-gray-400">© 2025 Meda Portal. Built by the community, for the community.</p>
+          <p className="text-xs text-gray-400">©2025 Swarm Resistance. Built by the players, for the players.</p>
         </div>
       </div>
     </SectionWrapper>
