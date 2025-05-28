@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 
+// Import Web3Auth Provider
+import { Web3AuthProvider } from './contexts/Web3AuthContext';
+
 // Import Components
 import Sidebar from './components/navigation/Sidebar';
 import TopBar from './components/navigation/TopBar';
@@ -20,9 +23,11 @@ const GamingPage = () => <div className="p-8">Gaming Hub - Meda Wars, Meda Shoot
 // Main App Wrapper
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <Web3AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </Web3AuthProvider>
   );
 }
 

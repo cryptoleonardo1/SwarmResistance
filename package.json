@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@web3auth/base": "^9.7.0",
+    "@web3auth/ethereum-provider": "^9.7.0",
+    "@web3auth/modal": "^9.7.0",
+    "buffer": "^6.0.3",
+    "ethers": "^6.13.4",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.321.0",
+    "process": "^0.11.10",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -30,6 +36,7 @@
     "globals": "^15.11.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "vite": "^5.4.10"
+    "vite": "^5.4.10",
+    "vite-plugin-node-polyfills": "^0.22.0"
   }
 }
