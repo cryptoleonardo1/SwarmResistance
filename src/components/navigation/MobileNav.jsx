@@ -17,7 +17,7 @@ const MobileNav = ({ isOpen, toggleMenu }) => {
     { icon: <User size={20} />, text: 'Profile', path: '/profile' },
     { icon: <Gem size={20} />, text: 'NFT', path: '/nft' },
     { icon: <ShoppingBag size={20} />, text: 'Market', path: '/marketplace' },
-    { icon: <Gamepad2 size={20} />, text: 'Gaming', path: '/gaming' },
+    { icon: <Gamepad2 size={20} />, text: 'Join Resistance', path: '/joinresistance' },
     { icon: <Menu size={20} />, text: 'More', path: '#', action: toggleMenu },
   ];
 

@@ -327,6 +327,177 @@ body {
   animation: pulse-slow 5s infinite ease-in-out;
 }
 
+
+/* Text gradient for main title */
+.text-gradient-gold {
+  background: linear-gradient(120deg, #FF6B00, #FF9D00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Enhanced glow effects */
+.glow-text-cyan {
+  text-shadow: 
+    0 0 10px rgba(255, 107, 0, 0.7),
+    0 0 20px rgba(255, 107, 0, 0.5),
+    0 0 30px rgba(255, 107, 0, 0.3);
+}
+
+/* Constellation star animations */
+@keyframes constellation-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes constellation-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px currentColor,
+      0 0 20px currentColor,
+      0 0 30px currentColor;
+  }
+  50% {
+    box-shadow: 
+      0 0 15px currentColor,
+      0 0 30px currentColor,
+      0 0 45px currentColor;
+  }
+}
+
+.constellation-star {
+  animation: constellation-pulse 3s ease-in-out infinite;
+}
+
+.constellation-star:hover {
+  animation: constellation-glow 1.5s ease-in-out infinite;
+}
+
+/* Connection line animations */
+@keyframes connection-flow {
+  0% {
+    stroke-dasharray: 5, 10;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 15;
+  }
+}
+
+.connection-line {
+  animation: connection-flow 2s linear infinite;
+}
+
+/* Mission modal backdrop effects */
+.mission-modal-backdrop {
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(74, 43, 159, 0.1) 0%, transparent 50%),
+    rgba(18, 13, 38, 0.8);
+}
+
+/* Responsive constellation adjustments */
+@media (max-width: 768px) {
+  .constellation-container {
+    padding: 1rem;
+  }
+  
+  .constellation-star {
+    transform: scale(0.8);
+  }
+  
+  .mission-info-popup {
+    min-width: 200px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Particle orbit animation */
+@keyframes particle-orbit {
+  0% {
+    transform: rotate(0deg) translateX(25px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(25px) rotate(-360deg);
+  }
+}
+
+.particle-orbit {
+  animation: particle-orbit 3s linear infinite;
+}
+
+/* Status bar enhancements */
+.status-bar {
+  background: 
+    linear-gradient(90deg, 
+      rgba(255, 107, 0, 0.1) 0%, 
+      rgba(74, 43, 159, 0.1) 50%, 
+      rgba(255, 62, 138, 0.1) 100%
+    );
+}
+
+/* Smooth scrolling for mission details */
+.mission-details-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 107, 0, 0.5) rgba(18, 13, 38, 0.3);
+}
+
+.mission-details-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mission-details-scroll::-webkit-scrollbar-track {
+  background: rgba(18, 13, 38, 0.3);
+  border-radius: 3px;
+}
+
+.mission-details-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 107, 0, 0.5);
+  border-radius: 3px;
+}
+
+.mission-details-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 107, 0, 0.7);
+}
+
+/* Central command animation */
+@keyframes command-center-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+.command-center {
+  animation: command-center-pulse 4s ease-in-out infinite;
+}
+
+/* Typing effect enhancements */
+@keyframes typing-glow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 107, 0, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 107, 0, 0.8);
+  }
+}
+
+.typing-effect {
+  animation: typing-glow 2s ease-in-out infinite;
+}
+
 /* Remove all margins from main content area */
 main {
   margin: 0 !important;

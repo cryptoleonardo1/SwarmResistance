@@ -21,17 +21,11 @@ const privateKeyProvider = new EthereumPrivateKeyProvider({
   config: { chainConfig },
 });
 
+// Base plan configuration - NO customization allowed
 export const web3AuthConfig = {
   clientId,
   web3AuthNetwork,
   chainConfig,
   privateKeyProvider,
-  uiConfig: {
-    appName: "Cryptomeda",
-    theme: {
-      primary: "#FF6B00", // Your meda-gold color
-    },
-    mode: "dark",
-    defaultLanguage: "en",
-  },
+  // Remove ALL uiConfig for base plan
 };

@@ -11,14 +11,15 @@ import TopBar from './components/navigation/TopBar';
 import MobileNav from './components/navigation/MobileNav';
 import OptimizedGpuBackground from './components/effects/OptimizedGpuBackground';
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 import ChatbotPage from './pages/ChatbotPage';
 import StoryPage from './pages/StoryPage';
+import SettingsPage from './pages/SettingsPage';
+import JoinResistancePage from './pages/JoinResistancePage';
 
 // Placeholder for future page components
-const ProfilePage = () => <div className="p-8">Profile Page (Coming Soon)</div>;
 const NFTPage = () => <div className="p-8">NFT Explanations & Concepts (Coming Soon)</div>;
 const MarketplacePage = () => <div className="p-8">Marketplace (Coming Soon)</div>;
-const GamingPage = () => <div className="p-8">Gaming Hub - Meda Wars, Meda Shooter & More (Coming Soon)</div>;
 
 // Main App Wrapper
 function App() {
@@ -65,14 +66,19 @@ function AppContent() {
       {/* Top Navigation Bar */}
       <TopBar />
       
-      {/* Main Content - no margins for homepage */}
-      <main className={`transition-all duration-400 ${location.pathname === '/' ? '' : 'md:ml-64 pt-16 pb-20 px-4 sm:px-6 md:px-8'}`}>
+      {/* Main Content - no margins for homepage and join-resistance */}
+      <main className={`transition-all duration-400 ${
+        location.pathname === '/' || location.pathname === '/join-resistance' 
+          ? '' 
+          : 'md:ml-64 pt-16 pb-20 px-4 sm:px-6 md:px-8'
+      }`}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/nft" element={<NFTPage />} />
           <Route path="/marketplace" element={<MarketplacePage />} />
-          <Route path="/gaming" element={<GamingPage />} />
+          <Route path="/join-resistance" element={<JoinResistancePage />} />
           <Route path="/story" element={<StoryPage />} />
           <Route path="/chatbot" element={<ChatbotPage />} />
         </Routes>

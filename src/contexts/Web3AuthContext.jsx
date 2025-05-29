@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { Web3Auth } from "@web3auth/modal";
-import { web3AuthConfig } from '../config/web3auth.config';
-import { userProfileService } from '../services/userProfile.service';
+import { web3AuthConfig } from '../config/web3auth.config.js';
+import { userProfileService } from '../services/userProfile.service.js';
 import PropTypes from 'prop-types';
+import { WalletConnectV2Adapter } from "@web3auth/wallet-connect-v2-adapter";
+import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 
 const Web3AuthContext = createContext(null);
 
@@ -29,9 +31,32 @@ export const Web3AuthProvider = ({ children }) => {
           clientId: web3AuthConfig.clientId,
           web3AuthNetwork: web3AuthConfig.web3AuthNetwork,
           chainConfig: web3AuthConfig.chainConfig,
-          uiConfig: web3AuthConfig.uiConfig,
           privateKeyProvider: web3AuthConfig.privateKeyProvider,
         });
+
+        // Configure WalletConnect V2 Adapter
+        const walletConnectV2Adapter = new WalletConnectV2Adapter({
+          adapterSettings: {
+            qrcodeModal: "walletconnect",
+            chains: ["0x89"], // Polygon
+            methods: ["eth_sendTransaction", "personal_sign"],
+          },
+          loginSettings: {
+            projectId: "2c7fa3defb38afe9156f6e4a08cf4f0f", // Get your own from https://cloud.walletconnect.com
+          },
+        });
+
+        // Configure MetaMask Adapter
+        const metamaskAdapter = new MetamaskAdapter({
+          clientId: web3AuthConfig.clientId,
+          sessionTime: 3600, // 1 hour
+          web3AuthNetwork: web3AuthConfig.web3AuthNetwork,
+          chainConfig: web3AuthConfig.chainConfig,
+        });
+
+        // Configure adapters
+        web3auth.configureAdapter(walletConnectV2Adapter);
+        web3auth.configureAdapter(metamaskAdapter);
 
         await web3auth.initModal();
 

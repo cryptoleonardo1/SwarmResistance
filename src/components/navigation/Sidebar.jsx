@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, ShoppingBag, Gamepad2, Book, Bot, Gem } from 'lucide-react';
+import { User, ShoppingBag, Sword, Book, Bot, Gem } from 'lucide-react';
 
 const Sidebar = () => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Navigation items with routes
+  // Navigation items with routes - updated Gaming to Join Resistance
   const navItems = [
     { icon: <User size={24} />, text: 'Profile', path: '/profile' },
-    { icon: <Gamepad2 size={24} />, text: 'Gaming', path: '/gaming' },
+    { icon: <Sword size={24} />, text: 'Join Resistance', path: '/join-resistance' },
     { icon: <Gem size={24} />, text: 'NFT', path: '/nft' },
     { icon: <ShoppingBag size={24} />, text: 'Marketplace', path: '/marketplace' },
     { icon: <Book size={24} />, text: 'Story', path: '/story' },
@@ -23,7 +23,7 @@ const Sidebar = () => {
     { 
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-.38.24-1.09.76-.98.7-1.96 1.99-2.07 2.04-.17.08-.49.05-.49.05s-.69-.23-.69-.23-.43-.27-.43-.27-.63-.39-.63-.39c.91-.59 2.66-1.7 2.66-1.7s.18-.14.35-.21c.16-.06.43-.12.43-.12s.18-.04.33-.04.30.04.30.04.12 0 .23.06c.11.05.24.15.24.15l3.5 2.4s.64.43.64 1.03z"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-.38.24-1.09.76-.98.7-1.96 1.99-2.07 2.04-.17.08-.49.05-.49.05s-.69-.23-.69-.23s-.43-.27-.43-.27s-.63-.39-.63-.39c.91-.59 2.66-1.7 2.66-1.7s.18-.14.35-.21c.16-.06.43-.12.43-.12s.18-.04.33-.04.30.04.30.04.12 0 .23.06c.11.05.24.15.24.15l3.5 2.4s.64.43.64 1.03z"/>
         </svg>
       ), 
       link: '#', 

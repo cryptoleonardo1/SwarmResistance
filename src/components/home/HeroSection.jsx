@@ -448,7 +448,7 @@ const HeroSection = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="section-title text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
             >
-              The Universe <span className="text-gradient-gold">Collapses</span>
+              Cryptomeda <span className="text-gradient-gold">Collapses</span>
             </motion.h1>
             
             {/* Tagline - Updated */}

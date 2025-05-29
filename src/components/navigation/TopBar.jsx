@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wallet, Menu, ChevronDown, LogOut, User, Settings, Copy, Check } from 'lucide-react';
-import { useWeb3Auth } from '../../contexts/Web3AuthContext.jsx';
+import { useWeb3Auth } from '../../contexts/Web3AuthContext';
 
 // Section navigation items (moved outside component to avoid re-creation)
 const sectionItems = [
