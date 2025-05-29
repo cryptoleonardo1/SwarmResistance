@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { useWeb3Auth } from '../../contexts/Web3AuthContext';
 
 // New Swarm Invasion Background Component
 const SwarmInvasionBackground = () => {
@@ -206,6 +208,9 @@ const SwarmInvasionBackground = () => {
 };
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  const { login, isLoading } = useWeb3Auth();
+
   // Terminal text effect - updated with Swarm Resistance story
   const [typedText, setTypedText] = useState('');
   const fullText = 'The Swarm has consumed our empire... Cryptomeda lies in ruins... But from collapse comes rebirth... Renegades and Goliaths now fight as one... The resistance needs heroes willing to reclaim what was lost.';
@@ -256,7 +261,7 @@ const HeroSection = () => {
       name: "Cybertron - Corrupted",
       color: "from-neon-cyan/40 via-red-400/30 to-gray-500/20",
       size: "w-20 h-20 md:w-28 md:h-28",
-      position: "top-[20%] left-[15%]",
+      position: "top-[20%] left-[25%]",
       rotationDuration: "160s",
       floatDuration: "12s",
       floatDelay: "2s",
@@ -282,7 +287,7 @@ const HeroSection = () => {
       name: "Energos - Infected",
       color: "from-green-400/30 via-red-500/40 to-orange-400/20",
       size: "w-14 h-14 md:w-20 md:h-20",
-      position: "bottom-[35%] left-[10%]",
+      position: "bottom-[35%] left-[20%]",
       rotationDuration: "140s",
       floatDuration: "7s",
       floatDelay: "1s",
@@ -303,15 +308,27 @@ const HeroSection = () => {
     }
   ];
 
+  const handleConnectWallet = async () => {
+    try {
+      await login();
+    } catch (error) {
+      console.error('Error connecting wallet:', error);
+    }
+  };
+
+  const handleJoinResistance = () => {
+    navigate('/join-resistance');
+  };
+
   return (
     <div className="min-h-screen w-full relative overflow-hidden flex items-center">
       {/* Swarm Invasion Background */}
       <SwarmInvasionBackground />
       
-      {/* Apocalyptic gradient layers */}
+      {/* Updated gradient layers - blue to purple with fire effect from bottom */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-red-900/30 to-void-black opacity-70" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-900/20 to-red-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/40 via-purple-900/50 to-red-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-orange-600/30 via-purple-900/20 to-transparent" />
       </div>
       
       {/* Corruption spread animation */}
@@ -441,14 +458,14 @@ const HeroSection = () => {
       <div className="section-content relative z-10">
         <div className="content-wrapper flex items-center justify-center min-h-screen">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Main Headline with underline - Updated */}
+            {/* Main Headline with underline - Updated - both words have same styling */}
             <motion.h1
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="section-title text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
             >
-              Cryptomeda <span className="text-gradient-gold">Collapses</span>
+              <span className="text-white">Cryptomeda</span> <span className="text-white">Collapses</span>
             </motion.h1>
             
             {/* Tagline - Updated */}
@@ -477,7 +494,7 @@ const HeroSection = () => {
               </p>
             </motion.div>
             
-            {/* CTA Buttons - Updated */}
+            {/* CTA Buttons - Updated with functionality */}
             <motion.div
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -486,13 +503,16 @@ const HeroSection = () => {
             >
               <motion.button 
                 className="btn-primary-glass text-lg px-8 py-4"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                onClick={handleConnectWallet}
+                disabled={isLoading}
+                whileHover={{ scale: isLoading ? 1 : 1.05 }}
+                whileTap={{ scale: isLoading ? 1 : 0.95 }}
               >
-                Connect Wallet & Begin
+                {isLoading ? 'Connecting...' : 'Connect Wallet & Begin'}
               </motion.button>
               <motion.button 
                 className="btn-secondary-glass text-lg px-8 py-4 border-red-400/30 hover:border-red-400/50"
+                onClick={handleJoinResistance}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -530,7 +550,7 @@ const HeroSection = () => {
         </motion.div>
       ))}
       
-      {/* Smooth transition to next section */}
+      {/* Smooth transition to next section - keeping as requested */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none">
         {/* Gradient transition from red/orange corruption to blue/purple */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-900/20 to-space-blue/60" />

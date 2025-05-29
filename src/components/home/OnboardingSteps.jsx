@@ -148,61 +148,21 @@ const OnboardingSteps = () => {
           </motion.button>
         </div>
 
-        {/* Section Title Above Mining Facility */}
-        <motion.div 
-          className="text-center mb-4"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h4 className="text-2xl font-bold text-stellar-white mb-2">
-            Resistance Operations
-          </h4>
-          <p className="text-gray-300">
-            Reclaim our territories ocupated by the Swarm entities.
-          </p>
-        </motion.div>
-
-        {/* Mining Facility Background - Increased height and moved down */}
-        <motion.div 
-          className="relative w-full h-64 rounded-xl overflow-hidden glassmorphism mb-8"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Background image */}
-          <div 
-            className="absolute inset-0 opacity-70"
-            style={{
-              backgroundImage: 'url("/mining-facility-bg.png")',
-              backgroundPosition: 'center center',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover'
-            }}
-          />
-          
-          {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-void-black/60 via-transparent to-void-black/30" />
-        
-          
-          {/* Scanning effect */}
-          <motion.div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'linear-gradient(90deg, transparent 0%, rgba(0, 240, 255, 0.15) 50%, transparent 100%)'
-            }}
-            animate={{
-              x: ['-100%', '100%']
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-        </motion.div>
+                      {/* Bottom section - Key benefits */}
+              <div className="mt-8 grid md:grid-cols-3 gap-6 text-center">
+                <div className="glassmorphism p-4 rounded-lg">
+                  <h4 className="text-energy-green font-bold mb-2">Daily Rewards</h4>
+                  <p className="text-gray-400 text-sm">Login bonuses, mini-games, and tasks provide consistent Meda Gas earnings</p>
+                </div>
+                <div className="glassmorphism p-4 rounded-lg">
+                  <h4 className="text-meda-gold font-bold mb-2">NFT Utility</h4>
+                  <p className="text-gray-400 text-sm">Deploy Heroes and Weapons in Meda Wars for passive Meda Gas generation</p>
+                </div>
+                <div className="glassmorphism p-4 rounded-lg">
+                  <h4 className="text-nebula-pink font-bold mb-2">Token Airdrop</h4>
+                  <p className="text-gray-400 text-sm">Meda Gas accumulation directly determines your future token allocation</p>
+                </div>
+              </div>
 
         {/* Footer text */}
         <div className="text-center mt-6">
