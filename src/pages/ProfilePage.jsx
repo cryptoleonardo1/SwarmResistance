@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Edit2, Save, X, Calendar, Target, Award, Shield, GamepadIcon, Clock, TrendingUp } from 'lucide-react';
+import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, GamepadIcon, Clock, TrendingUp, Sword, MapPin } from 'lucide-react';
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import { RANKS } from '../services/userProfile.service';
 
@@ -94,11 +94,37 @@ const ProfilePage = () => {
     ? ((userProfile.medaGas - (currentRankInfo?.minGas || 0)) / (nextRankInfo.minGas - (currentRankInfo?.minGas || 0))) * 100
     : 100;
 
-  // Mock data for Phase 1 features (this would come from backend in real implementation)
-  const mockNFTs = [
-    { id: 1, type: 'Hero', name: 'Elite Warrior', rarity: 'Legendary', assigned: true },
-    { id: 2, type: 'Weapon', name: 'Plasma Rifle', rarity: 'Epic', assigned: true },
-    { id: 3, type: 'Land', name: 'Outpost Alpha', rarity: 'Rare', assigned: false },
+  // Mock data for NFT Heroes with power stats
+  const mockHeroes = [
+    { id: 1, name: 'Elite Warrior', rarity: 'Revolution', power: 289 },
+    { id: 2, name: 'Cyber Assassin', rarity: 'Influencer', power: 234 },
+    { id: 3, name: 'Plasma Guardian', rarity: 'Collectible', power: 178 },
+    { id: 4, name: 'Nova Striker', rarity: 'Influencer', power: 256 },
+    { id: 5, name: 'Quantum Sentinel', rarity: 'Revolution', power: 312 },
+    { id: 6, name: 'Storm Ranger', rarity: 'Collectible', power: 165 },
+  ];
+
+  // Mock data for NFT Weapons with tier stats
+  const mockWeapons = [
+    { id: 1, name: 'Plasma Rifle', tier: 'Tier 3', power: 195 },
+    { id: 2, name: 'Quantum Blade', tier: 'Tier 2', power: 156 },
+    { id: 3, name: 'Energy Cannon', tier: 'Tier 3', power: 210 },
+    { id: 4, name: 'Neural Disruptor', tier: 'Tier 1', power: 98 },
+    { id: 5, name: 'Void Hammer', tier: 'Tier 2', power: 167 },
+    { id: 6, name: 'Photon Sniper', tier: 'Tier 3', power: 225 },
+    { id: 7, name: 'Arc Launcher', tier: 'Tier 1', power: 87 },
+    { id: 8, name: 'Nano Sword', tier: 'Tier 2', power: 143 },
+    { id: 9, name: 'Fusion Pistol', tier: 'Tier 1', power: 76 },
+    { id: 10, name: 'Gravity Gun', tier: 'Tier 3', power: 198 },
+    { id: 11, name: 'Storm Bow', tier: 'Tier 2', power: 134 },
+    { id: 12, name: 'Phase Rifle', tier: 'Tier 1', power: 89 },
+  ];
+
+  // Mock data for NFT Lands with rarity and plots
+  const mockLands = [
+    { id: 1, name: 'Crystal Outpost', rarity: 'Legendary', plots: 7 },
+    { id: 2, name: 'Mining Station Alpha', rarity: 'Rare', plots: 3 },
+    { id: 3, name: 'Desert Checkpoint', rarity: 'Common', plots: 1 },
   ];
 
   const recentActivities = [
@@ -110,10 +136,44 @@ const ProfilePage = () => {
 
   const tabs = [
     { id: 'overview', name: 'Overview', icon: Trophy },
-    { id: 'nfts', name: 'NFT Arsenal', icon: Shield },
-    { id: 'activities', name: 'Battle Log', icon: GamepadIcon },
-    { id: 'achievements', name: 'Achievements', icon: Award },
+    { id: 'heroes', name: 'NFT Heroes', icon: Shield },
+    { id: 'weapons', name: 'NFT Weapons', icon: Sword },
+    { id: 'lands', name: 'NFT Lands', icon: MapPin },
   ];
+
+  const getRarityColor = (rarity) => {
+    switch (rarity) {
+      case 'Revolution':
+        return 'text-meda-gold border-meda-gold/30 bg-meda-gold/10';
+      case 'Influencer':
+        return 'text-nebula-pink border-nebula-pink/30 bg-nebula-pink/10';
+      case 'Collectible':
+        return 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10';
+      case 'Legendary':
+        return 'text-meda-gold border-meda-gold/30 bg-meda-gold/10';
+      case 'Epic':
+        return 'text-nebula-pink border-nebula-pink/30 bg-nebula-pink/10';
+      case 'Rare':
+        return 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10';
+      case 'Common':
+        return 'text-gray-400 border-gray-400/30 bg-gray-400/10';
+      default:
+        return 'text-gray-400 border-gray-400/30 bg-gray-400/10';
+    }
+  };
+
+  const getTierColor = (tier) => {
+    switch (tier) {
+      case 'Tier 3':
+        return 'text-meda-gold border-meda-gold/30 bg-meda-gold/10';
+      case 'Tier 2':
+        return 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10';
+      case 'Tier 1':
+        return 'text-gray-400 border-gray-400/30 bg-gray-400/10';
+      default:
+        return 'text-gray-400 border-gray-400/30 bg-gray-400/10';
+    }
+  };
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
@@ -266,7 +326,7 @@ const ProfilePage = () => {
                     
                     <p className="text-gray-400 mb-6 text-lg">{userProfile.email || 'No secure comm channel set'}</p>
                     
-                    {/* Key Stats Row */}
+                    {/* Key Stats Row - Updated with new categories */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div className="glassmorphism p-4 rounded-lg text-center">
                         <Zap size={24} className="text-energy-green mx-auto mb-2" />
@@ -274,19 +334,19 @@ const ProfilePage = () => {
                         <div className="text-sm text-gray-400">Meda Gas</div>
                       </div>
                       <div className="glassmorphism p-4 rounded-lg text-center">
-                        <GamepadIcon size={24} className="text-neon-cyan mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-neon-cyan">{userProfile.stats.gamesPlayed}</div>
-                        <div className="text-sm text-gray-400">Battles</div>
+                        <Shield size={24} className="text-meda-gold mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-meda-gold">{mockHeroes.length}</div>
+                        <div className="text-sm text-gray-400">Heroes</div>
                       </div>
                       <div className="glassmorphism p-4 rounded-lg text-center">
-                        <Target size={24} className="text-meda-gold mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-meda-gold">{userProfile.stats.totalWins}</div>
-                        <div className="text-sm text-gray-400">Victories</div>
+                        <Sword size={24} className="text-neon-cyan mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-neon-cyan">{mockWeapons.length}</div>
+                        <div className="text-sm text-gray-400">Weapons</div>
                       </div>
                       <div className="glassmorphism p-4 rounded-lg text-center">
-                        <Shield size={24} className="text-nebula-pink mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-nebula-pink">{userProfile.stats.nftsOwned}</div>
-                        <div className="text-sm text-gray-400">NFT Assets</div>
+                        <MapPin size={24} className="text-nebula-pink mx-auto mb-2" />
+                        <div className="text-2xl font-bold text-nebula-pink">{mockLands.length}</div>
+                        <div className="text-sm text-gray-400">Lands</div>
                       </div>
                     </div>
 
@@ -406,47 +466,40 @@ const ProfilePage = () => {
               </div>
             )}
 
-            {activeTab === 'nfts' && (
+            {activeTab === 'heroes' && (
               <div className="glassmorphism rounded-xl p-6">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-2xl font-bold">NFT Arsenal</h3>
+                  <h3 className="text-2xl font-bold">NFT Heroes</h3>
                   <div className="text-gray-400">
-                    {mockNFTs.length} Assets | {mockNFTs.filter(nft => nft.assigned).length} Deployed
+                    {mockHeroes.length} Heroes
                   </div>
                 </div>
                 
-                {mockNFTs.length > 0 ? (
+                {mockHeroes.length > 0 ? (
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {mockNFTs.map((nft) => (
+                    {mockHeroes.map((hero) => (
                       <motion.div
-                        key={nft.id}
+                        key={hero.id}
                         className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
                         whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
                       >
                         <div className="aspect-square bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center">
                           <Shield size={48} className="text-meda-gold" />
                         </div>
-                        <h4 className="font-bold text-stellar-white mb-2">{nft.name}</h4>
-                        <div className="flex justify-between items-center mb-3">
-                          <span className="text-sm text-gray-400">{nft.type}</span>
-                          <span className={`text-sm px-2 py-1 rounded ${
-                            nft.rarity === 'Legendary' ? 'bg-meda-gold/20 text-meda-gold' :
-                            nft.rarity === 'Epic' ? 'bg-nebula-pink/20 text-nebula-pink' :
-                            'bg-neon-cyan/20 text-neon-cyan'
-                          }`}>
-                            {nft.rarity}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className={`text-sm ${nft.assigned ? 'text-energy-green' : 'text-gray-400'}`}>
-                            {nft.assigned ? '✓ Deployed' : 'Available'}
-                          </span>
-                          <motion.button 
-                            className="text-xs px-3 py-1 bg-meda-gold/20 text-meda-gold rounded hover:bg-meda-gold/30"
-                            whileHover={{ scale: 1.05 }}
-                          >
-                            {nft.assigned ? 'Manage' : 'Deploy'}
-                          </motion.button>
+                        
+                        {/* Hero Details */}
+                        <div className="space-y-3">
+                          <h4 className="font-bold text-stellar-white text-lg">{hero.name}</h4>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(hero.rarity)}`}>
+                              {hero.rarity}
+                            </span>
+                            <div className="text-right">
+                              <div className="text-sm text-gray-400">Power</div>
+                              <div className="text-lg font-bold text-energy-green">{hero.power}</div>
+                            </div>
+                          </div>
                         </div>
                       </motion.div>
                     ))}
@@ -454,8 +507,104 @@ const ProfilePage = () => {
                 ) : (
                   <div className="text-center py-12">
                     <Shield size={64} className="text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400 mb-4">No NFT assets detected</p>
-                    <p className="text-sm text-gray-500">Acquire Heroes, Weapons, and Land NFTs to build your resistance arsenal</p>
+                    <p className="text-gray-400 mb-4">No heroes detected</p>
+                    <p className="text-sm text-gray-500">Acquire Hero NFTs to build your resistance team</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'weapons' && (
+              <div className="glassmorphism rounded-xl p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-bold">NFT Weapons</h3>
+                  <div className="text-gray-400">
+                    {mockWeapons.length} Weapons
+                  </div>
+                </div>
+                
+                {mockWeapons.length > 0 ? (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {mockWeapons.map((weapon) => (
+                      <motion.div
+                        key={weapon.id}
+                        className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
+                        whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
+                      >
+                        <div className="aspect-square bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center">
+                          <Sword size={48} className="text-neon-cyan" />
+                        </div>
+                        
+                        {/* Weapon Details */}
+                        <div className="space-y-3">
+                          <h4 className="font-bold text-stellar-white text-lg">{weapon.name}</h4>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className={`text-sm px-2 py-1 rounded border ${getTierColor(weapon.tier)}`}>
+                              {weapon.tier}
+                            </span>
+                            <div className="text-right">
+                              <div className="text-sm text-gray-400">Power</div>
+                              <div className="text-lg font-bold text-energy-green">{weapon.power}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Sword size={64} className="text-gray-500 mx-auto mb-4" />
+                    <p className="text-gray-400 mb-4">No weapons detected</p>
+                    <p className="text-sm text-gray-500">Acquire Weapon NFTs to arm your resistance forces</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'lands' && (
+              <div className="glassmorphism rounded-xl p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-bold">NFT Lands</h3>
+                  <div className="text-gray-400">
+                    {mockLands.length} Territories
+                  </div>
+                </div>
+                
+                {mockLands.length > 0 ? (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {mockLands.map((land) => (
+                      <motion.div
+                        key={land.id}
+                        className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
+                        whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
+                      >
+                        <div className="aspect-square bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center">
+                          <MapPin size={48} className="text-nebula-pink" />
+                        </div>
+                        
+                        {/* Land Details */}
+                        <div className="space-y-3">
+                          <h4 className="font-bold text-stellar-white text-lg">{land.name}</h4>
+                          
+                          <div className="flex justify-between items-center">
+                            <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(land.rarity)}`}>
+                              {land.rarity}
+                            </span>
+                            <div className="text-right">
+                              <div className="text-sm text-gray-400">Plots</div>
+                              <div className="text-lg font-bold text-energy-green">{land.plots}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <MapPin size={64} className="text-gray-500 mx-auto mb-4" />
+                    <p className="text-gray-400 mb-4">No territories detected</p>
+                    <p className="text-sm text-gray-500">Acquire Land NFTs to establish resistance bases</p>
                   </div>
                 )}
               </div>

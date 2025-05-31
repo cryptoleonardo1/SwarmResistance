@@ -163,8 +163,8 @@ const TopBar = () => {
           </Link>
         </div>
         
-        {/* Center Section - Navigation (Desktop) */}
-        <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
+        {/* Center Section - Navigation (Desktop) - Centered accounting for sidebar */}
+        <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2 ml-32">
           {sectionItems.map((item) => (
             <motion.a
               key={item.id}
@@ -194,54 +194,8 @@ const TopBar = () => {
         
         {/* Right Section */}
         <div className="flex items-center space-x-4">
-          {/* Wallet Connection */}
+          {/* Wallet Connection - Simplified when connected */}
           {isConnected ? (
-            <motion.div 
-              className="hidden sm:flex items-center space-x-3 bg-space-blue/40 backdrop-blur-sm rounded-full py-1.5 px-4 border border-cosmic-purple/30"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 0 15px rgba(0,240,255,0.3)",
-                borderColor: "rgba(0,240,255,0.5)"
-              }}
-            >
-              <Wallet size={16} className="text-neon-cyan" />
-              <div className="flex flex-col items-start">
-                <span className="text-xs text-gray-400">
-                  {parseFloat(balance).toFixed(4)} MATIC
-                </span>
-                <button
-                  onClick={copyAddress}
-                  className="text-sm text-stellar-white hover:text-neon-cyan transition-colors flex items-center gap-1"
-                >
-                  {formatAddress(walletAddress)}
-                  {copied ? (
-                    <Check size={12} className="text-energy-green" />
-                  ) : (
-                    <Copy size={12} />
-                  )}
-                </button>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.button 
-              onClick={login}
-              disabled={isLoading}
-              className="hidden sm:flex items-center space-x-2 bg-space-blue/40 backdrop-blur-sm rounded-full py-1.5 px-4 border border-cosmic-purple/30 group disabled:opacity-50"
-              whileHover={{ 
-                scale: isLoading ? 1 : 1.05,
-                boxShadow: isLoading ? undefined : "0 0 15px rgba(74,43,159,0.3)"
-              }}
-              whileTap={{ scale: isLoading ? 1 : 0.95 }}
-            >
-              <Wallet size={16} className="text-gray-400 group-hover:text-neon-cyan transition-colors" />
-              <span className="text-lg group-hover:text-neon-cyan transition-colors">
-                {isLoading ? 'Loading...' : 'Connect Wallet'}
-              </span>
-            </motion.button>
-          )}
-          
-          {/* User Profile */}
-          {isConnected && (
             <div className="relative">
               <motion.button 
                 className="flex items-center space-x-2 group"
@@ -264,31 +218,64 @@ const TopBar = () => {
                 </motion.div>
                 
                 <div className="hidden lg:flex items-center">
-                  <span className="text-sm text-gray-400 mr-1">RANK:</span>
-                  <span className="text-sm font-medium text-meda-gold mr-2">{getUserRank()}</span>
                   <span className="text-lg text-stellar-white mr-2">{getUserDisplayName()}</span>
                   <ChevronDown size={14} className="text-gray-400" />
                 </div>
               </motion.button>
               
-              {/* Dropdown Menu */}
+              {/* Dropdown Menu - Now includes wallet details */}
               <AnimatePresence>
                 {dropdownOpen && (
                   <motion.div 
-                    className="absolute right-0 mt-2 w-56 bg-void-black/90 backdrop-blur-md border border-cosmic-purple/50 rounded-lg shadow-lg py-2 z-50"
+                    className="absolute right-0 mt-2 w-64 bg-void-black/90 backdrop-blur-md border border-cosmic-purple/50 rounded-lg shadow-lg py-2 z-50"
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
                   >
                     {/* User Info */}
-                    <div className="px-4 py-2 border-b border-cosmic-purple/30">
+                    <div className="px-4 py-3 border-b border-cosmic-purple/30">
                       <p className="text-sm text-gray-400">Signed in as</p>
                       <p className="text-sm text-stellar-white font-medium truncate">
                         {user?.email || formatAddress(walletAddress)}
                       </p>
+                      
+                      {/* Rank */}
+                      <div className="mt-2 flex items-center justify-between">
+                        <span className="text-xs text-gray-400">Rank:</span>
+                        <span className="text-sm font-medium text-meda-gold">{getUserRank()}</span>
+                      </div>
+                      
+                      {/* Balance */}
+                      <div className="mt-1 flex items-center justify-between">
+                        <span className="text-xs text-gray-400">Balance:</span>
+                        <div className="flex items-center gap-1">
+                          <Wallet size={12} className="text-neon-cyan" />
+                          <span className="text-xs text-stellar-white">
+                            {parseFloat(balance).toFixed(4)} MATIC
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Wallet Address */}
+                      <div className="mt-1 flex items-center justify-between">
+                        <span className="text-xs text-gray-400">Address:</span>
+                        <button
+                          onClick={copyAddress}
+                          className="text-xs text-stellar-white hover:text-neon-cyan transition-colors flex items-center gap-1"
+                        >
+                          {formatAddress(walletAddress)}
+                          {copied ? (
+                            <Check size={10} className="text-energy-green" />
+                          ) : (
+                            <Copy size={10} />
+                          )}
+                        </button>
+                      </div>
+                      
+                      {/* Meda Gas */}
                       {userProfile && (
-                        <div className="mt-2 flex items-center justify-between">
+                        <div className="mt-1 flex items-center justify-between">
                           <span className="text-xs text-gray-400">Meda Gas:</span>
                           <span className="text-xs text-meda-gold font-medium">{userProfile.medaGas.toLocaleString()}</span>
                         </div>
@@ -325,6 +312,22 @@ const TopBar = () => {
                 )}
               </AnimatePresence>
             </div>
+          ) : (
+            <motion.button 
+              onClick={login}
+              disabled={isLoading}
+              className="hidden sm:flex items-center space-x-2 bg-space-blue/40 backdrop-blur-sm rounded-full py-1.5 px-4 border border-cosmic-purple/30 group disabled:opacity-50"
+              whileHover={{ 
+                scale: isLoading ? 1 : 1.05,
+                boxShadow: isLoading ? undefined : "0 0 15px rgba(74,43,159,0.3)"
+              }}
+              whileTap={{ scale: isLoading ? 1 : 0.95 }}
+            >
+              <Wallet size={16} className="text-gray-400 group-hover:text-neon-cyan transition-colors" />
+              <span className="text-lg group-hover:text-neon-cyan transition-colors">
+                {isLoading ? 'Loading...' : 'Connect Wallet'}
+              </span>
+            </motion.button>
           )}
         </div>
       </div>
