@@ -1,10 +1,17 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+// Refresh Meda Gas balance
+  const refreshMedaGasBalance = async () => {
+    if (walletAddress) {
+      await loadMedaGasBalance(walletAddress);
+    }
+  };import { createContext, useContext, useState, useEffect } from 'react';
 import { Web3Auth } from "@web3auth/modal";
 import { web3AuthConfig } from '../config/web3auth.config.js';
 import { userProfileService } from '../services/userProfile.service.js';
 import { tokenService } from '../services/tokenService.js';
+import { nftService } from '../services/nftService.js';
 import PropTypes from 'prop-types';
 import { WalletConnectV2Adapter } from "@web3auth/wallet-connect-v2-adapter";
+import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 
 const Web3AuthContext = createContext(null);
 
@@ -25,6 +32,8 @@ export const Web3AuthProvider = ({ children }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [medaGasBalance, setMedaGasBalance] = useState(null);
   const [isLoadingBalance, setIsLoadingBalance] = useState(false);
+  const [nftHoldings, setNftHoldings] = useState(null);
+  const [isLoadingNFTs, setIsLoadingNFTs] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -34,6 +43,14 @@ export const Web3AuthProvider = ({ children }) => {
           web3AuthNetwork: web3AuthConfig.web3AuthNetwork,
           chainConfig: web3AuthConfig.chainConfig,
           privateKeyProvider: web3AuthConfig.privateKeyProvider,
+        });
+
+        // Configure MetaMask Adapter
+        const metamaskAdapter = new MetamaskAdapter({
+          clientId: web3AuthConfig.clientId,
+          sessionTime: 3600, // 1 hour in seconds
+          web3AuthNetwork: web3AuthConfig.web3AuthNetwork,
+          chainConfig: web3AuthConfig.chainConfig,
         });
 
         // Configure WalletConnect V2 Adapter
@@ -46,9 +63,13 @@ export const Web3AuthProvider = ({ children }) => {
           loginSettings: {
             projectId: "2c7fa3defb38afe9156f6e4a08cf4f0f", // Get your own from https://cloud.walletconnect.com
           },
+          clientId: web3AuthConfig.clientId,
+          web3AuthNetwork: web3AuthConfig.web3AuthNetwork,
+          chainConfig: web3AuthConfig.chainConfig,
         });
 
-        // Configure adapters
+        // Configure adapters - order matters for display
+        web3auth.configureAdapter(metamaskAdapter);
         web3auth.configureAdapter(walletConnectV2Adapter);
 
         await web3auth.initModal();
@@ -71,12 +92,18 @@ export const Web3AuthProvider = ({ children }) => {
             // Initialize token service
             await tokenService.initialize(web3authProvider);
             
+            // Initialize NFT service
+            await nftService.initialize(web3authProvider);
+            
             // Load user profile
             const profile = userProfileService.getProfile(address);
             setUserProfile(profile);
             
             // Load Meda Gas balance
             await loadMedaGasBalance(address);
+            
+            // Load NFT holdings
+            await loadNFTHoldings(address);
             
             // Update profile with Web3Auth user info if available
             if (user && profile) {
@@ -114,21 +141,29 @@ export const Web3AuthProvider = ({ children }) => {
 
   // Load Meda Gas balance from blockchain
   const loadMedaGasBalance = async (address) => {
-    if (!address || !tokenService.isInitialized()) {
+    if (!address) {
       return;
     }
 
     try {
       setIsLoadingBalance(true);
-      const balanceData = await tokenService.getMedaGasBalance(address);
-      setMedaGasBalance(balanceData);
       
-      // Update user profile with real balance
-      if (balanceData && !balanceData.error) {
-        userProfileService.updateProfile(address, {
-          medaGas: balanceData.balance
-        });
-        setUserProfile(userProfileService.getProfile(address));
+      // Initialize token service if not already done
+      if (!tokenService.isInitialized() && provider) {
+        await tokenService.initialize(provider);
+      }
+      
+      if (tokenService.isInitialized()) {
+        const balanceData = await tokenService.getMedaGasBalance(address);
+        setMedaGasBalance(balanceData);
+        
+        // Update user profile with real balance
+        if (balanceData && !balanceData.error) {
+          userProfileService.updateProfile(address, {
+            medaGas: balanceData.balance
+          });
+          setUserProfile(userProfileService.getProfile(address));
+        }
       }
       
     } catch (error) {
@@ -144,10 +179,43 @@ export const Web3AuthProvider = ({ children }) => {
     }
   };
 
-  // Refresh Meda Gas balance
-  const refreshMedaGasBalance = async () => {
+  // Load NFT holdings from blockchain
+  const loadNFTHoldings = async (address) => {
+    if (!address) {
+      return;
+    }
+
+    try {
+      setIsLoadingNFTs(true);
+      
+      // Initialize NFT service if not already done
+      if (!nftService.isInitialized() && provider) {
+        await nftService.initialize(provider);
+      }
+      
+      if (nftService.isInitialized()) {
+        const nftData = await nftService.getAllNFTs(address);
+        setNftHoldings(nftData);
+        console.log('Loaded NFT holdings:', nftData);
+      }
+      
+    } catch (error) {
+      console.error("Error loading NFT holdings:", error);
+      setNftHoldings({
+        heroes: { nfts: [], count: 0, error: error.message },
+        weapons: { nfts: [], count: 0, error: error.message },
+        lands: { nfts: [], count: 0, error: error.message },
+        totalCount: 0
+      });
+    } finally {
+      setIsLoadingNFTs(false);
+    }
+  };
+
+  // Refresh NFT holdings
+  const refreshNFTHoldings = async () => {
     if (walletAddress) {
-      await loadMedaGasBalance(walletAddress);
+      await loadNFTHoldings(walletAddress);
     }
   };
 
@@ -172,11 +240,17 @@ export const Web3AuthProvider = ({ children }) => {
         // Initialize token service
         await tokenService.initialize(web3authProvider);
         
+        // Initialize NFT service
+        await nftService.initialize(web3authProvider);
+        
         // Load/create user profile
         const profile = userProfileService.getProfile(address);
         
         // Load Meda Gas balance
         await loadMedaGasBalance(address);
+        
+        // Load NFT holdings
+        await loadNFTHoldings(address);
         
         // Update profile with Web3Auth user info
         if (user) {
@@ -212,9 +286,14 @@ export const Web3AuthProvider = ({ children }) => {
       setUserProfile(null);
       setMedaGasBalance(null);
       setIsLoadingBalance(false);
+      setNftHoldings(null);
+      setIsLoadingNFTs(false);
       
       // Reset token service
       tokenService.reset();
+      
+      // Reset NFT service
+      nftService.reset();
       
       console.log("Logged out successfully!");
     } catch (error) {
@@ -276,8 +355,10 @@ export const Web3AuthProvider = ({ children }) => {
     walletAddress,
     userProfile,
     medaGasBalance,
+    nftHoldings,
     isLoading,
     isLoadingBalance,
+    isLoadingNFTs,
     login,
     logout,
     getUserInfo,
@@ -285,6 +366,7 @@ export const Web3AuthProvider = ({ children }) => {
     updateUserProfile,
     addMedaGas,
     refreshMedaGasBalance,
+    refreshNFTHoldings,
     isConnected: !!walletAddress,
   };
 
