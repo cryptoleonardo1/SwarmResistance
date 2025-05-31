@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, GamepadIcon, Clock, TrendingUp, Sword, MapPin } from 'lucide-react';
+import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, GamepadIcon, Clock, TrendingUp, Sword, MapPin, RefreshCw } from 'lucide-react';
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import { RANKS } from '../services/userProfile.service';
 
 const ProfilePage = () => {
-  const { userProfile, updateUserProfile, isConnected } = useWeb3Auth();
+  const { userProfile, updateUserProfile, isConnected, medaGasBalance, isLoadingBalance, refreshMedaGasBalance } = useWeb3Auth();
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [editedProfile, setEditedProfile] = useState({
@@ -88,6 +88,32 @@ const ProfilePage = () => {
     setIsEditing(false);
   };
 
+  // Get real or fallback Meda Gas balance
+  const getMedaGasDisplay = () => {
+    if (isLoadingBalance) {
+      return {
+        balance: '...',
+        isLoading: true
+      };
+    }
+    
+    if (medaGasBalance && !medaGasBalance.error) {
+      return {
+        balance: medaGasBalance.balanceFormatted,
+        isLoading: false,
+        isReal: true
+      };
+    }
+    
+    // Fallback to localStorage value
+    return {
+      balance: userProfile.medaGas.toLocaleString(),
+      isLoading: false,
+      isReal: false
+    };
+  };
+
+  const medaGasDisplay = getMedaGasDisplay();
   const currentRankInfo = RANKS.find(r => r.name === userProfile.rank);
   const nextRankInfo = RANKS.find(r => r.minGas > userProfile.medaGas);
   const progressToNextRank = nextRankInfo 
@@ -329,9 +355,37 @@ const ProfilePage = () => {
                     {/* Key Stats Row - Updated with new categories */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div className="glassmorphism p-4 rounded-lg text-center">
-                        <Zap size={24} className="text-energy-green mx-auto mb-2" />
-                        <div className="text-2xl font-bold text-energy-green">{userProfile.medaGas.toLocaleString()}</div>
-                        <div className="text-sm text-gray-400">Meda Gas</div>
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <Zap size={24} className="text-energy-green" />
+                          {medaGasDisplay.isReal && !medaGasDisplay.isLoading && (
+                            <motion.button
+                              onClick={refreshMedaGasBalance}
+                              className="text-gray-400 hover:text-energy-green transition-colors"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              title="Refresh balance"
+                            >
+                              <RefreshCw size={16} />
+                            </motion.button>
+                          )}
+                        </div>
+                        <div className={`text-2xl font-bold ${medaGasDisplay.isLoading ? 'text-gray-400' : 'text-energy-green'}`}>
+                          {medaGasDisplay.balance}
+                        </div>
+                        <div className="text-sm text-gray-400 flex items-center justify-center gap-1">
+                          Meda Gas
+                          {medaGasDisplay.isReal && !medaGasDisplay.isLoading && (
+                            <div className="w-2 h-2 bg-energy-green rounded-full" title="Live blockchain data" />
+                          )}
+                          {!medaGasDisplay.isReal && !medaGasDisplay.isLoading && (
+                            <div className="w-2 h-2 bg-yellow-500 rounded-full" title="Cached data" />
+                          )}
+                        </div>
+                        {medaGasBalance?.error && (
+                          <div className="text-xs text-red-400 mt-1">
+                            Connection error
+                          </div>
+                        )}
                       </div>
                       <div className="glassmorphism p-4 rounded-lg text-center">
                         <Shield size={24} className="text-meda-gold mx-auto mb-2" />

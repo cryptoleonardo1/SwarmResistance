@@ -2,9 +2,9 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { Web3Auth } from "@web3auth/modal";
 import { web3AuthConfig } from '../config/web3auth.config.js';
 import { userProfileService } from '../services/userProfile.service.js';
+import { tokenService } from '../services/tokenService.js';
 import PropTypes from 'prop-types';
 import { WalletConnectV2Adapter } from "@web3auth/wallet-connect-v2-adapter";
-import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 
 const Web3AuthContext = createContext(null);
 
@@ -23,6 +23,8 @@ export const Web3AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [walletAddress, setWalletAddress] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
+  const [medaGasBalance, setMedaGasBalance] = useState(null);
+  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -46,17 +48,8 @@ export const Web3AuthProvider = ({ children }) => {
           },
         });
 
-        // Configure MetaMask Adapter
-        const metamaskAdapter = new MetamaskAdapter({
-          clientId: web3AuthConfig.clientId,
-          sessionTime: 3600, // 1 hour
-          web3AuthNetwork: web3AuthConfig.web3AuthNetwork,
-          chainConfig: web3AuthConfig.chainConfig,
-        });
-
         // Configure adapters
         web3auth.configureAdapter(walletConnectV2Adapter);
-        web3auth.configureAdapter(metamaskAdapter);
 
         await web3auth.initModal();
 
@@ -75,9 +68,15 @@ export const Web3AuthProvider = ({ children }) => {
             const address = await getAccounts(web3authProvider);
             setWalletAddress(address);
             
+            // Initialize token service
+            await tokenService.initialize(web3authProvider);
+            
             // Load user profile
             const profile = userProfileService.getProfile(address);
             setUserProfile(profile);
+            
+            // Load Meda Gas balance
+            await loadMedaGasBalance(address);
             
             // Update profile with Web3Auth user info if available
             if (user && profile) {
@@ -113,6 +112,45 @@ export const Web3AuthProvider = ({ children }) => {
     }
   };
 
+  // Load Meda Gas balance from blockchain
+  const loadMedaGasBalance = async (address) => {
+    if (!address || !tokenService.isInitialized()) {
+      return;
+    }
+
+    try {
+      setIsLoadingBalance(true);
+      const balanceData = await tokenService.getMedaGasBalance(address);
+      setMedaGasBalance(balanceData);
+      
+      // Update user profile with real balance
+      if (balanceData && !balanceData.error) {
+        userProfileService.updateProfile(address, {
+          medaGas: balanceData.balance
+        });
+        setUserProfile(userProfileService.getProfile(address));
+      }
+      
+    } catch (error) {
+      console.error("Error loading Meda Gas balance:", error);
+      setMedaGasBalance({
+        balance: 0,
+        balanceFormatted: '0',
+        balanceWei: '0',
+        error: error.message
+      });
+    } finally {
+      setIsLoadingBalance(false);
+    }
+  };
+
+  // Refresh Meda Gas balance
+  const refreshMedaGasBalance = async () => {
+    if (walletAddress) {
+      await loadMedaGasBalance(walletAddress);
+    }
+  };
+
   const login = async () => {
     if (!web3auth) {
       console.error("Web3Auth not initialized");
@@ -131,8 +169,14 @@ export const Web3AuthProvider = ({ children }) => {
         const address = await getAccounts(web3authProvider);
         setWalletAddress(address);
         
+        // Initialize token service
+        await tokenService.initialize(web3authProvider);
+        
         // Load/create user profile
         const profile = userProfileService.getProfile(address);
+        
+        // Load Meda Gas balance
+        await loadMedaGasBalance(address);
         
         // Update profile with Web3Auth user info
         if (user) {
@@ -166,6 +210,12 @@ export const Web3AuthProvider = ({ children }) => {
       setUser(null);
       setWalletAddress(null);
       setUserProfile(null);
+      setMedaGasBalance(null);
+      setIsLoadingBalance(false);
+      
+      // Reset token service
+      tokenService.reset();
+      
       console.log("Logged out successfully!");
     } catch (error) {
       console.error("Error during logout:", error);
@@ -225,13 +275,16 @@ export const Web3AuthProvider = ({ children }) => {
     user,
     walletAddress,
     userProfile,
+    medaGasBalance,
     isLoading,
+    isLoadingBalance,
     login,
     logout,
     getUserInfo,
     getBalance,
     updateUserProfile,
     addMedaGas,
+    refreshMedaGasBalance,
     isConnected: !!walletAddress,
   };
 
