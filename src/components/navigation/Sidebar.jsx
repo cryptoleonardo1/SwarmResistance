@@ -12,10 +12,11 @@ const Sidebar = () => {
   const navItems = [
     { icon: <User size={24} />, text: 'Profile', path: '/profile' },
     { icon: <Sword size={24} />, text: 'Join Resistance', path: '/join-resistance' },
-    { icon: <Gem size={24} />, text: 'NFT', path: '/nft' },
     { icon: <ShoppingBag size={24} />, text: 'Marketplace', path: '/marketplace' },
-    { icon: <Book size={24} />, text: 'Story', path: '/story' },
-    { icon: <Bot size={24} />, text: 'AI Assistant', path: '/chatbot' },
+    { icon: <Gem size={24} />, text: 'Lore', path: '/story' },
+    { icon: <Book size={24} />, text: 'Blog', path: '/blog' },
+    { icon: <Bot size={24} />, text: 'AI Commander', path: '/chatbot' },
+   
   ];
 
   // Social icons

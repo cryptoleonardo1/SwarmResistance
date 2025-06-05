@@ -1,7 +1,6 @@
 import HeroSection from '../components/home/HeroSection';
 import EcosystemOverview from '../components/home/EcosystemOverview';
 import CommunityMetrics from '../components/home/CommunityMetrics';
-import LatestNews from '../components/home/LatestNews';
 import OnboardingSteps from '../components/home/OnboardingSteps';
 
 const HomePage = () => {
@@ -18,10 +17,6 @@ const HomePage = () => {
       
       <section id="metrics" className="full-screen-section">
         <CommunityMetrics />
-      </section>
-      
-      <section id="news" className="full-screen-section">
-        <LatestNews />
       </section>
       
       <section id="join" className="full-screen-section">

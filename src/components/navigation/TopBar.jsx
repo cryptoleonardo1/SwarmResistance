@@ -9,7 +9,7 @@ const sectionItems = [
   { id: 'home', name: 'Home', href: '#home' },
   { id: 'ecosystem', name: 'Ecosystem', href: '#ecosystem' },
   { id: 'metrics', name: 'Metrics', href: '#metrics' },
-  { id: 'news', name: 'News', href: '#news' },
+ // { id: 'news', name: 'News', href: '#news' },
   { id: 'join', name: 'Join Us', href: '#join' },
 ];
 

@@ -461,8 +461,7 @@ const EcosystemOverview = () => {
                 />
               </div>
               
-              {/* Bottom section - Key benefits */}
-
+              
             </div>
           </motion.div>
         </div>

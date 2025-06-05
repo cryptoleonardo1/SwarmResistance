@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useWeb3Auth } from '../../contexts/Web3AuthContext';
-import SectionWrapper from '../layout/SectionWrapper';
 
 // New Swarm Invasion Background Component
 const SwarmInvasionBackground = () => {
@@ -211,6 +210,24 @@ const SwarmInvasionBackground = () => {
 const HeroSection = () => {
   const navigate = useNavigate();
   const { login, isLoading } = useWeb3Auth();
+
+  // Terminal text effect - updated with Swarm Resistance story
+  const [typedText, setTypedText] = useState('');
+  const fullText = 'The Swarm has consumed our empire... Cryptomeda lies in ruins... But from collapse comes rebirth... Renegades and Goliaths now fight as one... The resistance needs heroes willing to reclaim what was lost.';
+  
+  useEffect(() => {
+    let index = 0;
+    const intervalId = setInterval(() => {
+      setTypedText(fullText.slice(0, index));
+      index++;
+      
+      if (index > fullText.length) {
+        clearInterval(intervalId);
+      }
+    }, 35);
+    
+    return () => clearInterval(intervalId);
+  }, []);
   
   // Parallax effect
   const [scrollY, setScrollY] = useState(0);
@@ -223,6 +240,73 @@ const HeroSection = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  // Corrupted/burning planets and space objects
+  const spaceObjects = [
+    {
+      type: "burning-planet",
+      name: "Meda Prime - Burning",
+      color: "from-red-500/60 via-orange-500/40 to-yellow-500/20",
+      size: "w-24 h-24 md:w-32 md:h-32",
+      position: "bottom-[25%] right-[10%]",
+      rotationDuration: "180s",
+      floatDuration: "8s",
+      floatDelay: "0s",
+      shadow: "shadow-red-500",
+      parallaxSpeed: 0.1,
+      corrupted: true
+    },
+    {
+      type: "damaged-planet",
+      name: "Cybertron - Corrupted",
+      color: "from-neon-cyan/40 via-red-400/30 to-gray-500/20",
+      size: "w-20 h-20 md:w-28 md:h-28",
+      position: "top-[20%] left-[25%]",
+      rotationDuration: "160s",
+      floatDuration: "12s",
+      floatDelay: "2s",
+      shadow: "shadow-red-400",
+      parallaxSpeed: 0.15,
+      corrupted: true
+    },
+    {
+      type: "dying-planet",
+      name: "Nebulon - Dying",
+      color: "from-gray-400/60 via-red-400/20 to-transparent",
+      size: "w-16 h-16 md:w-24 md:h-24",
+      position: "top-[30%] right-[15%]",
+      rotationDuration: "120s",
+      floatDuration: "10s",
+      floatDelay: "4s",
+      shadow: "shadow-gray-400",
+      parallaxSpeed: 0.2,
+      corrupted: true
+    },
+    {
+      type: "infected-planet",
+      name: "Energos - Infected",
+      color: "from-green-400/30 via-red-500/40 to-orange-400/20",
+      size: "w-14 h-14 md:w-20 md:h-20",
+      position: "bottom-[35%] left-[20%]",
+      rotationDuration: "140s",
+      floatDuration: "7s",
+      floatDelay: "1s",
+      shadow: "shadow-orange-400",
+      parallaxSpeed: 0.12,
+      corrupted: true
+    },
+    {
+      type: "debris-field",
+      color: "from-gray-500/40 via-red-400/30 to-transparent",
+      size: "w-32 h-32 md:w-48 md:h-48",
+      position: "top-[10%] right-[30%]",
+      rotationDuration: "300s",
+      floatDuration: "20s",
+      floatDelay: "0s",
+      shadow: "shadow-gray-500",
+      parallaxSpeed: 0.05
+    }
+  ];
 
   const handleConnectWallet = async () => {
     try {
@@ -237,14 +321,14 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden">
+    <div className="min-h-screen w-full relative overflow-hidden flex items-center">
       {/* Swarm Invasion Background */}
       <SwarmInvasionBackground />
       
-      {/* Updated gradient layers - black to blue (matching ecosystem) */}
+      {/* Updated gradient layers - blue to purple with fire effect from bottom */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-blue-900/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-space-blue/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/40 via-purple-900/50 to-red-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-orange-600/30 via-purple-900/20 to-transparent" />
       </div>
       
       {/* Corruption spread animation */}
@@ -295,124 +379,149 @@ const HeroSection = () => {
         ))}
       </motion.div>
       
-      {/* Content using SectionWrapper for proper full-screen structure */}
-      <SectionWrapper
-        title="Cryptomeda Collapses"
-        subtitle="The Swarm has consumed our empire... Cryptomeda lies in ruins... But from collapse comes rebirth... Renegades and Goliaths now fight as one... The resistance needs heroes willing to reclaim what was lost. Join the resistance and unite against extinction."
-        className="relative z-10"
-      >
-        {/* Main content area with proper flex distribution */}
-        <div className="flex flex-col items-center justify-center h-full">
-          {/* Main Image with reduced top margin to better center content */}
-          <div className="flex-shrink-0 mb-8">
-            <motion.div
-              initial={{ scale: 0, opacity: 0, rotate: -10 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ 
-                duration: 1.2, 
-                delay: 0.7,
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-              }}
-              className="relative"
-            >
-              {/* Glow effect behind the image */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-radial from-orange-500/30 via-red-500/20 to-transparent rounded-full blur-2xl"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.6, 0.3]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                style={{
-                  width: '120%',
-                  height: '120%',
-                  left: '-10%',
-                  top: '-10%'
-                }}
-              />
-              
-              {/* Main image - optimized size for full-screen layout */}
-              <motion.img
-                src="/main.png"
-                alt="Swarm Resistance"
-                className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[26rem] lg:h-[26rem] xl:w-[28rem] xl:h-[28rem] object-contain relative z-10"
-                animate={{
-                  y: [0, -8, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                style={{
-                  filter: 'drop-shadow(0 0 30px rgba(255, 107, 0, 0.7))'
-                }}
-              />
-              
-              {/* Orbiting particles around the image - adjusted for optimized size */}
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={`particle-${i}`}
-                  className="absolute w-2 h-2 bg-orange-400 rounded-full"
-                  style={{
-                    left: '50%',
-                    top: '50%',
-                  }}
+      {/* Corrupted space objects with parallax */}
+      {spaceObjects.map((obj, index) => (
+        <motion.div
+          key={index}
+          className={`absolute ${obj.position} ${obj.size} pointer-events-none`}
+          style={{ 
+            y: scrollY * obj.parallaxSpeed,
+            x: scrollY * (index % 2 === 0 ? obj.parallaxSpeed * 0.5 : -obj.parallaxSpeed * 0.5),
+          }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, delay: 0.3 + index * 0.1 }}
+        >
+          <motion.div 
+            className={`w-full h-full relative rounded-full bg-gradient-radial ${obj.color} ${obj.shadow}`}
+            animate={{
+              rotate: 360,
+              y: [0, -10, 0],
+            }}
+            transition={{
+              rotate: { duration: obj.rotationDuration, repeat: Infinity, ease: "linear" },
+              y: { duration: obj.floatDuration, repeat: Infinity, ease: "easeInOut", delay: obj.floatDelay }
+            }}
+          >
+            {/* Corrupted planet effects */}
+            {obj.corrupted && (
+              <>
+                {/* Crack patterns */}
+                <div className="absolute inset-[25%] rounded-full bg-gradient-to-br from-red-500/30 via-transparent to-orange-500/20" />
+                
+                {/* Pulsing corruption */}
+                <motion.div 
+                  className="absolute inset-0 rounded-full bg-red-500/20"
                   animate={{
-                    rotate: [0, 360],
+                    opacity: [0.2, 0.6, 0.2],
+                    scale: [1, 1.1, 1]
                   }}
                   transition={{
-                    duration: 8 + i * 2,
+                    duration: 3,
                     repeat: Infinity,
-                    ease: "linear",
-                    delay: i * 0.5
+                    ease: "easeInOut"
                   }}
-                >
-                  <div 
-                    className="w-2 h-2 bg-orange-400 rounded-full shadow-lg"
+                />
+              </>
+            )}
+            
+            {/* Debris field effects */}
+            {obj.type === "debris-field" && (
+              <div className="absolute inset-0 rounded-full">
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-1 h-1 bg-gray-400 rounded-full"
                     style={{
-                      boxShadow: '0 0 12px rgba(255, 107, 0, 0.8)',
-                      transform: `translateX(${130 + i * 25}px) translateY(-50%)`
+                      left: `${Math.random() * 80 + 10}%`,
+                      top: `${Math.random() * 80 + 10}%`,
+                    }}
+                    animate={{
+                      x: [0, Math.random() * 20 - 10],
+                      y: [0, Math.random() * 20 - 10],
+                      rotate: [0, 360]
+                    }}
+                    transition={{
+                      duration: 10 + Math.random() * 10,
+                      repeat: Infinity,
+                      ease: "linear"
                     }}
                   />
-                </motion.div>
-              ))}
+                ))}
+              </div>
+            )}
+          </motion.div>
+        </motion.div>
+      ))}
+      
+      {/* Content - Centered */}
+      <div className="section-content relative z-10">
+        <div className="content-wrapper flex items-center justify-center min-h-screen">
+          <div className="text-center max-w-4xl mx-auto">
+            {/* Main Headline with underline - Updated - both words have same styling */}
+            <motion.h1
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="section-title text-5xl md:text-6xl lg:text-7xl font-bold mb-6"
+            >
+              <span className="text-white">Cryptomeda</span> <span className="text-white">Collapses</span>
+            </motion.h1>
+            
+            {/* Tagline - Updated */}
+            <motion.p
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="text-2xl md:text-3xl font-medium mb-10 text-stellar-white/90"
+            >
+              Unite Against Extinction
+            </motion.p>
+            
+            {/* Animated Description - Terminal text effect - Updated */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.7 }}
+              className="max-w-3xl mx-auto mb-12 glassmorphism p-8 rounded-xl backdrop-blur-md border border-red-500/20"
+              style={{
+                boxShadow: '0 0 20px rgba(239, 68, 68, 0.1)'
+              }}
+            >
+              <p className="font-jetbrains text-stellar-white/90 text-base md:text-lg leading-relaxed">
+                {typedText}
+                <span className="animate-pulse text-red-400">_</span>
+              </p>
+            </motion.div>
+            
+            {/* CTA Buttons - Updated with functionality */}
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+            >
+              <motion.button 
+                className="btn-primary-glass text-lg px-8 py-4"
+                onClick={handleConnectWallet}
+                disabled={isLoading}
+                whileHover={{ scale: isLoading ? 1 : 1.05 }}
+                whileTap={{ scale: isLoading ? 1 : 0.95 }}
+              >
+                {isLoading ? 'Connecting...' : 'Connect Wallet & Begin'}
+              </motion.button>
+              <motion.button 
+                className="btn-secondary-glass text-lg px-8 py-4 border-red-400/30 hover:border-red-400/50"
+                onClick={handleJoinResistance}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Join the Resistance
+              </motion.button>
             </motion.div>
           </div>
-          
-          {/* CTA Buttons with proper spacing */}
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center flex-shrink-0"
-          >
-            <motion.button 
-              className="btn-primary-glass text-lg px-8 py-4"
-              onClick={handleConnectWallet}
-              disabled={isLoading}
-              whileHover={{ scale: isLoading ? 1 : 1.05 }}
-              whileTap={{ scale: isLoading ? 1 : 0.95 }}
-            >
-              {isLoading ? 'Connecting...' : 'Connect Wallet & Begin'}
-            </motion.button>
-            <motion.button 
-              className="btn-secondary-glass text-lg px-8 py-4 border-red-400/30 hover:border-red-400/50"
-              onClick={handleJoinResistance}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Join the Resistance
-            </motion.button>
-          </motion.div>
         </div>
-      </SectionWrapper>
+      </div>
       
       {/* Emergency alert streaks instead of shooting stars */}
       {[...Array(3)].map((_, i) => (
@@ -443,9 +552,9 @@ const HeroSection = () => {
       
       {/* Smooth transition to next section - keeping as requested */}
       <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none">
-        {/* Gradient transition from purple to next section */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-space-blue/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-700/10 to-cosmic-purple/40" />
+        {/* Gradient transition from red/orange corruption to blue/purple */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-red-900/20 to-space-blue/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-900/10 to-cosmic-purple/40" />
         
         {/* Animated transition particles */}
         {[...Array(8)].map((_, i) => (
