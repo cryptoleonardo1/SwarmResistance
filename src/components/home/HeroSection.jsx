@@ -409,11 +409,78 @@ const HeroSection = () => {
         </motion.div>
       ))}
       
-      {/* Enhanced transition to next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none">
-        {/* Multi-layer gradient transition */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-resistance-primary/15 to-resistance-primary/40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-phoenix-primary/5 to-phoenix-primary/15" />
+      {/* Subtle creative transition to next section - no blue/black elements */}
+      <div className="absolute bottom-0 left-0 right-0 h-80 pointer-events-none z-20">
+        {/* Subtle energy particle streams flowing to next section - centered */}
+        <div className="absolute inset-0" style={{ left: '16rem' }}>
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`flow-particle-${i}`}
+              className="absolute w-1 h-16 rounded-full"
+              style={{
+                left: `${30 + i * 6}%`,
+                top: '60%',
+                background: `linear-gradient(to bottom, transparent, ${i % 2 === 0 ? 'rgba(255, 140, 0, 0.3)' : 'rgba(59, 130, 246, 0.3)'})`,
+                filter: 'blur(2px)'
+              }}
+              animate={{
+                y: ['0px', '120px'],
+                opacity: [0, 0.6, 0],
+                scale: [1, 1.2, 1]
+              }}
+              transition={{
+                duration: 4,
+                delay: i * 0.5,
+                repeat: Infinity,
+                ease: "easeOut"
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Sidebar interaction particles */}
+        <div className="absolute left-0 top-0 w-64 h-full">
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`sidebar-particle-${i}`}
+              className="absolute w-2 h-2 rounded-full bg-phoenix-primary/40"
+              style={{
+                left: `${60 + i * 20}%`,
+                top: `${30 + i * 20}%`
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.2, 0.6, 0.2],
+                scale: [1, 1.3, 1]
+              }}
+              transition={{
+                duration: 3 + i,
+                delay: i * 0.8,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Subtle atmospheric glow - no harsh lines */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-20"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(255, 140, 0, 0.1) 0%, transparent 70%)',
+          }}
+          animate={{
+            opacity: [0.3, 0.6, 0.3]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Final gentle blend overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void-primary/30" />
       </div>
     </div>
   );

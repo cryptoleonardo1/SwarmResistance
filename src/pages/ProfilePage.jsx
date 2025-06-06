@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, GamepadIcon, Clock, TrendingUp, Sword, MapPin, RefreshCw } from 'lucide-react';
+import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, Clock, TrendingUp, Sword, MapPin, RefreshCw } from 'lucide-react';
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import { RANKS } from '../services/userProfile.service';
 
@@ -32,62 +32,207 @@ const ProfilePage = () => {
     }
   }, [userProfile]);
 
+  // Enhanced floating particles
+  const particles = Array.from({ length: 15 }).map((_, i) => ({
+    id: i,
+    delay: i * 0.3,
+    duration: 12 + Math.random() * 6,
+    size: 1.5 + Math.random() * 2.5,
+    left: Math.random() * 100,
+    color: i % 4 === 0 ? "#FF8C00" : i % 4 === 1 ? "#60A5FA" : i % 4 === 2 ? "#8B5CF6" : "#22C55E"
+  }));
+
+  // Phoenix fire particles
+  const fireParticles = Array.from({ length: 8 }).map((_, i) => ({
+    id: i,
+    delay: i * 1.2,
+    duration: 6 + Math.random() * 3,
+    left: 10 + Math.random() * 80,
+  }));
+
   if (!isConnected) {
     return (
-      <div className="min-h-screen w-full relative overflow-hidden flex items-center justify-center">
-        {/* Background with space theme */}
-        <div className="absolute inset-0 bg-gradient-to-b from-space-blue via-cosmic-purple/80 to-void-black">
-          {/* Animated stars */}
-          {[...Array(30)].map((_, i) => (
+      <div className="full-screen-section relative overflow-hidden bg-void-primary">
+        {/* Enhanced background layers */}
+        <div className="absolute inset-0 w-full h-full">
+          {/* Starfield background */}
+          <div 
+            className="absolute inset-0 w-full h-full opacity-40"
+            style={{ 
+              backgroundImage: `radial-gradient(2px 2px at 20px 30px, #FF8C00, transparent),
+                               radial-gradient(2px 2px at 40px 70px, #60A5FA, transparent),
+                               radial-gradient(1px 1px at 90px 40px, #8B5CF6, transparent),
+                               radial-gradient(1px 1px at 130px 80px, #22C55E, transparent),
+                               radial-gradient(2px 2px at 160px 30px, #FF8C00, transparent)`,
+              backgroundRepeat: 'repeat',
+              backgroundSize: '200px 100px'
+            }}
+          />
+          
+          {/* Nebula overlay */}
+          <div className="absolute inset-0 bg-gradient-radial from-cosmic-purple/30 via-transparent to-void-primary/60" />
+          <div className="absolute inset-0 bg-gradient-conic from-phoenix-primary/10 via-resistance-primary/10 to-energy-purple/10 opacity-30" />
+        </div>
+
+        {/* Enhanced floating particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {particles.map(particle => (
             <motion.div
-              key={`star-${i}`}
-              className="absolute bg-white rounded-full"
+              key={particle.id}
+              className="absolute rounded-full"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${1 + Math.random() * 2}px`,
-                height: `${1 + Math.random() * 2}px`,
+                width: `${particle.size}px`,
+                height: `${particle.size}px`,
+                left: `${particle.left}%`,
+                backgroundColor: particle.color,
+                boxShadow: `0 0 ${particle.size * 6}px ${particle.color}`,
               }}
               animate={{
-                opacity: [0.3, 1, 0.3],
-                scale: [1, 1.2, 1]
+                y: ['120vh', '-10vh'],
+                x: [0, Math.sin(particle.id * 0.5) * 150],
+                opacity: [0, 0.8, 0.8, 0],
+                scale: [0.5, 1, 1, 0.3]
               }}
               transition={{
-                duration: 2 + Math.random() * 3,
+                duration: particle.duration,
+                delay: particle.delay,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "linear"
+              }}
+            />
+          ))}
+          
+          {/* Phoenix fire particles */}
+          {fireParticles.map(particle => (
+            <motion.div
+              key={`fire-${particle.id}`}
+              className="absolute fire-particle"
+              style={{
+                left: `${particle.left}%`,
+                background: 'linear-gradient(to top, #FF8C00, #FFB84D)',
+              }}
+              animate={{
+                y: ['100vh', '-50px'],
+                opacity: [0, 1, 1, 0],
+                scale: [0.8, 1.2, 1, 0.6]
+              }}
+              transition={{
+                duration: particle.duration,
+                delay: particle.delay,
+                repeat: Infinity,
+                ease: "easeOut"
               }}
             />
           ))}
         </div>
         
-        <motion.div 
-          className="text-center glassmorphism p-8 rounded-xl max-w-md mx-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Shield size={64} className="text-meda-gold mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-stellar-white mb-4">Access Restricted</h2>
-          <p className="text-gray-400 mb-6">Connect your wallet to access your resistance profile and join the fight against the Swarm.</p>
-          <motion.button 
-            className="btn-primary-glass"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Connect Wallet
-          </motion.button>
-        </motion.div>
+        <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
+          <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center">
+            <motion.div 
+              className="text-center glassmorphism p-8 rounded-xl max-w-md mx-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <Shield size={64} className="text-meda-gold mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-stellar-white mb-4">Access Restricted</h2>
+              <p className="text-gray-400 mb-6">Connect your wallet to access your resistance profile and join the fight against the Swarm.</p>
+              <motion.button 
+                className="btn-primary-glass"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Connect Wallet
+              </motion.button>
+            </motion.div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!userProfile) {
     return (
-      <div className="min-h-screen w-full relative overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-space-blue via-cosmic-purple/80 to-void-black" />
-        <div className="text-center glassmorphism p-8 rounded-xl">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-meda-gold mx-auto mb-4"></div>
-          <p className="text-xl text-gray-400">Loading resistance profile...</p>
+      <div className="full-screen-section relative overflow-hidden bg-void-primary">
+        {/* Enhanced background layers */}
+        <div className="absolute inset-0 w-full h-full">
+          {/* Starfield background */}
+          <div 
+            className="absolute inset-0 w-full h-full opacity-40"
+            style={{ 
+              backgroundImage: `radial-gradient(2px 2px at 20px 30px, #FF8C00, transparent),
+                               radial-gradient(2px 2px at 40px 70px, #60A5FA, transparent),
+                               radial-gradient(1px 1px at 90px 40px, #8B5CF6, transparent),
+                               radial-gradient(1px 1px at 130px 80px, #22C55E, transparent),
+                               radial-gradient(2px 2px at 160px 30px, #FF8C00, transparent)`,
+              backgroundRepeat: 'repeat',
+              backgroundSize: '200px 100px'
+            }}
+          />
+          
+          {/* Nebula overlay */}
+          <div className="absolute inset-0 bg-gradient-radial from-cosmic-purple/30 via-transparent to-void-primary/60" />
+          <div className="absolute inset-0 bg-gradient-conic from-phoenix-primary/10 via-resistance-primary/10 to-energy-purple/10 opacity-30" />
+        </div>
+
+        {/* Enhanced floating particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {particles.map(particle => (
+            <motion.div
+              key={particle.id}
+              className="absolute rounded-full"
+              style={{
+                width: `${particle.size}px`,
+                height: `${particle.size}px`,
+                left: `${particle.left}%`,
+                backgroundColor: particle.color,
+                boxShadow: `0 0 ${particle.size * 6}px ${particle.color}`,
+              }}
+              animate={{
+                y: ['120vh', '-10vh'],
+                x: [0, Math.sin(particle.id * 0.5) * 150],
+                opacity: [0, 0.8, 0.8, 0],
+                scale: [0.5, 1, 1, 0.3]
+              }}
+              transition={{
+                duration: particle.duration,
+                delay: particle.delay,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+          ))}
+          
+          {/* Phoenix fire particles */}
+          {fireParticles.map(particle => (
+            <motion.div
+              key={`fire-${particle.id}`}
+              className="absolute fire-particle"
+              style={{
+                left: `${particle.left}%`,
+                background: 'linear-gradient(to top, #FF8C00, #FFB84D)',
+              }}
+              animate={{
+                y: ['100vh', '-50px'],
+                opacity: [0, 1, 1, 0],
+                scale: [0.8, 1.2, 1, 0.6]
+              }}
+              transition={{
+                duration: particle.duration,
+                delay: particle.delay,
+                repeat: Infinity,
+                ease: "easeOut"
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
+          <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col items-center justify-center">
+            <div className="text-center glassmorphism p-8 rounded-xl">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-meda-gold mx-auto mb-4"></div>
+              <p className="text-xl text-gray-400">Loading resistance profile...</p>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -286,40 +431,83 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Full background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-space-blue via-cosmic-purple/60 to-void-black">
-        {/* Animated background elements */}
-        {[...Array(20)].map((_, i) => (
+    <div className="full-screen-section relative overflow-hidden bg-void-primary">
+      {/* Enhanced background layers */}
+      <div className="absolute inset-0 w-full h-full">
+        {/* Starfield background */}
+        <div 
+          className="absolute inset-0 w-full h-full opacity-40"
+          style={{ 
+            backgroundImage: `radial-gradient(2px 2px at 20px 30px, #FF8C00, transparent),
+                             radial-gradient(2px 2px at 40px 70px, #60A5FA, transparent),
+                             radial-gradient(1px 1px at 90px 40px, #8B5CF6, transparent),
+                             radial-gradient(1px 1px at 130px 80px, #22C55E, transparent),
+                             radial-gradient(2px 2px at 160px 30px, #FF8C00, transparent)`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '200px 100px'
+          }}
+        />
+        
+        {/* Nebula overlay */}
+        <div className="absolute inset-0 bg-gradient-radial from-cosmic-purple/30 via-transparent to-void-primary/60" />
+        <div className="absolute inset-0 bg-gradient-conic from-phoenix-primary/10 via-resistance-primary/10 to-energy-purple/10 opacity-30" />
+      </div>
+
+      {/* Enhanced floating particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {particles.map(particle => (
           <motion.div
-            key={`bg-particle-${i}`}
+            key={particle.id}
             className="absolute rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${2 + Math.random() * 4}px`,
-              height: `${2 + Math.random() * 4}px`,
-              backgroundColor: i % 3 === 0 ? '#FFB61E' : i % 3 === 1 ? '#00F0FF' : '#FF3E8A',
-              opacity: 0.4
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              left: `${particle.left}%`,
+              backgroundColor: particle.color,
+              boxShadow: `0 0 ${particle.size * 6}px ${particle.color}`,
             }}
             animate={{
-              y: [0, -50, 0],
-              opacity: [0.2, 0.8, 0.2]
+              y: ['120vh', '-10vh'],
+              x: [0, Math.sin(particle.id * 0.5) * 150],
+              opacity: [0, 0.8, 0.8, 0],
+              scale: [0.5, 1, 1, 0.3]
             }}
             transition={{
-              duration: 8 + Math.random() * 4,
+              duration: particle.duration,
+              delay: particle.delay,
               repeat: Infinity,
-              ease: "easeInOut",
-              delay: Math.random() * 2
+              ease: "linear"
+            }}
+          />
+        ))}
+        
+        {/* Phoenix fire particles */}
+        {fireParticles.map(particle => (
+          <motion.div
+            key={`fire-${particle.id}`}
+            className="absolute fire-particle"
+            style={{
+              left: `${particle.left}%`,
+              background: 'linear-gradient(to top, #FF8C00, #FFB84D)',
+            }}
+            animate={{
+              y: ['100vh', '-50px'],
+              opacity: [0, 1, 1, 0],
+              scale: [0.8, 1.2, 1, 0.6]
+            }}
+            transition={{
+              duration: particle.duration,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: "easeOut"
             }}
           />
         ))}
       </div>
 
       {/* Main content - properly centered accounting for sidebar */}
-      <div className="relative z-10 min-h-screen py-8">
-        <div className="section-content">
-          <div className="content-wrapper">
+      <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           
           {/* Header Section */}
           <motion.div 
@@ -1056,7 +1244,6 @@ const ProfilePage = () => {
           </motion.div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

@@ -115,6 +115,48 @@ const CommunityMetrics = () => {
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Diamond mirror pattern transition from previous section */}
+      <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-20">
+        {/* Top diamond shape - mirroring bottom */}
+        <div className="absolute inset-0">
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-void-primary/60 via-void-primary/30 to-transparent"
+            style={{
+              clipPath: 'polygon(50% 0%, 75% 50%, 50% 100%, 25% 50%)',
+              transform: 'perspective(800px) rotateX(-10deg)',
+              left: '16rem',
+              width: 'calc(100% - 16rem)'
+            }}
+          />
+        </div>
+        
+        {/* Subtle energy cascade - less visible */}
+        <div className="absolute inset-0" style={{ left: '16rem' }}>
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={`cascade-${i}`}
+              className="absolute w-1 h-16 rounded-full"
+              style={{
+                left: `${35 + i * 8}%`,
+                top: '20px',
+                background: `linear-gradient(to bottom, ${i % 2 === 0 ? 'rgba(255, 140, 0, 0.2)' : 'rgba(59, 130, 246, 0.2)'}, transparent)`,
+                filter: 'blur(2px)'
+              }}
+              animate={{
+                y: ['0px', '180px'],
+                opacity: [0, 0.4, 0]
+              }}
+              transition={{
+                duration: 3.5,
+                delay: i * 0.5,
+                repeat: Infinity,
+                ease: "easeOut"
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
       {/* Enhanced space background */}
       <div className="absolute inset-0 w-full h-full">
         {/* Base gradient */}
@@ -186,15 +228,15 @@ const CommunityMetrics = () => {
             {/* Spacer to push content down more */}
             <div className="flex-grow" style={{ minHeight: '120px' }}></div>
             
-            {/* Traffic animation layer - positioned between title and city */}
+            {/* Simplified traffic animation layer - positioned between title and city */}
             <div className="absolute inset-x-0 pointer-events-none" style={{ bottom: '600px', height: '200px' }}>
               {/* Horizontal fast gold lines moving left to right */}
-              {[...Array(6)].map((_, i) => (
+              {[...Array(4)].map((_, i) => (
                 <motion.div
                   key={`gold-line-ltr-${i}`}
                   className="absolute"
                   style={{
-                    top: `${15 + i * 15}%`,
+                    top: `${20 + i * 20}%`,
                     left: '-200px',
                     height: '2px',
                     width: '100px',
@@ -203,10 +245,10 @@ const CommunityMetrics = () => {
                     x: ['0px', 'calc(100vw + 400px)'],
                   }}
                   transition={{
-                    duration: 1.5 + (i % 3) * 0.3,
+                    duration: 2 + (i % 2) * 0.5,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: i * 0.4,
+                    delay: i * 0.8,
                   }}
                 >
                   <div 
@@ -219,12 +261,12 @@ const CommunityMetrics = () => {
               ))}
 
               {/* Diagonal fast gold lines moving right to left */}
-              {[...Array(4)].map((_, i) => (
+              {[...Array(2)].map((_, i) => (
                 <motion.div
                   key={`gold-line-rtl-${i}`}
                   className="absolute"
                   style={{
-                    top: `${25 + i * 18}%`,
+                    top: `${40 + i * 25}%`,
                     right: '-150px',
                     height: '2px',
                     width: '80px',
@@ -234,97 +276,16 @@ const CommunityMetrics = () => {
                     x: ['0px', 'calc(-100vw - 300px)'],
                   }}
                   transition={{
-                    duration: 1.2 + (i % 2) * 0.2,
+                    duration: 1.8 + (i % 2) * 0.4,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: i * 0.6 + 0.8,
+                    delay: i * 1.2 + 1,
                   }}
                 >
                   <div 
                     className="w-full h-full bg-gradient-to-r from-transparent via-meda-gold to-transparent"
                     style={{
                       boxShadow: '0 0 6px #FFB61E, 0 0 12px #FFB61E60',
-                    }}
-                  />
-                </motion.div>
-              ))}
-
-              {/* Curved gold traffic paths */}
-              {[...Array(3)].map((_, i) => (
-                <motion.div
-                  key={`gold-curve-${i}`}
-                  className="absolute"
-                  style={{
-                    left: `${15 + i * 30}%`,
-                    top: `${35 + i * 10}%`,
-                  }}
-                >
-                  <motion.div
-                    className="w-3 h-3 rounded-full bg-meda-gold"
-                    style={{
-                      boxShadow: '0 0 12px #FFB61E, 0 0 20px #FFB61E60',
-                    }}
-                    animate={{
-                      x: [0, 100, 200, 180, 80, 0],
-                      y: [0, -30, -15, 10, 20, 0],
-                      opacity: [0.8, 1, 1, 1, 0.8, 0.8],
-                    }}
-                    transition={{
-                      duration: 4 + i * 0.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 1.2,
-                    }}
-                  />
-                  {/* Trail effect */}
-                  <motion.div
-                    className="absolute top-0 left-0 w-2 h-2 rounded-full bg-meda-gold/60"
-                    style={{
-                      boxShadow: '0 0 8px #FFB61E60',
-                    }}
-                    animate={{
-                      x: [0, 100, 200, 180, 80, 0],
-                      y: [0, -30, -15, 10, 20, 0],
-                      opacity: [0.4, 0.7, 0.7, 0.7, 0.4, 0.4],
-                    }}
-                    transition={{
-                      duration: 4 + i * 0.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 1.2 + 0.1,
-                    }}
-                  />
-                </motion.div>
-              ))}
-
-              {/* Fast streaking gold lines (shooting star effect) */}
-              {[...Array(2)].map((_, i) => (
-                <motion.div
-                  key={`gold-streak-${i}`}
-                  className="absolute"
-                  style={{
-                    top: `${30 + i * 25}%`,
-                    left: '-100px',
-                    height: '3px',
-                    width: '180px',
-                    transform: `rotate(${-10 + i * 5}deg)`,
-                  }}
-                  animate={{
-                    x: ['0px', 'calc(100vw + 300px)'],
-                    opacity: [0, 1, 1, 0],
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    repeat: Infinity,
-                    ease: "easeIn",
-                    delay: i * 3 + 2,
-                    repeatDelay: 4,
-                  }}
-                >
-                  <div 
-                    className="w-full h-full bg-gradient-to-r from-transparent via-meda-gold to-meda-gold/20"
-                    style={{
-                      boxShadow: '0 0 12px #FFB61E, 0 0 20px #FFB61E80',
                     }}
                   />
                 </motion.div>
@@ -350,7 +311,7 @@ const CommunityMetrics = () => {
             </div>
             
             {/* Buildings section - moved up */}
-            <div ref={sectionRef} className="relative z-10 mb-4"> {/* Reduced margin from mb-6 to mb-4 */}
+            <div ref={sectionRef} className="relative z-10 mb-4">
               <div className="flex justify-between items-end max-w-6xl mx-auto px-4">
                 {metricsData.map((metric, index) => (
                   <div key={index} className="relative flex flex-col items-center flex-1">
@@ -372,9 +333,9 @@ const CommunityMetrics = () => {
                       <motion.img 
                         src={metric.buildingImage} 
                         alt={metric.title}
-                        className="h-[120px] md:h-[150px] lg:h-[220px] object-contain transform-gpu cursor-pointer" // Increased height as in your code
+                        className="h-[120px] md:h-[150px] lg:h-[240px] object-contain transform-gpu cursor-pointer"
                         style={{ 
-                          marginBottom: '+10px', // As in your code
+                          marginBottom: '+10px',
                           transformOrigin: 'bottom center'
                         }}
                         animate={{
@@ -391,28 +352,6 @@ const CommunityMetrics = () => {
                           e.target.style.display = 'none';
                         }}
                       />
-                      
-                      {/* Energy beam 
-                      <motion.div
-                        className="absolute bottom-0 left-1/2 w-[3px] transform -translate-x-1/2"
-                        style={{ 
-                          backgroundColor: metric.color, 
-                          boxShadow: `0 0 8px ${metric.color}`,
-                          height: '0%'
-                        }}
-                        animate={{ 
-                          height: ["0%", "100%", "0%"]
-                        }}
-                        transition={{
-                          duration: 3,
-                          ease: "easeInOut",
-                          times: [0, 0.5, 1],
-                          repeat: Infinity,
-                          repeatDelay: 1,
-                          delay: index * 0.5
-                        }}
-                      />
-                      */}
                     </div>
                   </div>
                 ))}
@@ -420,7 +359,7 @@ const CommunityMetrics = () => {
             </div>
 
             {/* Horizontal energy lines positioned at city horizon edge */}
-            <div className="relative w-full mb-6"> {/* Reduced margin from mb-8 to mb-6 */}
+            <div className="relative w-full mb-6">
               <div className="max-w-6xl mx-auto px-4">
                 <div className="grid grid-cols-4 gap-4">
                   {metricsData.map((metric, index) => (
@@ -452,7 +391,7 @@ const CommunityMetrics = () => {
             </div>
             
             {/* Metrics Cards with enhanced border styling */}
-            <div className="pb-24"> {/* Increased bottom padding from pb-20 to pb-24 */}
+            <div className="pb-24">
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto px-4">
                 {metricsData.map((metric, index) => (
                   <motion.div
@@ -583,6 +522,216 @@ const CommunityMetrics = () => {
             </div>
           </div>
         </div>
+      </div>
+      
+      {/* Cyberpunk Ground Effect - Full Width Below City */}
+      <div className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none z-5">
+        {/* Main cyberpunk grid floor spanning full width */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-full"
+          style={{
+            background: `
+              linear-gradient(90deg, rgba(0, 240, 255, 0.4) 1px, transparent 1px),
+              linear-gradient(0deg, rgba(0, 240, 255, 0.4) 1px, transparent 1px),
+              linear-gradient(45deg, rgba(255, 140, 0, 0.3) 1px, transparent 1px),
+              linear-gradient(-45deg, rgba(255, 140, 0, 0.3) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px, 60px 60px, 120px 120px, 120px 120px',
+            transform: 'perspective(1000px) rotateX(80deg)',
+            transformOrigin: 'bottom center',
+            opacity: 0.7
+          }}
+          animate={{
+            backgroundPosition: [
+              '0px 0px, 0px 0px, 0px 0px, 0px 0px',
+              '60px 0px, 0px 60px, 120px 0px, -120px 0px'
+            ]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        
+        {/* Glowing horizontal grid lines */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`grid-h-${i}`}
+            className="absolute w-full h-px"
+            style={{
+              bottom: `${80 + i * 35}px`,
+              background: 'linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.9), transparent)',
+              transform: 'perspective(1000px) rotateX(80deg)',
+              transformOrigin: 'bottom center'
+            }}
+            animate={{
+              opacity: [0.4, 0.9, 0.4],
+              boxShadow: [
+                '0 0 8px rgba(0, 240, 255, 0.6)',
+                '0 0 20px rgba(0, 240, 255, 0.9)',
+                '0 0 8px rgba(0, 240, 255, 0.6)'
+              ]
+            }}
+            transition={{
+              duration: 4 + i * 0.5,
+              delay: i * 0.3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+        
+        {/* Vertical perspective grid lines */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`grid-v-${i}`}
+            className="absolute h-full w-px"
+            style={{
+              left: `${8 + i * 8}%`,
+              background: 'linear-gradient(180deg, transparent, rgba(255, 140, 0, 0.7), rgba(0, 240, 255, 0.9))',
+              transform: 'perspective(1000px) rotateX(80deg)',
+              transformOrigin: 'bottom center'
+            }}
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              boxShadow: [
+                '0 0 4px rgba(255, 140, 0, 0.5)',
+                '0 0 12px rgba(255, 140, 0, 0.8)',
+                '0 0 4px rgba(255, 140, 0, 0.5)'
+              ]
+            }}
+            transition={{
+              duration: 5 + i * 0.2,
+              delay: i * 0.15,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+        
+        {/* Data stream particles racing across the grid */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={`data-particle-${i}`}
+            className="absolute w-3 h-3 rounded-full"
+            style={{
+              background: i % 3 === 0 ? 'rgba(0, 240, 255, 1)' : i % 3 === 1 ? 'rgba(255, 140, 0, 1)' : 'rgba(34, 197, 94, 1)',
+              boxShadow: `0 0 15px ${i % 3 === 0 ? '#00F0FF' : i % 3 === 1 ? '#FF8C00' : '#22C55E'}`,
+              bottom: '100px',
+              transform: 'perspective(1000px) rotateX(80deg)',
+              transformOrigin: 'bottom center'
+            }}
+            animate={{
+              x: ['-100px', 'calc(100vw + 100px)'],
+              opacity: [0, 1, 1, 0]
+            }}
+            transition={{
+              duration: 12 + i * 2,
+              delay: i * 4,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
+        
+        {/* Cyberpunk energy pulses from center */}
+        <motion.div
+          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full h-32"
+          style={{
+            background: 'radial-gradient(ellipse at center bottom, rgba(0, 240, 255, 0.4) 0%, rgba(255, 140, 0, 0.3) 40%, transparent 70%)',
+            transform: 'perspective(1000px) rotateX(80deg)',
+            transformOrigin: 'bottom center'
+          }}
+          animate={{
+            opacity: [0.4, 0.8, 0.4],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        
+        {/* Matrix-style data cascades */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`matrix-cascade-${i}`}
+            className="absolute w-px h-24"
+            style={{
+              left: `${15 + i * 12}%`,
+              background: 'linear-gradient(180deg, transparent, rgba(0, 240, 255, 1), rgba(0, 240, 255, 0.3), transparent)',
+              transform: 'perspective(1000px) rotateX(80deg)',
+              transformOrigin: 'bottom center'
+            }}
+            animate={{
+              y: ['150px', '-150px'],
+              opacity: [0, 1, 0]
+            }}
+            transition={{
+              duration: 4,
+              delay: i * 0.8,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
+        
+        {/* Horizon glow effect */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-20"
+          style={{
+            background: 'linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.2), rgba(255, 140, 0, 0.3))',
+            transform: 'perspective(1000px) rotateX(80deg)',
+            transformOrigin: 'bottom center'
+          }}
+        />
+      </div>
+      
+      {/* Diamond mirror pattern transition to next section - above cyberpunk ground */}
+      <div className="absolute bottom-0 left-0 right-0 h-80 pointer-events-none z-20">
+        {/* Bottom diamond shape - mirroring top */}
+        <div className="absolute inset-0">
+          <div 
+            className="absolute inset-0 bg-gradient-to-t from-void-primary/60 via-void-primary/30 to-transparent"
+            style={{
+              clipPath: 'polygon(25% 0%, 50% 50%, 75% 0%, 50% 100%)',
+              transform: 'perspective(800px) rotateX(10deg)',
+              left: '16rem',
+              width: 'calc(100% - 16rem)'
+            }}
+          />
+        </div>
+        
+        {/* Subtle energy streams - less visible */}
+        <div className="absolute inset-0" style={{ left: '16rem' }}>
+          {[...Array(5)].map((_, i) => (
+            <motion.div
+              key={`descent-stream-${i}`}
+              className="absolute w-1 h-16 rounded-full"
+              style={{
+                left: `${38 + i * 8}%`,
+                bottom: '20px',
+                background: `linear-gradient(to top, ${i % 2 === 0 ? 'rgba(255, 140, 0, 0.2)' : 'rgba(59, 130, 246, 0.2)'}, transparent)`,
+                filter: 'blur(2px)'
+              }}
+              animate={{
+                y: ['0px', '-150px'],
+                opacity: [0, 0.4, 0]
+              }}
+              transition={{
+                duration: 4,
+                delay: i * 0.4,
+                repeat: Infinity,
+                ease: "easeOut"
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Subtle atmospheric blend */}
+        <div className="absolute inset-0 bg-gradient-to-t from-void-primary/20 via-transparent to-transparent" />
       </div>
     </div>
   );

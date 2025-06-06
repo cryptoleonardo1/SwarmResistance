@@ -10,16 +10,25 @@ import Sidebar from './components/navigation/Sidebar';
 import TopBar from './components/navigation/TopBar';
 import MobileNav from './components/navigation/MobileNav';
 import OptimizedGpuBackground from './components/effects/OptimizedGpuBackground';
+
+// Import Ready Pages
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import ChatbotPage from './pages/ChatbotPage';
 import StoryPage from './pages/StoryPage';
 import SettingsPage from './pages/SettingsPage';
-import JoinResistancePage from './pages/JoinResistancePage';
+
+// Import Coming Soon Pages
+import MarketplacePage from './pages/MarketplacePage';
+import AICommanderPage from './pages/AICommanderPage';
+import BlogPage from './pages/BlogPage';
+import JoinResistanceComingSoonPage from './pages/JoinResistanceComingSoonPage';
+
+// Import existing Join Resistance page (if you want to keep it as backup)
+// import JoinResistancePage from './pages/JoinResistancePage';
 
 // Placeholder for future page components
 const NFTPage = () => <div className="p-8">NFT Explanations & Concepts (Coming Soon)</div>;
-const MarketplacePage = () => <div className="p-8">Marketplace (Coming Soon)</div>;
 
 // Main App Wrapper
 function App() {
@@ -56,6 +65,16 @@ function AppContent() {
     }
   }, []);
 
+  // Check if current route should have full-screen layout (no margins/padding)
+  const isFullScreenRoute = [
+    '/', 
+    '/join-resistance', 
+    '/story', 
+    '/marketplace',
+    '/ai-commander',
+    '/blog'
+  ].includes(location.pathname);
+
   return (
     <div className="app relative min-h-screen">
       <OptimizedGpuBackground />
@@ -66,9 +85,9 @@ function AppContent() {
       {/* Top Navigation Bar */}
       <TopBar />
       
-      {/* Main Content - no margins for homepage and join-resistance */}
+      {/* Main Content - conditional margins based on route */}
       <main className={`transition-all duration-400 ${
-        location.pathname === '/' || location.pathname === '/join-resistance' 
+        isFullScreenRoute
           ? '' 
           : 'md:ml-64 pt-16 pb-20 px-4 sm:px-6 md:px-8'
       }`}>
@@ -78,9 +97,11 @@ function AppContent() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/nft" element={<NFTPage />} />
           <Route path="/marketplace" element={<MarketplacePage />} />
-          <Route path="/join-resistance" element={<JoinResistancePage />} />
+          <Route path="/join-resistance" element={<JoinResistanceComingSoonPage />} />
           <Route path="/story" element={<StoryPage />} />
+          <Route path="/blog" element={<BlogPage />} />
           <Route path="/chatbot" element={<ChatbotPage />} />
+          <Route path="/ai-commander" element={<AICommanderPage />} />
         </Routes>
       </main>
       

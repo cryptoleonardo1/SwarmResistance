@@ -172,7 +172,7 @@ const Sidebar = () => {
     { icon: <ShoppingBag size={24} />, text: 'Marketplace', path: '/marketplace' },
     { icon: <Gem size={24} />, text: 'Lore', path: '/story' },
     { icon: <Book size={24} />, text: 'Blog', path: '/blog' },
-    { icon: <Bot size={24} />, text: 'AI Commander', path: '/chatbot' },
+    { icon: <Bot size={24} />, text: 'AI Commander', path: '/ai-commander' },
   ];
 
   // Social icons with enhanced Phoenix styling

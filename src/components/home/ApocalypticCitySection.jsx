@@ -3,6 +3,80 @@ import { motion } from 'framer-motion';
 const ApocalypticCitySection = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
+      {/* Smooth 3D transition from previous section */}
+      <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-20">
+        {/* 3D perspective transition blend */}
+        <div className="absolute inset-0">
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-void-primary/80 via-void-primary/50 to-transparent"
+            style={{
+              clipPath: 'polygon(0 0, 100% 0, 85% 100%, 15% 100%)',
+              transform: 'perspective(1200px) rotateX(-10deg)'
+            }}
+          />
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-resistance-primary/60 via-resistance-primary/30 to-transparent"
+            style={{
+              clipPath: 'polygon(5% 0, 95% 0, 80% 100%, 20% 100%)',
+              transform: 'perspective(800px) rotateX(-6deg)'
+            }}
+          />
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-phoenix-primary/30 via-phoenix-primary/15 to-transparent"
+            style={{
+              clipPath: 'polygon(10% 0, 90% 0, 75% 100%, 25% 100%)',
+              transform: 'perspective(500px) rotateX(-3deg)'
+            }}
+          />
+        </div>
+        
+        {/* Energy cascade from previous section */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={`transition-cascade-${i}`}
+              className="absolute w-1 h-36 rounded-full"
+              style={{
+                left: `${5 + i * 4.5}%`,
+                top: '0px',
+                background: `linear-gradient(to bottom, ${i % 4 === 0 ? 'rgba(255, 140, 0, 0.9)' : i % 4 === 1 ? 'rgba(59, 130, 246, 0.9)' : i % 4 === 2 ? 'rgba(34, 197, 94, 0.9)' : 'rgba(255, 62, 138, 0.9)'}, transparent)`,
+                filter: 'blur(1px)',
+                transform: `perspective(600px) rotateX(${25 + Math.random() * 20}deg)`
+              }}
+              animate={{
+                y: ['0px', '320px'],
+                opacity: [1, 0],
+                rotateX: [25, 10]
+              }}
+              transition={{
+                duration: 3.5 + Math.random() * 2,
+                delay: i * 0.1,
+                repeat: Infinity,
+                ease: "easeOut"
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Advanced holographic scan */}
+        <motion.div
+          className="absolute inset-0 opacity-60"
+          style={{
+            background: 'linear-gradient(180deg, transparent 0%, rgba(255, 140, 0, 0.2) 2%, transparent 4%, transparent 94%, rgba(59, 130, 246, 0.2) 96%, rgba(0, 240, 255, 0.3) 98%, transparent 100%)',
+            backgroundSize: '100% 80px',
+            transform: 'perspective(1000px) rotateX(-15deg)'
+          }}
+          animate={{
+            backgroundPosition: ['0px 0px', '0px 480px']
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </div>
+
       {/* Full-screen background image */}
       <div className="absolute inset-0 w-full h-full">
         <div 
@@ -232,6 +306,51 @@ const ApocalypticCitySection = () => {
             </p>
           </motion.div>
         </div>
+      </div>
+      
+      {/* Final section - no transition needed as this is the last section */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-20">
+        {/* Final atmospheric effects */}
+        <div className="absolute inset-0">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`final-particle-${i}`}
+              className="absolute w-1 h-1 rounded-full bg-phoenix-primary/60"
+              style={{
+                left: `${12 + i * 12}%`,
+                bottom: '10px'
+              }}
+              animate={{
+                y: [0, -40, 0],
+                opacity: [0.4, 0.9, 0.4],
+                scale: [0.8, 1.3, 0.8]
+              }}
+              transition={{
+                duration: 3,
+                delay: i * 0.4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Final energy glow */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-4"
+          style={{
+            background: 'linear-gradient(90deg, rgba(255, 140, 0, 0.6), rgba(59, 130, 246, 0.6), rgba(34, 197, 94, 0.6), rgba(255, 140, 0, 0.6))',
+            backgroundSize: '400% 100%'
+          }}
+          animate={{
+            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
       </div>
     </div>
   );
