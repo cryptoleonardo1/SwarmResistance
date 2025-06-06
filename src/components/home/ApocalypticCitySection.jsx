@@ -109,6 +109,15 @@ const ApocalypticCitySection = () => {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   viewport={{ once: true }}
                 >
+                  <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                       style={{
+                         background: 'radial-gradient(circle, rgba(255, 140, 0, 0.2) 0%, rgba(255, 140, 0, 0.1) 50%, transparent 100%)',
+                         border: '1px solid rgba(255, 140, 0, 0.6)'
+                       }}>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-phoenix-primary">
+                      <path d="M12 2L13.09 8.26L19 9L13.09 9.74L12 16L10.91 9.74L5 9L10.91 8.26L12 2Z" stroke="currentColor" strokeWidth="2" fill="currentColor"/>
+                    </svg>
+                  </div>
                   <h3 className="text-xl font-orbitron font-bold text-phoenix-primary mb-2">
                     Daily Rewards
                   </h3>
@@ -134,6 +143,18 @@ const ApocalypticCitySection = () => {
                   transition={{ duration: 0.8, delay: 0.6 }}
                   viewport={{ once: true }}
                 >
+                  <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                       style={{
+                         background: 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%)',
+                         border: '1px solid rgba(59, 130, 246, 0.6)'
+                       }}>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-resistance-light">
+                      <path d="M21 16V8C21 5.79086 19.2091 4 17 4H7C4.79086 4 3 5.79086 3 8V16C3 18.2091 4.79086 20 7 20H17C19.2091 20 21 18.2091 21 16Z" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M7 4V20" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M17 4V20" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M3 12H21" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  </div>
                   <h3 className="text-xl font-orbitron font-bold text-resistance-light mb-2">
                     NFT Utility
                   </h3>
@@ -159,6 +180,15 @@ const ApocalypticCitySection = () => {
                   transition={{ duration: 0.8, delay: 0.8 }}
                   viewport={{ once: true }}
                 >
+                  <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                       style={{
+                         background: 'radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 50%, transparent 100%)',
+                         border: '1px solid rgba(34, 197, 94, 0.6)'
+                       }}>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-energy-green">
+                      <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" fill="currentColor"/>
+                    </svg>
+                  </div>
                   <h3 className="text-xl font-orbitron font-bold text-energy-green mb-2">
                     Token Airdrop
                   </h3>
@@ -178,7 +208,7 @@ const ApocalypticCitySection = () => {
                 <motion.button 
                   className="btn-phoenix-primary text-xl px-12 py-6 font-orbitron font-bold"
                   whileHover={{ 
-                    scale: 1.15,
+                    scale: 1.05,
                     boxShadow: "0 0 40px rgba(255, 140, 0, 0.6)"
                   }}
                   whileTap={{ scale: 0.95 }}
@@ -189,19 +219,17 @@ const ApocalypticCitySection = () => {
             </motion.div>
           </div>
 
-          {/* Copyright notice positioned 80px from bottom */}
+          {/* Footer section */}
           <motion.div 
-            className="absolute bottom-24 left-0 right-0 text-center z-20"
+            className="text-center py-8"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
+            transition={{ duration: 1, delay: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="md:pl-64"> {/* Account for sidebar on desktop */}
-              <p className="text-phoenix-primary/60 text-sm font-orbitron">
-                ©2025 Swarm Resistance, All Rights Reserved
-              </p>
-            </div>
+            <p className="text-phoenix-primary/60 text-sm font-orbitron">
+              ©2024 Swarm Resistance
+            </p>
           </motion.div>
         </div>
       </div>

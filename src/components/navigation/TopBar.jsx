@@ -4,13 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Wallet, Menu, ChevronDown, LogOut, User, Settings, Copy, Check } from 'lucide-react';
 import { useWeb3Auth } from '../../contexts/Web3AuthContext';
 
-// Section navigation items (moved outside component to avoid re-creation)
+// Updated section navigation items with new names
 const sectionItems = [
-  { id: 'home', name: 'Home', href: '#home' },
-  { id: 'ecosystem', name: 'Ecosystem', href: '#ecosystem' },
-  { id: 'metrics', name: 'Metrics', href: '#metrics' },
- // { id: 'news', name: 'News', href: '#news' },
-  { id: 'join', name: 'Join Us', href: '#join' },
+  { id: 'home', name: 'Headquarters', href: '#home' },
+  { id: 'ecosystem', name: 'Mission Briefing', href: '#ecosystem' },
+  { id: 'metrics', name: 'Battle Status', href: '#metrics' },
+  { id: 'join', name: 'Join the Fight', href: '#join' },
 ];
 
 const TopBar = () => {
@@ -66,7 +65,7 @@ const TopBar = () => {
     if (userProfile?.nickname) return userProfile.nickname;
     if (user?.name) return user.name;
     if (user?.email) return user.email.split('@')[0];
-    return 'Explorer';
+    return 'Guardian';
   };
 
   // Get user avatar
@@ -84,25 +83,51 @@ const TopBar = () => {
     return 'Explorer';
   };
 
-  // Handle section scrolling
+  // Handle section scrolling with warp gate effect - FIXED SCROLL OFFSET
   const scrollToSection = (sectionId) => {
     if (location.pathname !== '/') {
       navigate('/', { replace: true });
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          // Calculate offset accounting for the top bar height (80px) plus some padding
+          const topBarHeight = 80;
+          const elementPosition = element.offsetTop - topBarHeight;
+          
+          // Add warp transition class
+          element.classList.add('warp-transition');
+          
+          // Scroll to the calculated position
+          window.scrollTo({
+            top: elementPosition,
+            behavior: 'smooth'
+          });
+          
+          setTimeout(() => element.classList.remove('warp-transition'), 800);
         }
       }, 100);
     } else {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        // Calculate offset accounting for the top bar height (80px) plus some padding
+        const topBarHeight = 80;
+        const elementPosition = element.offsetTop - topBarHeight;
+        
+        // Add warp transition class
+        element.classList.add('warp-transition');
+        
+        // Scroll to the calculated position
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
+        
+        setTimeout(() => element.classList.remove('warp-transition'), 800);
       }
     }
   };
 
-  // Track active section based on scroll position
+  // Track active section based on scroll position - UPDATED FOR CORRECT OFFSET
   useEffect(() => {
     const handleScroll = () => {
       if (location.pathname !== '/') return;
@@ -112,7 +137,9 @@ const TopBar = () => {
         element: document.getElementById(item.id)
       })).filter(item => item.element);
 
-      const scrollPosition = window.scrollY + 100;
+      // Adjust scroll position calculation to account for top bar height
+      const topBarHeight = 80;
+      const scrollPosition = window.scrollY + topBarHeight + 50; // Added 50px buffer
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -131,70 +158,100 @@ const TopBar = () => {
 
   return (
     <motion.header 
-      className="fixed top-0 right-0 left-0 h-16 z-50 bg-void-black/80 backdrop-blur-md border-b border-cosmic-purple/30"
+      className="fixed top-0 right-0 left-0 h-20 z-50 glass-void" // Increased height from h-16 to h-20
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.3 }}
     >
-      <div className="h-full flex items-center justify-between px-4 md:px-8">
-        {/* Left Section - Logo */}
+      <div className="h-full flex items-center justify-between px-6 md:px-10"> {/* Increased padding */}
+        {/* Left Section - Logo moved to right and enlarged */}
         <div className="flex items-center">
           {/* Mobile Menu Button */}
           <motion.button 
-            className="text-gray-400 hover:text-neon-cyan md:hidden mr-3"
+            className="text-stellar-white hover:text-phoenix-primary md:hidden mr-4" // Brighter text color and increased margin
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
-            <Menu size={24} />
+            <Menu size={28} /> {/* Increased icon size */}
           </motion.button>
           
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
+          {/* Logo - Enlarged and repositioned */}
+          <Link to="/" className="flex items-center ml-4"> {/* Added left margin */}
             <motion.img 
               src="/logo.png" 
-              alt="Cryptomeda" 
-              className="h-10 w-auto"
+              alt="Swarm Resistance" 
+              className="h-14 w-auto" // Increased from h-10 to h-14
               whileHover={{ 
                 scale: 1.05,
-                filter: "drop-shadow(0 0 8px rgba(255,182,30,0.5))"
+                filter: "drop-shadow(0 0 12px rgba(255,140,0,0.6))"
               }}
             />
           </Link>
         </div>
         
-        {/* Center Section - Navigation (Desktop) - Centered accounting for sidebar */}
-        <nav className="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2 ml-32">
+        {/* Center Section - Navigation (Desktop) */}
+        <nav className="hidden md:flex items-center space-x-10"> {/* Increased spacing from space-x-8 to space-x-10 */}
           {sectionItems.map((item) => (
-            <motion.a
+            <motion.button
               key={item.id}
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(item.id);
-              }}
-              className={`relative text-xl font-medium transition-colors duration-300 ${
+              onClick={() => scrollToSection(item.id)}
+              className={`relative text-xl font-orbitron font-bold transition-all duration-300 ${  // Increased from text-lg to text-xl and added font-bold
                 activeSection === item.id && location.pathname === '/' 
-                  ? 'text-meda-gold' 
-                  : 'text-gray-400 hover:text-neon-cyan'
+                  ? 'text-phoenix-primary text-shadow-phoenix' 
+                  : 'text-stellar-white hover:text-phoenix-light' // Changed from text-neutral-light to text-stellar-white for brighter text
               }`}
-              whileHover={{ y: -2 }}
+              whileHover={{ 
+                y: -3, // Slightly increased hover lift
+                textShadow: "0 0 12px rgba(255,140,0,0.8)" // Enhanced glow
+              }}
             >
               {item.name}
               {activeSection === item.id && location.pathname === '/' && (
-                <motion.div
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-meda-gold"
-                  layoutId="activeSection"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
+                <>
+                  {/* Enhanced active indicator line */}
+                  <motion.div
+                    className="absolute -bottom-2 left-0 right-0 h-1 bg-phoenix-primary shadow-phoenix rounded-full" // Increased height and added rounded
+                    layoutId="activeSection"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                  
+                  {/* Glowing line effect similar to sidebar */}
+                  <motion.div
+                    className="absolute -bottom-2 left-0 right-0 h-1 rounded-full"
+                    style={{
+                      background: 'linear-gradient(90deg, transparent, var(--phoenix-primary), transparent)',
+                      boxShadow: '0 0 8px rgba(255, 140, 0, 0.8)'
+                    }}
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </>
               )}
-            </motion.a>
+              
+              {/* Enhanced holographic hover effect */}
+              <motion.div
+                className="absolute inset-0 bg-phoenix-primary/10 rounded-lg -z-10 -mx-2 -my-1" // Added negative margins for better coverage
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileHover={{ 
+                  opacity: 1, 
+                  scale: 1,
+                  boxShadow: "0 0 20px rgba(255,140,0,0.3)" // Enhanced glow
+                }}
+                transition={{ duration: 0.2 }}
+              />
+            </motion.button>
           ))}
         </nav>
         
-        {/* Right Section */}
+        {/* Right Section - Wallet Connection */}
         <div className="flex items-center space-x-4">
-          {/* Wallet Connection - Simplified when connected */}
           {isConnected ? (
             <div className="relative">
               <motion.button 
@@ -204,10 +261,10 @@ const TopBar = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <motion.div 
-                  className="w-8 h-8 rounded-full border-2 border-cosmic-purple overflow-hidden"
+                  className="w-8 h-8 rounded-full border-2 border-phoenix-primary overflow-hidden"
                   whileHover={{ 
-                    borderColor: "rgba(0,240,255,0.7)",
-                    boxShadow: "0 0 15px rgba(0,240,255,0.4)"
+                    borderColor: "var(--phoenix-glow)",
+                    boxShadow: "0 0 15px rgba(255,140,0,0.4)"
                   }}
                 >
                   <img 
@@ -218,39 +275,48 @@ const TopBar = () => {
                 </motion.div>
                 
                 <div className="hidden lg:flex items-center">
-                  <span className="text-lg text-stellar-white mr-2">{getUserDisplayName()}</span>
-                  <ChevronDown size={14} className="text-gray-400" />
+                  <span className="text-lg text-stellar-white font-medium mr-2">
+                    {getUserDisplayName()}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: dropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown size={14} className="text-neutral-light" />
+                  </motion.div>
                 </div>
               </motion.button>
               
-              {/* Dropdown Menu - Now includes wallet details */}
+              {/* Enhanced Dropdown Menu */}
               <AnimatePresence>
                 {dropdownOpen && (
                   <motion.div 
-                    className="absolute right-0 mt-2 w-64 bg-void-black/90 backdrop-blur-md border border-cosmic-purple/50 rounded-lg shadow-lg py-2 z-50"
+                    className="absolute right-0 mt-3 w-72 glass-void rounded-lg shadow-lg py-3 z-50 border border-phoenix-primary/20" // Increased mt-2 to mt-3 and py-2 to py-3
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {/* User Info */}
-                    <div className="px-4 py-3 border-b border-cosmic-purple/30">
-                      <p className="text-sm text-gray-400">Signed in as</p>
+                    {/* User Info Header */}
+                    <div className="px-4 py-3 border-b border-phoenix-primary/20">
+                      <p className="text-sm text-neutral-light">Guardian Status</p>
                       <p className="text-sm text-stellar-white font-medium truncate">
                         {user?.email || formatAddress(walletAddress)}
                       </p>
                       
-                      {/* Rank */}
+                      {/* Rank with Phoenix styling */}
                       <div className="mt-2 flex items-center justify-between">
-                        <span className="text-xs text-gray-400">Rank:</span>
-                        <span className="text-sm font-medium text-meda-gold">{getUserRank()}</span>
+                        <span className="text-xs text-neutral-light">Rank:</span>
+                        <span className="text-sm font-orbitron font-bold text-phoenix-primary">
+                          {getUserRank()}
+                        </span>
                       </div>
                       
                       {/* Balance */}
                       <div className="mt-1 flex items-center justify-between">
-                        <span className="text-xs text-gray-400">Balance:</span>
+                        <span className="text-xs text-neutral-light">Balance:</span>
                         <div className="flex items-center gap-1">
-                          <Wallet size={12} className="text-neon-cyan" />
+                          <Wallet size={12} className="text-resistance-light" />
                           <span className="text-xs text-stellar-white">
                             {parseFloat(balance).toFixed(4)} MATIC
                           </span>
@@ -259,32 +325,37 @@ const TopBar = () => {
                       
                       {/* Wallet Address */}
                       <div className="mt-1 flex items-center justify-between">
-                        <span className="text-xs text-gray-400">Address:</span>
-                        <button
+                        <span className="text-xs text-neutral-light">Address:</span>
+                        <motion.button
                           onClick={copyAddress}
-                          className="text-xs text-stellar-white hover:text-neon-cyan transition-colors flex items-center gap-1"
+                          className="text-xs text-stellar-white hover:text-phoenix-primary transition-colors flex items-center gap-1"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                         >
                           {formatAddress(walletAddress)}
                           {copied ? (
-                            <Check size={10} className="text-energy-green" />
+                            <Check size={10} className="text-success-green" />
                           ) : (
                             <Copy size={10} />
                           )}
-                        </button>
+                        </motion.button>
                       </div>
                       
-                      {/* Meda Gas */}
+                      {/* Phoenix Essence */}
                       {userProfile && (
                         <div className="mt-1 flex items-center justify-between">
-                          <span className="text-xs text-gray-400">Meda Gas:</span>
-                          <span className="text-xs text-meda-gold font-medium">{userProfile.medaGas.toLocaleString()}</span>
+                          <span className="text-xs text-neutral-light">Phoenix Essence:</span>
+                          <span className="text-xs text-phoenix-primary font-bold">
+                            {userProfile.medaGas.toLocaleString()}
+                          </span>
                         </div>
                       )}
                     </div>
                     
+                    {/* Menu Items */}
                     <Link 
                       to="/profile" 
-                      className="flex items-center gap-2 px-4 py-2 text-lg hover:bg-space-blue/50 hover:text-neon-cyan transition-all"
+                      className="flex items-center gap-2 px-4 py-2 text-lg hover:bg-phoenix-primary/10 hover:text-phoenix-primary transition-all"
                       onClick={() => setDropdownOpen(false)}
                     >
                       <User size={16} />
@@ -292,22 +363,23 @@ const TopBar = () => {
                     </Link>
                     <Link 
                       to="/settings" 
-                      className="flex items-center gap-2 px-4 py-2 text-lg hover:bg-space-blue/50 hover:text-neon-cyan transition-all"
+                      className="flex items-center gap-2 px-4 py-2 text-lg hover:bg-resistance-primary/10 hover:text-resistance-light transition-all"
                       onClick={() => setDropdownOpen(false)}
                     >
                       <Settings size={16} />
                       Settings
                     </Link>
-                    <button 
-                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-lg hover:bg-space-blue/50 hover:text-nebula-pink transition-all"
+                    <motion.button 
+                      className="flex items-center gap-2 w-full text-left px-4 py-2 text-lg hover:bg-red-500/10 hover:text-red-400 transition-all"
                       onClick={() => {
                         logout();
                         setDropdownOpen(false);
                       }}
+                      whileHover={{ x: 4 }}
                     >
                       <LogOut size={16} />
                       Disconnect
-                    </button>
+                    </motion.button>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -316,77 +388,155 @@ const TopBar = () => {
             <motion.button 
               onClick={login}
               disabled={isLoading}
-              className="hidden sm:flex items-center space-x-2 bg-space-blue/40 backdrop-blur-sm rounded-full py-1.5 px-4 border border-cosmic-purple/30 group disabled:opacity-50"
+              className="hidden sm:flex items-center space-x-3 btn-phoenix-primary text-lg px-8 py-4 disabled:opacity-50" // Increased spacing, text size, and padding
               whileHover={{ 
                 scale: isLoading ? 1 : 1.05,
-                boxShadow: isLoading ? undefined : "0 0 15px rgba(74,43,159,0.3)"
+                boxShadow: isLoading ? undefined : "0 0 30px rgba(255,140,0,0.5)" // Enhanced glow
               }}
               whileTap={{ scale: isLoading ? 1 : 0.95 }}
             >
-              <Wallet size={16} className="text-gray-400 group-hover:text-neon-cyan transition-colors" />
-              <span className="text-lg group-hover:text-neon-cyan transition-colors">
-                {isLoading ? 'Loading...' : 'Connect Wallet'}
+              <Wallet size={18} /> {/* Increased icon size */}
+              <span className="font-bold"> {/* Added font-bold */}
+                {isLoading ? 'Initializing...' : 'Connect Wallet'}
               </span>
             </motion.button>
           )}
         </div>
       </div>
       
-      {/* Mobile Section Navigation */}
-      {mobileMenuOpen && (
-        <motion.div
-          className="md:hidden absolute top-16 left-0 right-0 bg-void-black/90 backdrop-blur-md border-b border-cosmic-purple/30 py-2"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-        >
-          {sectionItems.map((item) => (
-            <a
-              key={item.id}
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(item.id);
-                setMobileMenuOpen(false);
-              }}
-              className={`block px-4 py-2 text-xl ${
-                activeSection === item.id && location.pathname === '/' 
-                  ? 'text-neon-cyan bg-space-blue/30' 
-                  : 'text-gray-400'
-              }`}
-            >
-              {item.name}
-            </a>
-          ))}
-          
-          {/* Mobile Wallet Connection */}
-          <div className="px-4 py-2 border-t border-cosmic-purple/30">
-            {isConnected ? (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Wallet size={16} className="text-neon-cyan" />
-                  <span className="text-sm">{formatAddress(walletAddress)}</span>
-                </div>
-                <button
-                  onClick={logout}
-                  className="text-sm text-nebula-pink"
-                >
-                  Disconnect
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={login}
-                disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 py-2 bg-space-blue/40 rounded-lg"
+      {/* Enhanced Mobile Section Navigation */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="md:hidden absolute top-20 left-0 right-0 glass-void border-b border-phoenix-primary/30 py-3" // Increased from top-16 to top-20 and py-2 to py-3
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {sectionItems.map((item) => (
+              <motion.button
+                key={item.id}
+                onClick={() => {
+                  scrollToSection(item.id);
+                  setMobileMenuOpen(false);
+                }}
+                className={`block w-full text-left px-6 py-4 text-xl font-orbitron font-bold transition-all ${  // Increased padding and text size, added font-bold
+                  activeSection === item.id && location.pathname === '/' 
+                    ? 'text-phoenix-primary bg-phoenix-primary/10 border-l-3 border-phoenix-primary' 
+                    : 'text-stellar-white hover:text-phoenix-light hover:bg-phoenix-primary/5' // Changed from text-neutral-light to text-stellar-white
+                }`}
+                whileHover={{ x: 6 }} // Increased from x: 4 to x: 6
+                whileTap={{ scale: 0.98 }}
               >
-                <Wallet size={16} />
-                {isLoading ? 'Loading...' : 'Connect Wallet'}
-              </button>
-            )}
-          </div>
-        </motion.div>
-      )}
+                {item.name}
+                
+                {/* Mobile glowing line effect for active items */}
+                {activeSection === item.id && location.pathname === '/' && (
+                  <motion.div
+                    className="absolute left-0 top-0 bottom-0 w-1 rounded-r-full"
+                    style={{
+                      background: 'var(--phoenix-primary)',
+                      boxShadow: '0 0 8px rgba(255, 140, 0, 0.8)'
+                    }}
+                    animate={{
+                      opacity: [0.7, 1, 0.7],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                )}
+              </motion.button>
+            ))}
+            
+            {/* Mobile Wallet Connection */}
+            <div className="px-4 py-2 border-t border-phoenix-primary/20 mt-2">
+              {isConnected ? (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Wallet size={16} className="text-resistance-light" />
+                    <span className="text-sm font-medium">{formatAddress(walletAddress)}</span>
+                  </div>
+                  <motion.button
+                    onClick={logout}
+                    className="text-sm text-red-400 hover:text-red-300"
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Disconnect
+                  </motion.button>
+                </div>
+              ) : (
+                <motion.button
+                  onClick={login}
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center gap-2 py-3 btn-phoenix-primary disabled:opacity-50"
+                  whileTap={{ scale: isLoading ? 1 : 0.95 }}
+                >
+                  <Wallet size={16} />
+                  <span className="font-semibold">
+                    {isLoading ? 'Connecting...' : 'Connect Wallet'}
+                  </span>
+                </motion.button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Golden glowing horizontal line at bottom - matching sidebar style */}
+      <motion.div
+        className="absolute bottom-0 left-0 w-full h-0.5"
+        style={{
+          background: 'linear-gradient(to right, transparent, rgba(255, 140, 0, 0.5), transparent)'
+        }}
+        animate={{
+          opacity: [0.3, 0.8, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      {/* Corner accent lights matching sidebar */}
+      <motion.div
+        className="absolute bottom-2 left-4 w-2 h-2 rounded-full"
+        style={{
+          background: '#FF8C00',
+          boxShadow: '0 0 8px rgba(255, 140, 0, 0.8)'
+        }}
+        animate={{
+          opacity: [0.4, 1, 0.4],
+          scale: [1, 1.2, 1]
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      <motion.div
+        className="absolute bottom-2 right-4 w-1.5 h-1.5 rounded-full"
+        style={{
+          background: '#60A5FA',
+          boxShadow: '0 0 6px rgba(96, 165, 250, 0.8)'
+        }}
+        animate={{
+          opacity: [0.4, 1, 0.4],
+          scale: [1, 1.3, 1]
+        }}
+        transition={{
+          duration: 2.5,
+          delay: 1,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
     </motion.header>
   );
 };

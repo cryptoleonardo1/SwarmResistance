@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useWeb3Auth } from '../../contexts/Web3AuthContext';
-import SectionWrapper from '../layout/SectionWrapper';
 
-// New Swarm Invasion Background Component
+// Enhanced Background with Swarm Invasion
 const SwarmInvasionBackground = () => {
   const [stars, setStars] = useState([]);
   const [debris, setDebris] = useState([]);
@@ -13,14 +12,14 @@ const SwarmInvasionBackground = () => {
     // Generate background stars
     const generateStars = () => {
       const newStars = [];
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 150; i++) {
         newStars.push({
           id: i,
           x: Math.random() * 100,
           y: Math.random() * 100,
-          size: Math.random() * 2 + 0.5,
+          size: Math.random() * 3 + 0.5,
           opacity: Math.random() * 0.8 + 0.2,
-          twinkleDelay: Math.random() * 3
+          twinkleDelay: Math.random() * 4
         });
       }
       setStars(newStars);
@@ -29,15 +28,15 @@ const SwarmInvasionBackground = () => {
     // Generate debris particles
     const generateDebris = () => {
       const newDebris = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 25; i++) {
         newDebris.push({
           id: i,
           x: Math.random() * 100,
           y: Math.random() * 100,
-          size: Math.random() * 8 + 4,
+          size: Math.random() * 12 + 4,
           rotation: Math.random() * 360,
-          speed: Math.random() * 30 + 20,
-          opacity: Math.random() * 0.6 + 0.2
+          speed: Math.random() * 40 + 20,
+          opacity: Math.random() * 0.4 + 0.1
         });
       }
       setDebris(newDebris);
@@ -49,7 +48,7 @@ const SwarmInvasionBackground = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Background stars */}
+      {/* Enhanced background stars */}
       {stars.map((star) => (
         <motion.div
           key={star.id}
@@ -61,10 +60,11 @@ const SwarmInvasionBackground = () => {
             height: `${star.size}px`,
           }}
           animate={{
-            opacity: [star.opacity, star.opacity * 0.3, star.opacity]
+            opacity: [star.opacity, star.opacity * 0.2, star.opacity],
+            scale: [1, 1.2, 1]
           }}
           transition={{
-            duration: 2 + Math.random() * 2,
+            duration: 3 + Math.random() * 2,
             delay: star.twinkleDelay,
             repeat: Infinity,
             ease: "easeInOut"
@@ -72,11 +72,11 @@ const SwarmInvasionBackground = () => {
         />
       ))}
 
-      {/* Floating debris */}
+      {/* Floating debris with enhanced movement */}
       {debris.map((piece) => (
         <motion.div
           key={piece.id}
-          className="absolute bg-gray-400/40 rounded-sm"
+          className="absolute bg-neutral-medium/40 rounded-sm"
           style={{
             width: `${piece.size}px`,
             height: `${piece.size * 0.6}px`,
@@ -85,9 +85,9 @@ const SwarmInvasionBackground = () => {
             opacity: piece.opacity
           }}
           animate={{
-            x: [0, Math.random() * 50 - 25],
-            y: [0, Math.random() * 30 - 15],
-            rotate: [piece.rotation, piece.rotation + 360]
+            x: [0, Math.random() * 60 - 30],
+            y: [0, Math.random() * 40 - 20],
+            rotate: [piece.rotation, piece.rotation + 720]
           }}
           transition={{
             duration: piece.speed,
@@ -97,110 +97,109 @@ const SwarmInvasionBackground = () => {
         />
       ))}
 
-      {/* Swarm ships moving across screen */}
-      {[...Array(6)].map((_, i) => (
+      {/* Enhanced Swarm ships */}
+      {[...Array(8)].map((_, i) => (
         <motion.div
           key={`swarm-${i}`}
           className="absolute"
           initial={{
-            left: '-5%',
-            top: `${15 + i * 12}%`,
+            left: '-8%',
+            top: `${10 + i * 10}%`,
           }}
           animate={{
-            left: ['105%'],
-            top: [`${15 + i * 12}%`, `${20 + i * 10}%`, `${15 + i * 12}%`]
+            left: ['108%'],
+            top: [`${10 + i * 10}%`, `${15 + i * 8}%`, `${10 + i * 10}%`]
           }}
           transition={{
-            duration: 12 + i * 2,
-            delay: i * 1.5,
+            duration: 15 + i * 3,
+            delay: i * 2,
             repeat: Infinity,
             ease: "linear"
           }}
         >
-          {/* Swarm ship - insectoid design */}
           <div className="relative">
             <motion.div
-              className="w-8 h-4 bg-gradient-to-r from-red-900 to-red-700 rounded-full relative"
+              className="w-12 h-6 bg-gradient-to-r from-red-900 to-red-600 relative"
               style={{
-                clipPath: 'polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%)'
+                clipPath: 'polygon(0% 50%, 30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%)'
               }}
               animate={{
-                scale: [1, 1.1, 1]
+                scale: [1, 1.15, 1],
+                filter: ['hue-rotate(0deg)', 'hue-rotate(20deg)', 'hue-rotate(0deg)']
               }}
               transition={{
-                duration: 1,
+                duration: 1.5,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
             >
-              {/* Swarm ship glow */}
-              <div className="absolute inset-0 bg-red-500/50 rounded-full blur-sm" />
+              <div className="absolute inset-0 bg-red-400/60 rounded-full blur-sm" />
               
-              {/* Wing-like appendages */}
-              <div className="absolute -left-1 top-0 w-2 h-1 bg-red-800/60 rounded-full transform -rotate-12" />
-              <div className="absolute -left-1 bottom-0 w-2 h-1 bg-red-800/60 rounded-full transform rotate-12" />
-              <div className="absolute -right-1 top-0 w-2 h-1 bg-red-800/60 rounded-full transform rotate-12" />
-              <div className="absolute -right-1 bottom-0 w-2 h-1 bg-red-800/60 rounded-full transform -rotate-12" />
+              {/* Enhanced wing appendages */}
+              <div className="absolute -left-2 top-0 w-3 h-2 bg-red-700/70 rounded-full transform -rotate-15" />
+              <div className="absolute -left-2 bottom-0 w-3 h-2 bg-red-700/70 rounded-full transform rotate-15" />
+              <div className="absolute -right-2 top-0 w-3 h-2 bg-red-700/70 rounded-full transform rotate-15" />
+              <div className="absolute -right-2 bottom-0 w-3 h-2 bg-red-700/70 rounded-full transform -rotate-15" />
             </motion.div>
             
-            {/* Swarm ship trail */}
-            <div className="absolute top-1/2 right-full -translate-y-1/2 w-12 h-0.5 bg-gradient-to-l from-red-500/80 to-transparent" />
+            {/* Enhanced trail */}
+            <div className="absolute top-1/2 right-full -translate-y-1/2 w-20 h-1 bg-gradient-to-l from-red-400/90 via-red-500/60 to-transparent" />
           </div>
         </motion.div>
       ))}
 
-      {/* Weapon fire across screen */}
-      {[...Array(4)].map((_, i) => (
+      {/* Enhanced weapon fire */}
+      {[...Array(6)].map((_, i) => (
         <motion.div
           key={`laser-${i}`}
           className="absolute"
           initial={{
-            left: `${20 + i * 20}%`,
-            top: `${30 + i * 10}%`,
+            left: `${15 + i * 15}%`,
+            top: `${25 + i * 8}%`,
             opacity: 0
           }}
           animate={{
-            left: [`${20 + i * 20}%`, `${60 + i * 15}%`],
+            left: [`${15 + i * 15}%`, `${70 + i * 10}%`],
             opacity: [0, 1, 1, 0]
           }}
           transition={{
-            duration: 0.8,
-            delay: 2 + i * 0.5,
+            duration: 1.2,
+            delay: 2.5 + i * 0.7,
             repeat: Infinity,
-            repeatDelay: 4,
+            repeatDelay: 5,
             ease: "easeOut"
           }}
         >
-          <div className="w-16 h-0.5 bg-gradient-to-r from-orange-500 via-red-500 to-transparent rounded-full">
-            <div className="w-full h-full bg-gradient-to-r from-yellow-300 via-orange-400 to-transparent blur-sm" />
+          <div className="w-24 h-1 bg-gradient-to-r from-phoenix-primary via-red-500 to-transparent rounded-full">
+            <div className="w-full h-full bg-gradient-to-r from-yellow-200 via-orange-300 to-transparent blur-sm" />
           </div>
         </motion.div>
       ))}
 
-      {/* Explosion effects */}
-      {[...Array(3)].map((_, i) => (
+      {/* Enhanced explosion effects */}
+      {[...Array(4)].map((_, i) => (
         <motion.div
           key={`explosion-${i}`}
           className="absolute"
           style={{
-            left: `${30 + i * 25}%`,
-            top: `${25 + i * 20}%`,
+            left: `${25 + i * 20}%`,
+            top: `${20 + i * 15}%`,
           }}
           initial={{ scale: 0, opacity: 0 }}
           animate={{
-            scale: [0, 1.5, 0],
+            scale: [0, 2, 0],
             opacity: [0, 1, 0]
           }}
           transition={{
-            duration: 1.2,
-            delay: 3 + i * 2,
+            duration: 1.5,
+            delay: 4 + i * 2.5,
             repeat: Infinity,
-            repeatDelay: 8,
+            repeatDelay: 10,
             ease: "easeOut"
           }}
         >
-          <div className="w-12 h-12 rounded-full bg-gradient-radial from-yellow-400 via-orange-500 to-red-600">
-            <div className="absolute inset-0 rounded-full bg-gradient-radial from-white via-yellow-300 to-transparent blur-sm" />
+          <div className="w-16 h-16 rounded-full bg-gradient-radial from-yellow-300 via-phoenix-primary to-red-700">
+            <div className="absolute inset-0 rounded-full bg-gradient-radial from-white via-yellow-200 to-transparent blur-sm" />
           </div>
         </motion.div>
       ))}
@@ -212,18 +211,6 @@ const HeroSection = () => {
   const navigate = useNavigate();
   const { login, isLoading } = useWeb3Auth();
   
-  // Parallax effect
-  const [scrollY, setScrollY] = useState(0);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const handleConnectWallet = async () => {
     try {
       await login();
@@ -241,53 +228,62 @@ const HeroSection = () => {
       {/* Swarm Invasion Background */}
       <SwarmInvasionBackground />
       
-      {/* Updated gradient layers - black to blue (matching ecosystem) */}
+      {/* Enhanced gradient layers matching design manual */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-blue-900/80" />
-        <div className="absolute inset-0 bg-gradient-to-t from-space-blue/60 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-void-primary via-void-secondary to-resistance-primary/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-phoenix-primary/10 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-void-primary/80 via-transparent to-void-primary/80" />
       </div>
       
-      {/* Corruption spread animation */}
+      {/* Corruption spread animation with Phoenix colors */}
       <motion.div 
-        className="absolute w-full h-full opacity-40"
+        className="absolute w-full h-full opacity-30"
         animate={{
           backgroundPosition: ['0% 0%', '100% 100%'],
         }}
         transition={{
-          duration: 45,
+          duration: 60,
           repeat: Infinity,
           ease: "linear"
         }}
         style={{
-          backgroundImage: 'radial-gradient(ellipse at center, rgba(220, 38, 38, 0.3) 0%, transparent 60%), radial-gradient(ellipse at bottom right, rgba(255, 100, 0, 0.2) 0%, transparent 50%)',
-          backgroundSize: '300% 300%',
+          backgroundImage: `
+            radial-gradient(ellipse at center, rgba(255, 140, 0, 0.2) 0%, transparent 70%), 
+            radial-gradient(ellipse at bottom right, rgba(220, 38, 38, 0.15) 0%, transparent 60%)
+          `,
+          backgroundSize: '400% 400%',
         }}
       />
       
-      {/* Emergency beacon signals */}
+      {/* Emergency beacon signals with Phoenix styling */}
       <motion.div 
         className="absolute w-full h-full pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
+        transition={{ delay: 1.5 }}
       >
-        {[...Array(4)].map((_, i) => (
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={`beacon-${i}`}
-            className="absolute w-2 h-2 rounded-full"
+            className="absolute w-3 h-3 rounded-full"
             style={{
-              left: `${20 + i * 20}%`,
-              top: `${30 + i * 15}%`,
-              backgroundColor: '#ff4444',
-              boxShadow: '0 0 10px #ff4444'
+              left: `${15 + i * 17}%`,
+              top: `${20 + i * 12}%`,
+              backgroundColor: '#FF8C00',
+              boxShadow: '0 0 15px #FF8C00'
             }}
             animate={{
-              opacity: [0.3, 1, 0.3],
-              scale: [1, 1.5, 1]
+              opacity: [0.2, 1, 0.2],
+              scale: [1, 1.8, 1],
+              boxShadow: [
+                '0 0 15px rgba(255, 140, 0, 0.5)',
+                '0 0 30px rgba(255, 140, 0, 0.8)',
+                '0 0 15px rgba(255, 140, 0, 0.5)'
+              ]
             }}
             transition={{
-              duration: 2,
-              delay: i * 0.5,
+              duration: 2.5,
+              delay: i * 0.6,
               repeat: Infinity,
               ease: "easeInOut"
             }}
@@ -295,197 +291,129 @@ const HeroSection = () => {
         ))}
       </motion.div>
       
-      {/* Content using SectionWrapper for proper full-screen structure */}
-      <SectionWrapper
-        title="Cryptomeda Collapses"
-        subtitle="The Swarm has consumed our empire... Cryptomeda lies in ruins... But from collapse comes rebirth... Renegades and Goliaths now fight as one... The resistance needs heroes willing to reclaim what was lost. Join the resistance and unite against extinction."
-        className="relative z-10"
-      >
-        {/* Main content area with proper flex distribution */}
-        <div className="flex flex-col items-center justify-center h-full">
-          {/* Main Image with reduced top margin to better center content */}
-          <div className="flex-shrink-0 mb-8">
-            <motion.div
-              initial={{ scale: 0, opacity: 0, rotate: -10 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ 
-                duration: 1.2, 
-                delay: 0.7,
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-              }}
-              className="relative"
-            >
-              {/* Glow effect behind the image */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-radial from-orange-500/30 via-red-500/20 to-transparent rounded-full blur-2xl"
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.3, 0.6, 0.3]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                style={{
-                  width: '120%',
-                  height: '120%',
-                  left: '-10%',
-                  top: '-10%'
-                }}
-              />
-              
-              {/* Main image - optimized size for full-screen layout */}
-              <motion.img
-                src="/main.png"
-                alt="Swarm Resistance"
-                className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[26rem] lg:h-[26rem] xl:w-[28rem] xl:h-[28rem] object-contain relative z-10"
-                animate={{
-                  y: [0, -8, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                style={{
-                  filter: 'drop-shadow(0 0 30px rgba(255, 107, 0, 0.7))'
-                }}
-              />
-              
-              {/* Orbiting particles around the image - adjusted for optimized size */}
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={`particle-${i}`}
-                  className="absolute w-2 h-2 bg-orange-400 rounded-full"
-                  style={{
-                    left: '50%',
-                    top: '50%',
-                  }}
-                  animate={{
-                    rotate: [0, 360],
-                  }}
-                  transition={{
-                    duration: 8 + i * 2,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay: i * 0.5
-                  }}
-                >
-                  <div 
-                    className="w-2 h-2 bg-orange-400 rounded-full shadow-lg"
-                    style={{
-                      boxShadow: '0 0 12px rgba(255, 107, 0, 0.8)',
-                      transform: `translateX(${130 + i * 25}px) translateY(-50%)`
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
+      {/* Main Content - Properly centered with sidebar consideration */}
+      <div className="relative z-10 min-h-screen w-full pt-20 md:pl-64 flex items-center justify-center">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center h-full">
           
-          {/* CTA Buttons with proper spacing */}
+          {/* Main Guardian Image */}
           <motion.div
-            initial={{ y: 30, opacity: 0 }}
+            initial={{ scale: 0, opacity: 0, rotate: -15 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{ 
+              duration: 1.5, 
+              delay: 0.8,
+              type: "spring",
+              stiffness: 80,
+              damping: 20
+            }}
+            className="relative mb-12"
+          >
+            {/* Enhanced glow effect behind the image */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-radial from-phoenix-primary/40 via-phoenix-light/25 to-transparent rounded-full blur-3xl"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.4, 0.7, 0.4]
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              style={{
+                width: '140%',
+                height: '140%',
+                left: '-20%',
+                top: '-20%'
+              }}
+            />
+            
+            {/* Main Guardian image */}
+            <motion.img
+              src="/main.png"
+              alt="Guardian Squad"
+              className="w-80 h-80 sm:w-96 sm:h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem] xl:w-[36rem] xl:h-[36rem] object-contain relative z-10"
+              animate={{
+                y: [0, -12, 0],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              style={{
+                filter: 'drop-shadow(0 0 40px rgba(255, 140, 0, 0.8))'
+              }}
+            />
+          </motion.div>
+          
+          {/* Action Buttons - Clean and Prominent */}
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center flex-shrink-0"
+            transition={{ duration: 1, delay: 1.5 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center"
           >
             <motion.button 
-              className="btn-primary-glass text-lg px-8 py-4"
+              className="btn-phoenix-primary text-xl px-10 py-5 font-orbitron font-bold"
               onClick={handleConnectWallet}
               disabled={isLoading}
-              whileHover={{ scale: isLoading ? 1 : 1.05 }}
+              whileHover={{ 
+                scale: isLoading ? 1 : 1.08,
+                boxShadow: isLoading ? undefined : "0 0 40px rgba(255, 140, 0, 0.6)"
+              }}
               whileTap={{ scale: isLoading ? 1 : 0.95 }}
             >
-              {isLoading ? 'Connecting...' : 'Connect Wallet & Begin'}
+              {isLoading ? 'Initializing...' : 'BEGIN'}
             </motion.button>
+            
             <motion.button 
-              className="btn-secondary-glass text-lg px-8 py-4 border-red-400/30 hover:border-red-400/50"
+              className="btn-resistance-secondary text-xl px-10 py-5 font-orbitron font-bold"
               onClick={handleJoinResistance}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ 
+                scale: 1.08,
+                boxShadow: "0 0 40px rgba(59, 130, 246, 0.4)"
+              }}
               whileTap={{ scale: 0.95 }}
             >
-              Join the Resistance
+              JOIN THE RESISTANCE
             </motion.button>
           </motion.div>
         </div>
-      </SectionWrapper>
+      </div>
       
-      {/* Emergency alert streaks instead of shooting stars */}
-      {[...Array(3)].map((_, i) => (
+      {/* Emergency alert streaks */}
+      {[...Array(4)].map((_, i) => (
         <motion.div
           key={`alert-${i}`}
-          className="absolute w-1 h-1 bg-red-400 rounded-full"
+          className="absolute w-2 h-2 bg-phoenix-primary rounded-full"
           initial={{ 
-            top: `${Math.random() * 50}%`,
-            left: '-5%',
+            top: `${Math.random() * 60}%`,
+            left: '-8%',
             opacity: 0
           }}
           animate={{
-            left: ['110%'],
-            top: [`${Math.random() * 50}%`, `${Math.random() * 50 + 50}%`],
+            left: ['115%'],
+            top: [`${Math.random() * 60}%`, `${Math.random() * 40 + 60}%`],
             opacity: [0, 1, 1, 0]
           }}
           transition={{
-            duration: 1.5,
-            delay: i * 2 + 3,
+            duration: 2,
+            delay: i * 2.5 + 4,
             repeat: Infinity,
-            repeatDelay: 6,
+            repeatDelay: 8,
             ease: "easeIn"
           }}
         >
-          <div className="absolute inset-0 w-20 h-0.5 bg-gradient-to-r from-transparent to-red-400/80 transform -translate-y-1/2 origin-right -rotate-45" />
+          <div className="absolute inset-0 w-32 h-1 bg-gradient-to-r from-transparent to-phoenix-primary/90 transform -translate-y-1/2 origin-right -rotate-45" />
         </motion.div>
       ))}
       
-      {/* Smooth transition to next section - keeping as requested */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none">
-        {/* Gradient transition from purple to next section */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-space-blue/60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-700/10 to-cosmic-purple/40" />
-        
-        {/* Animated transition particles */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={`transition-${i}`}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              left: `${15 + i * 10}%`,
-              background: i % 2 === 0 ? 'rgba(255, 182, 30, 0.6)' : 'rgba(0, 240, 255, 0.4)',
-              boxShadow: i % 2 === 0 ? '0 0 8px rgba(255, 182, 30, 0.6)' : '0 0 8px rgba(0, 240, 255, 0.4)'
-            }}
-            animate={{
-              y: [0, -60, 0],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [0.8, 1.2, 0.8]
-            }}
-            transition={{
-              duration: 4,
-              delay: i * 0.3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-        
-        {/* Flowing energy transition */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500/30 via-meda-gold/40 to-neon-cyan/30"
-          animate={{
-            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          style={{
-            backgroundSize: '200% 100%'
-          }}
-        />
+      {/* Enhanced transition to next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none">
+        {/* Multi-layer gradient transition */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-resistance-primary/15 to-resistance-primary/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-phoenix-primary/5 to-phoenix-primary/15" />
       </div>
     </div>
   );
