@@ -295,7 +295,7 @@ const HeroSection = () => {
       <div className="relative z-10 min-h-screen w-full pt-20 md:pl-64 flex items-center justify-center">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center h-full">
           
-          {/* Main Guardian Image */}
+          {/* Main Guardian Image - Full Size, Bottom Aligned */}
           <motion.div
             initial={{ scale: 0, opacity: 0, rotate: -15 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
@@ -306,9 +306,13 @@ const HeroSection = () => {
               stiffness: 80,
               damping: 20
             }}
-            className="relative mb-12"
+            className="absolute bottom-0 z-0"
+            style={{
+              left: '16rem', // Start right after sidebar
+              transform: 'translateX(0%)'
+            }}
           >
-            {/* Enhanced glow effect behind the image */}
+            {/* Enhanced glow effect behind the image - can extend into sidebar */}
             <motion.div
               className="absolute inset-0 bg-gradient-radial from-phoenix-primary/40 via-phoenix-light/25 to-transparent rounded-full blur-3xl"
               animate={{
@@ -321,38 +325,36 @@ const HeroSection = () => {
                 ease: "easeInOut"
               }}
               style={{
-                width: '140%',
-                height: '140%',
-                left: '-20%',
-                top: '-20%'
+                width: '200%',
+                height: '200%',
+                left: '-50%',
+                top: '-50%'
               }}
             />
             
-            {/* Main Guardian image */}
+            {/* Main Guardian image - Full Screen Size */}
             <motion.img
               src="/main.png"
               alt="Guardian Squad"
-              className="w-80 h-80 sm:w-96 sm:h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem] xl:w-[36rem] xl:h-[36rem] object-contain relative z-10"
-              animate={{
-                y: [0, -12, 0],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
+              className="w-[50rem] h-[50rem] sm:w-[60rem] sm:h-[60rem] md:w-[70rem] md:h-[70rem] lg:w-[80rem] lg:h-[80rem] xl:w-[90rem] xl:h-[90rem] 2xl:w-[100rem] 2xl:h-[100rem] object-contain object-bottom"
               style={{
-                filter: 'drop-shadow(0 0 40px rgba(255, 140, 0, 0.8))'
+                filter: 'drop-shadow(0 0 40px rgba(255, 140, 0, 0.8))',
+                maxWidth: 'calc(100vw - 16rem)',
+                maxHeight: 'calc(100vh - 5rem)'
               }}
             />
           </motion.div>
           
-          {/* Action Buttons - Clean and Prominent */}
+          {/* Action Buttons - Overlaid on top, positioned lower */}
           <motion.div
             initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1, delay: 1.5 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center"
+            className="absolute z-20 flex flex-col sm:flex-row gap-6 justify-center bottom-32"
+            style={{
+              left: '50%',
+              transform: 'translateX(-50%)'
+            }}
           >
             <motion.button 
               className="btn-phoenix-primary text-xl px-10 py-5 font-orbitron font-bold"

@@ -22,6 +22,7 @@ const ProfilePage = () => {
     nickname: '',
     email: '',
   });
+  const [imageErrors, setImageErrors] = useState(new Set());
 
   useEffect(() => {
     if (userProfile) {
@@ -49,6 +50,10 @@ const ProfilePage = () => {
     duration: 6 + Math.random() * 3,
     left: 10 + Math.random() * 80,
   }));
+
+  const handleImageError = (heroId) => {
+    setImageErrors(prev => new Set([...prev, heroId]));
+  };
 
   if (!isConnected) {
     return (
@@ -870,82 +875,82 @@ const ProfilePage = () => {
                       </div>
                     )}
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {nftData.heroes.map((hero) => (
-                        <motion.div
-                          key={hero.id}
-                          className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
-                          whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
-                        >
-                          <div className="aspect-square bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                            {hero.image ? (
-                              <img 
-                                src={hero.image} 
-                                alt={hero.name}
-                                className="w-full h-full object-cover rounded-lg"
-                                onError={(e) => {
-                                  // Fallback to icon if image fails to load
-                                  e.target.style.display = 'none';
-                                  e.target.nextSibling.style.display = 'flex';
-                                }}
-                              />
-                            ) : null}
-                            <div 
-                              className="w-full h-full flex items-center justify-center"
-                              style={{ display: hero.image ? 'none' : 'flex' }}
-                            >
-                              <Shield size={48} className="text-meda-gold" />
+                      {nftData.heroes.map((hero) => {
+                        const heroKey = hero.id || hero.tokenId;
+                        const hasImageError = imageErrors.has(heroKey);
+                        const shouldShowImage = hero.image && !hasImageError;
+                        
+                        return (
+                          <motion.div
+                            key={heroKey}
+                            className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
+                            whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
+                          >
+                            <div className="aspect-[637/1000] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden relative">
+                              {shouldShowImage ? (
+                                <img 
+                                  src={hero.image} 
+                                  alt={hero.name}
+                                  className="w-full h-full object-contain rounded-lg"
+                                  onError={() => handleImageError(heroKey)}
+                                />
+                              ) : (
+                                <Shield size={48} className="text-meda-gold" />
+                              )}
                             </div>
-                          </div>
-                          
-                          {/* Hero Details */}
-                          <div className="space-y-3">
-                            <h4 className="font-bold text-stellar-white text-lg">{hero.name}</h4>
                             
-                            {nftData.isReal && (
-                              <div className="text-xs text-gray-500">
-                                Token ID: {hero.tokenId}
-                              </div>
-                            )}
-                            
-                            {/* Show attributes if available */}
-                            {hero.attributes && (
-                              <div className="space-y-2">
-                                <div className="grid grid-cols-3 gap-2 text-xs">
-                                  <div className="text-center">
-                                    <div className="text-blue-400 font-semibold">{hero.attributes.security}</div>
-                                    <div className="text-gray-400">Security</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-purple-400 font-semibold">{hero.attributes.anonymity}</div>
-                                    <div className="text-gray-400">Anonymity</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-cyan-400 font-semibold">{hero.attributes.innovation}</div>
-                                    <div className="text-gray-400">Innovation</div>
+                            {/* Hero Details */}
+                            <div className="space-y-3">
+                              <h4 className="font-bold text-stellar-white text-lg">
+                                {nftData.isReal ? `Hero #${hero.tokenId}` : hero.name}
+                              </h4>
+                              
+                              {nftData.isReal && (
+                                <div className="text-xs text-gray-500">
+                                  Token ID: {hero.tokenId}
+                                </div>
+                              )}
+                              
+                              {/* Show attributes if available */}
+                              {hero.attributes && (
+                                <div className="space-y-2">
+                                  <div className="grid grid-cols-3 gap-2 text-xs">
+                                    <div className="text-center">
+                                      <div className="text-blue-400 font-semibold">{hero.attributes.security}</div>
+                                      <div className="text-gray-400">Security</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="text-purple-400 font-semibold">{hero.attributes.anonymity}</div>
+                                      <div className="text-gray-400">Anonymity</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="text-cyan-400 font-semibold">{hero.attributes.innovation}</div>
+                                      <div className="text-gray-400">Innovation</div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                            
-                            <div className="flex justify-between items-center">
-                              <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(hero.rarity)}`}>
-                                {hero.rarity}
-                              </span>
-                              <div className="text-right">
-                                <div className="text-sm text-gray-400">
-                                  {hero.attributes ? 'Total Power' : 'Power'}
-                                </div>
-                                <div className="text-lg font-bold text-energy-green">{hero.power}</div>
-                                {hero.attributes && (
-                                  <div className="text-xs text-gray-500">
-                                    ({hero.attributes.security + hero.attributes.anonymity + hero.attributes.innovation})
+                              )}
+                              
+                              <div className="flex justify-between items-center">
+                                <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(hero.rarity)}`}>
+                                  {hero.rarity}
+                                </span>
+                                <div className="text-right">
+                                  <div className="text-sm text-gray-400">
+                                    {hero.attributes ? 'Total Power' : 'Power'}
                                   </div>
-                                )}
+                                  <div className="text-lg font-bold text-energy-green">{hero.power}</div>
+                                  {hero.attributes && (
+                                    <div className="text-xs text-gray-500">
+                                      ({hero.attributes.security + hero.attributes.anonymity + hero.attributes.innovation})
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      ))}
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   </>
                 ) : (
@@ -1009,14 +1014,14 @@ const ProfilePage = () => {
                           className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
                           whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
                         >
-                          <div className="aspect-square bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                          <div className="aspect-[637/1000] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                             {weapon.video ? (
                               <video 
                                 src={weapon.video} 
                                 autoPlay
                                 loop
                                 muted
-                                className="w-full h-full object-cover rounded-lg"
+                                className="w-full h-full object-contain rounded-lg"
                                 onError={(e) => {
                                   // Fallback to icon if video fails to load
                                   e.target.style.display = 'none';
@@ -1145,12 +1150,12 @@ const ProfilePage = () => {
                           className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
                           whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
                         >
-                          <div className="aspect-square bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                          <div className="aspect-[1909/2664] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
                             {nftData.isReal && land.image ? (
                               <img 
                                 src={land.image} 
                                 alt={land.name}
-                                className="w-full h-full object-cover rounded-lg"
+                                className="w-full h-full object-contain rounded-lg"
                                 onError={(e) => {
                                   // Fallback to icon if image fails to load
                                   e.target.style.display = 'none';
@@ -1205,38 +1210,6 @@ const ProfilePage = () => {
                         <p className="text-red-400 text-sm">Error loading Lands: {nftHoldings.lands.error}</p>
                       </div>
                     )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'achievements' && (
-              <div className="glassmorphism rounded-xl p-6">
-                <h3 className="text-2xl font-bold mb-6">Achievements</h3>
-                {userProfile.achievements.length > 0 ? (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {userProfile.achievements.map((achievement, index) => (
-                      <motion.div
-                        key={achievement.id}
-                        className="bg-space-blue/30 rounded-lg p-6 text-center border border-meda-gold/30"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        <div className="text-4xl mb-3">{achievement.icon}</div>
-                        <h4 className="font-bold text-stellar-white mb-2">{achievement.name}</h4>
-                        <p className="text-sm text-gray-400">
-                          Unlocked {new Date(achievement.unlockedAt).toLocaleDateString()}
-                        </p>
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <Award size={64} className="text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400 mb-4">No achievements unlocked yet</p>
-                    <p className="text-sm text-gray-500">Complete battles, games, and challenges to earn achievements and prove your worth to the resistance!</p>
                   </div>
                 )}
               </div>

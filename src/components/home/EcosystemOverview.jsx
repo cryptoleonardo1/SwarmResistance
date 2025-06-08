@@ -332,7 +332,7 @@ const MissionBriefing = () => {
       </div>
 
       {/* Section content with optimized spacing */}
-      <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
+      <div className="relative z-10 min-h-screen w-full pt-6 md:pl-64">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col">
           
           {/* Optimized Section Header - Closer spacing */}
@@ -344,7 +344,7 @@ const MissionBriefing = () => {
             viewport={{ once: true }}
           >
             <motion.h2 
-              className="text-4xl md:text-5xl font-orbitron font-bold text-center mb-3 text-phoenix-primary relative inline-block"
+              className="text-4xl md:text-5xl font-orbitron font-bold text-center mb-2 text-phoenix-primary relative inline-block"
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 0.2 }}

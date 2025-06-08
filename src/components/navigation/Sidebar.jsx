@@ -175,17 +175,30 @@ const Sidebar = () => {
     { icon: <Bot size={24} />, text: 'AI Commander', path: '/ai-commander' },
   ];
 
-  // Social icons with enhanced Phoenix styling
+  // Social icons with enhanced Phoenix styling and updated links
   const socialIcons = [
     { 
       icon: (
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-.38.24-1.09.76-.98.7-1.96 1.99-2.07 2.04-.17.08-.49.05-.49.05s-.69-.23-.69-.23s-.43-.27-.43-.27s-.63-.39-.63-.39c.91-.59 2.66-1.7 2.66-1.7s.18-.14.35-.21c.16-.06.43-.12.43-.12s.18-.04.33-.04.30.04.30.04.12 0 .23.06c.11.05.24.15.24.15l3.5 2.4s.64.43.64 1.03z"/>
+        <svg width="28" height="28" viewBox="0 0 240 240" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="b" x1="0.6667" y1="0.1667" x2="0.4167" y2="0.75">
+              <stop stopColor="#37aee2"/>
+              <stop offset="1" stopColor="#1e96c8"/>
+            </linearGradient>
+            <linearGradient id="w" x1="0.6597" y1="0.4369" x2="0.8512" y2="0.8024">
+              <stop stopColor="#eff7fc"/>
+              <stop offset="1" stopColor="#fff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="120" cy="120" r="120" fill="url(#b)"/>
+          <path d="m98 175c-3.888 0-3.227-1.468-4.568-5.17L82 132.207 170 80" fill="#c8daea"/>
+          <path d="m98 175c3 0 4.325-1.372 6-3l16-15.558-19.958-12.035" fill="#a9c9dd"/>
+          <path d="m100.04 144.41 48.36 35.729c5.519 3.045 9.501 1.468 10.876-5.123l19.685-92.763c2.015-8.08-3.08-11.746-8.36-9.349l-115.59 44.571c-7.89 3.165-7.843 7.567-1.438 9.528l29.663 9.259 68.673-43.325c3.242-1.966 6.218-.91 3.776 1.258" fill="url(#w)"/>
         </svg>
       ), 
-      link: '#', 
+      link: 'https://t.me/Cryptomeda_Tech', 
       label: 'Telegram',
-      color: 'hover:text-resistance-light'
+      color: 'hover:text-[#37aee2]'
     },
     { 
       icon: (
@@ -193,7 +206,7 @@ const Sidebar = () => {
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.736-8.84L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </svg>
       ), 
-      link: '#', 
+      link: 'https://x.com/cryptomedatech', 
       label: 'X (Twitter)',
       color: 'hover:text-phoenix-primary'
     },
@@ -387,7 +400,9 @@ const Sidebar = () => {
           {socialIcons.map((item, index) => (
             <motion.a 
               key={index} 
-              href={item.link} 
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
               className={`text-stellar-white ${item.color} transition-all duration-300 p-3 rounded-lg relative bg-phoenix-primary/5`}
               title={item.label}
               whileHover={{ 

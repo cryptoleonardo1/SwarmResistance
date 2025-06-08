@@ -8,8 +8,8 @@ const metricsData = [
     icon: <Users size={24} className="text-neon-cyan" />,
     title: "HERO ARTIFACTS",
     value: 0,
-    target: 3000,
-    suffix: "+",
+    target: 4023,
+    //suffix: "+",
     description: "Combat-ready operatives deployed across web and Telegram battlefronts",
     iconBackground: "bg-neon-cyan/20",
     textColor: "text-neon-cyan",
@@ -20,8 +20,8 @@ const metricsData = [
     icon: <Shield size={24} className="text-meda-gold" />,
     title: "WEAPONS",
     value: 0,
-    target: 15000,
-    suffix: "+",
+    target: 10350,
+    //suffix: "+",
     description: "Legendary warriors with specialized combat abilities and battle histories",
     iconBackground: "bg-meda-gold/20",
     textColor: "text-meda-gold",
@@ -32,8 +32,8 @@ const metricsData = [
     icon: <MapPin size={24} className="text-nebula-pink" />,
     title: "LIBERATED LANDS",
     value: 0,
-    target: 3500,
-    suffix: "+",
+    target: 449,
+    //suffix: "+",
     description: "Strategic zones reclaimed from Swarm control across multiple sectors",
     iconBackground: "bg-nebula-pink/20",
     textColor: "text-nebula-pink",
@@ -42,10 +42,10 @@ const metricsData = [
   },
   {
     icon: <Zap size={24} className="text-energy-green" />,
-    title: "MEDA GAS PRODUCED",
+    title: "MEDA GAS Released",
     value: 0,
-    target: 400000,
-    suffix: "+",
+    target: 15000000,
+    //suffix: "+",
     description: "Critical energy resources powering the resistance war machine",
     iconBackground: "bg-energy-green/20",
     textColor: "text-energy-green",
@@ -116,20 +116,7 @@ const CommunityMetrics = () => {
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Diamond mirror pattern transition from previous section */}
-      <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-20">
-        {/* Top diamond shape - mirroring bottom */}
-        <div className="absolute inset-0">
-          <div 
-            className="absolute inset-0 bg-gradient-to-b from-void-primary/60 via-void-primary/30 to-transparent"
-            style={{
-              clipPath: 'polygon(50% 0%, 75% 50%, 50% 100%, 25% 50%)',
-              transform: 'perspective(800px) rotateX(-10deg)',
-              left: '16rem',
-              width: 'calc(100% - 16rem)'
-            }}
-          />
-        </div>
-        
+      <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-20">      
         {/* Subtle energy cascade - less visible */}
         <div className="absolute inset-0" style={{ left: '16rem' }}>
           {[...Array(6)].map((_, i) => (
@@ -191,7 +178,7 @@ const CommunityMetrics = () => {
       </div>
 
       {/* Section content with optimized spacing */}
-      <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
+      <div className="relative z-10 min-h-screen w-full pt-6 md:pl-64">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col">
           
           {/* Optimized Section Header - Matching Mission Briefing style */}
@@ -335,7 +322,7 @@ const CommunityMetrics = () => {
                         alt={metric.title}
                         className="h-[120px] md:h-[150px] lg:h-[240px] object-contain transform-gpu cursor-pointer"
                         style={{ 
-                          marginBottom: '+10px',
+                          marginBottom: '+5px',
                           transformOrigin: 'bottom center'
                         }}
                         animate={{
@@ -691,18 +678,7 @@ const CommunityMetrics = () => {
       
       {/* Diamond mirror pattern transition to next section - above cyberpunk ground */}
       <div className="absolute bottom-0 left-0 right-0 h-80 pointer-events-none z-20">
-        {/* Bottom diamond shape - mirroring top */}
-        <div className="absolute inset-0">
-          <div 
-            className="absolute inset-0 bg-gradient-to-t from-void-primary/60 via-void-primary/30 to-transparent"
-            style={{
-              clipPath: 'polygon(25% 0%, 50% 50%, 75% 0%, 50% 100%)',
-              transform: 'perspective(800px) rotateX(10deg)',
-              left: '16rem',
-              width: 'calc(100% - 16rem)'
-            }}
-          />
-        </div>
+
         
         {/* Subtle energy streams - less visible */}
         <div className="absolute inset-0" style={{ left: '16rem' }}>

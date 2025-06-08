@@ -473,3 +473,160 @@ html {
   color: #EF4444;
   text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
 }
+
+/* Warp transition effect for sections */
+.warp-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+.warp-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 140, 0, 0.1) 0%,
+    rgba(59, 130, 246, 0.1) 25%,
+    rgba(34, 197, 94, 0.1) 50%,
+    rgba(255, 62, 138, 0.1) 75%,
+    rgba(255, 140, 0, 0.1) 100%
+  );
+  animation: warpPulse 0.8s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes warpPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Enhance existing Phoenix glow effects */
+.text-shadow-phoenix {
+  text-shadow: 0 0 10px rgba(255, 140, 0, 0.8);
+}
+
+.shadow-phoenix {
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
+}
+
+/* Add this to your App.css or index.css file */
+
+/* Hologram transition effect for sections */
+.hologram-transition {
+  position: relative;
+  overflow: hidden;
+}
+
+.hologram-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(0, 240, 255, 0.1) 0%,
+    rgba(255, 140, 0, 0.1) 25%,
+    rgba(34, 197, 94, 0.1) 50%,
+    rgba(255, 62, 138, 0.1) 75%,
+    rgba(0, 240, 255, 0.1) 100%
+  );
+  animation: hologramPulse 1.0s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes hologramPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Hologram grid effect */
+.hologram-grid {
+  background-image: 
+    linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: hologramGrid 2s linear infinite;
+}
+
+@keyframes hologramGrid {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 20px 20px;
+  }
+}
+
+/* Enhanced text glow effects */
+.text-shadow-hologram {
+  text-shadow: 
+    0 0 5px rgba(0, 240, 255, 0.8),
+    0 0 10px rgba(0, 240, 255, 0.6),
+    0 0 15px rgba(0, 240, 255, 0.4);
+}
+
+.text-shadow-phoenix {
+  text-shadow: 
+    0 0 5px rgba(255, 140, 0, 0.8),
+    0 0 10px rgba(255, 140, 0, 0.6),
+    0 0 15px rgba(255, 140, 0, 0.4);
+}
+
+/* Hologram border effect */
+.border-hologram {
+  border: 1px solid rgba(0, 240, 255, 0.5);
+  box-shadow: 
+    0 0 10px rgba(0, 240, 255, 0.3),
+    inset 0 0 10px rgba(0, 240, 255, 0.1);
+}
+
+/* Glitch effect for text */
+.glitch-text {
+  animation: glitch 0.3s ease-in-out;
+}
+
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+}
