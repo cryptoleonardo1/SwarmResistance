@@ -17,12 +17,13 @@ import ProfilePage from './pages/ProfilePage';
 import ChatbotPage from './pages/ChatbotPage';
 import StoryPage from './pages/StoryPage';
 import SettingsPage from './pages/SettingsPage';
+import JoinResistancePage from './pages/JoinResistancePage';
 
 // Import Coming Soon Pages
 import MarketplacePage from './pages/MarketplacePage';
 import AICommanderPage from './pages/AICommanderPage';
 import BlogPage from './pages/BlogPage';
-import JoinResistanceComingSoonPage from './pages/JoinResistanceComingSoonPage';
+//import JoinResistanceComingSoonPage from './pages/JoinResistanceComingSoonPage';
 
 // Import existing Join Resistance page (if you want to keep it as backup)
 // import JoinResistancePage from './pages/JoinResistancePage';
@@ -97,7 +98,7 @@ function AppContent() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/nft" element={<NFTPage />} />
           <Route path="/marketplace" element={<MarketplacePage />} />
-          <Route path="/join-resistance" element={<JoinResistanceComingSoonPage />} />
+          <Route path="/join-resistance" element={<JoinResistancePage />} />
           <Route path="/story" element={<StoryPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/chatbot" element={<ChatbotPage />} />

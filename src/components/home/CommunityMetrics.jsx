@@ -39,9 +39,9 @@ const metricsData = [
   },
   {
     icon: <Zap size={24} className="text-energy-green" />,
-    title: "MEDA GAS RELEASED",
+    title: "MEDA GAS OUT (Mil)",
     value: 0,
-    target: 15000000,
+    target: 150,
     description: "Critical energy resources powering the resistance war machine",
     iconBackground: "bg-energy-green/20",
     textColor: "text-energy-green",

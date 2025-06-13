@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useTransform as useMotionTransform, animate } from 'framer-motion';
 import { BookOpen, PenTool, FileText, Users, Globe, Rss } from 'lucide-react';
 
 const BlogPage = () => {
@@ -9,10 +9,32 @@ const BlogPage = () => {
     offset: ["start end", "end start"]
   });
 
+  // State for animated counter
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const count = useMotionValue(0);
+  const rounded = useMotionTransform(count, (latest) => Math.round(latest));
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Animate counter when component loads
+  useEffect(() => {
+    if (!hasAnimated) {
+      const timer = setTimeout(() => {
+        const controls = animate(count, 65, {
+          duration: 2,
+          ease: "easeOut",
+          delay: 2 // Start after the progress bar animation begins
+        });
+        setHasAnimated(true);
+        return controls.stop;
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [count, hasAnimated]);
   
   // Enhanced parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -231,7 +253,9 @@ const BlogPage = () => {
                   <h3 className="text-xl font-orbitron font-bold text-phoenix-primary">
                     Chronicle Archives Setup
                   </h3>
-                  <span className="text-phoenix-light font-mono">65%</span>
+                  <span className="text-phoenix-light font-mono">
+                    <motion.span>{rounded}</motion.span>%
+                  </span>
                 </div>
                 <div className="w-full bg-void-secondary rounded-full h-3 overflow-hidden">
                   <motion.div
@@ -330,7 +354,7 @@ const BlogPage = () => {
               transition={{ duration: 1, delay: 4 }}
             >
               <p className="text-phoenix-primary/60 text-sm font-orbitron">
-                ©2024 Swarm Resistance - Chronicling the Fight for Freedom
+                ©2025 Swarm Resistance - Chronicling the Fight for Freedom
               </p>
             </motion.div>
           </div>

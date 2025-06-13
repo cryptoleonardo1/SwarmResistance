@@ -317,16 +317,6 @@ const HomePage = () => {
         ))}
       </div>
 
-      {/* Scroll Hint */}
-      {activeSection === 'home' && !isWheelScrolling && (
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 flex flex-col items-center text-stellar-white/60 animate-fade-in-delayed">
-          <span className="text-sm font-orbitron mb-2">Scroll to explore</span>
-          <div className="w-6 h-10 border-2 border-stellar-white/30 rounded-full flex justify-center animate-bounce-slow">
-            <div className="w-1 h-3 bg-stellar-white/60 rounded-full mt-2 animate-pulse" />
-          </div>
-        </div>
-      )}
-
       {/* Debug info */}
       <div className="fixed top-20 left-4 z-50 bg-black/50 text-white p-2 text-xs">
         Active: {activeSection}

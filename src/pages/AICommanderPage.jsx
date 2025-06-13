@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useTransform as useMotionTransform, animate } from 'framer-motion';
 import { Brain, Database, Cpu, Shield, Eye, Network } from 'lucide-react';
 
 const AICommanderPage = () => {
@@ -9,10 +9,32 @@ const AICommanderPage = () => {
     offset: ["start end", "end start"]
   });
 
+  // State for animated counter
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const count = useMotionValue(0);
+  const rounded = useMotionTransform(count, (latest) => Math.round(latest));
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Animate counter when component loads
+  useEffect(() => {
+    if (!hasAnimated) {
+      const timer = setTimeout(() => {
+        const controls = animate(count, 60, {
+          duration: 2,
+          ease: "easeOut",
+          delay: 2 // Start after the progress bar animation begins
+        });
+        setHasAnimated(true);
+        return controls.stop;
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [count, hasAnimated]);
   
   // Enhanced parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -229,15 +251,17 @@ const AICommanderPage = () => {
               <div className="glass-void rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-orbitron font-bold text-phoenix-primary">
-                    Neural Network Integration
+                    AI Commander Integration
                   </h3>
-                  <span className="text-phoenix-light font-mono">85%</span>
+                  <span className="text-phoenix-light font-mono">
+                    <motion.span>{rounded}</motion.span>%
+                  </span>
                 </div>
                 <div className="w-full bg-void-secondary rounded-full h-3 overflow-hidden">
                   <motion.div
                     className="h-full bg-gradient-to-r from-phoenix-primary to-phoenix-light"
                     initial={{ width: 0 }}
-                    animate={{ width: "85%" }}
+                    animate={{ width: "60%" }}
                     transition={{ duration: 2, delay: 2 }}
                   />
                 </div>
@@ -247,7 +271,7 @@ const AICommanderPage = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 {[
                   { name: "Hero Artifact Database", status: "Complete", color: "text-success-green" },
-                  { name: "Tactical Analysis Engine", status: "Calibrating", color: "text-phoenix-primary" },
+                  { name: "Knowledge Database", status: "Calibrating", color: "text-phoenix-primary" },
                   { name: "Memory Core Integration", status: "Testing", color: "text-resistance-light" },
                   { name: "Holographic Interface", status: "Finalizing", color: "text-warning-orange" }
                 ].map((feature, index) => (
@@ -330,7 +354,7 @@ const AICommanderPage = () => {
               transition={{ duration: 1, delay: 4 }}
             >
               <p className="text-phoenix-primary/60 text-sm font-orbitron">
-                ©2024 Swarm Resistance - Awakening Ancient Wisdom
+                ©2025 Swarm Resistance - Awakening Ancient Wisdom
               </p>
             </motion.div>
           </div>

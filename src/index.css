@@ -102,7 +102,7 @@ body {
   z-index: 10;
 }
 
-/* Desktop adjustments for transparent sidebar */
+/* Desktop adjustments - REMOVED sidebar background padding */
 @media (min-width: 768px) {
   .section-content {
     padding-left: 2rem;
@@ -302,8 +302,8 @@ section {
   animation: fire-flow 4s ease-in-out infinite;
 }
 
-/* Sidebar transparent overlay */
-.sidebar-transparent {
+/* REMOVED - Sidebar transparent overlay that was causing the visual issue */
+/* .sidebar-transparent {
   background: linear-gradient(135deg, 
     rgba(15, 15, 35, 0.1) 0%,
     rgba(26, 26, 46, 0.2) 50%, 
@@ -311,7 +311,7 @@ section {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-right: 1px solid rgba(255, 140, 0, 0.1);
-}
+} */
 
 /* Warp Gate Transitions */
 .warp-transition {
@@ -630,12 +630,9 @@ section {
   animation: glitch 0.3s ease-in-out;
 }
 
-
 body.warping html {
   /* REMOVED: scroll-snap-type: none; */
 }
-
-
 
 /* Keep your existing scroll-related CSS (the code you shared above) */
 /* Smooth transitions for all section changes */

@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useTransform as useMotionTransform, animate } from 'framer-motion';
 import { Shield, Sword, Users, Target, Zap, Award } from 'lucide-react';
 
 const JoinResistanceComingSoonPage = () => {
@@ -9,10 +9,32 @@ const JoinResistanceComingSoonPage = () => {
     offset: ["start end", "end start"]
   });
 
+  // State for animated counter
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const count = useMotionValue(0);
+  const rounded = useMotionTransform(count, (latest) => Math.round(latest));
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Animate counter when component loads
+  useEffect(() => {
+    if (!hasAnimated) {
+      const timer = setTimeout(() => {
+        const controls = animate(count, 92, {
+          duration: 2,
+          ease: "easeOut",
+          delay: 2 // Start after the progress bar animation begins
+        });
+        setHasAnimated(true);
+        return controls.stop;
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [count, hasAnimated]);
   
   // Enhanced parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -129,8 +151,8 @@ const JoinResistanceComingSoonPage = () => {
         ))}
       </motion.div>
 
-      {/* Main content */}
-      <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
+      {/* Main content - REMOVED md:pl-64 class that was causing the sidebar spacing */}
+      <div className="relative z-10 min-h-screen w-full pt-16">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col">
           
           {/* Title and subtitle section */}
@@ -231,7 +253,9 @@ const JoinResistanceComingSoonPage = () => {
                   <h3 className="text-xl font-orbitron font-bold text-phoenix-primary">
                     Recruitment System Status
                   </h3>
-                  <span className="text-phoenix-light font-mono">92%</span>
+                  <span className="text-phoenix-light font-mono">
+                    <motion.span>{rounded}</motion.span>%
+                  </span>
                 </div>
                 <div className="w-full bg-void-secondary rounded-full h-3 overflow-hidden">
                   <motion.div

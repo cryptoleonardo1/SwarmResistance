@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Wrench, Cog, Zap, Rocket, Clock, Star, ShoppingCart, Coins } from 'lucide-react';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useTransform as useMotionTransform, animate } from 'framer-motion';
+import { Zap, Rocket, Clock, Star, ShoppingCart, Coins } from 'lucide-react';
 
 const MarketplacePage = () => {
   const sectionRef = useRef(null);
@@ -9,10 +9,32 @@ const MarketplacePage = () => {
     offset: ["start end", "end start"]
   });
 
+  // State for animated counter
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const count = useMotionValue(0);
+  const rounded = useMotionTransform(count, (latest) => Math.round(latest));
+
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // Animate counter when component loads
+  useEffect(() => {
+    if (!hasAnimated) {
+      const timer = setTimeout(() => {
+        const controls = animate(count, 55, {
+          duration: 2,
+          ease: "easeOut",
+          delay: 2 // Start after the progress bar animation begins
+        });
+        setHasAnimated(true);
+        return controls.stop;
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [count, hasAnimated]);
   
   // Enhanced parallax effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
@@ -228,13 +250,15 @@ const MarketplacePage = () => {
                   <h3 className="text-xl font-orbitron font-bold text-phoenix-primary">
                     Trading Hub Construction
                   </h3>
-                  <span className="text-phoenix-light font-mono">78%</span>
+                  <span className="text-phoenix-light font-mono">
+                    <motion.span>{rounded}</motion.span>%
+                  </span>
                 </div>
                 <div className="w-full bg-void-secondary rounded-full h-3 overflow-hidden">
                   <motion.div
                     className="h-full bg-gradient-to-r from-phoenix-primary to-phoenix-light"
                     initial={{ width: 0 }}
-                    animate={{ width: "78%" }}
+                    animate={{ width: "55%" }}
                     transition={{ duration: 2, delay: 2 }}
                   />
                 </div>
@@ -327,7 +351,7 @@ const MarketplacePage = () => {
               transition={{ duration: 1, delay: 4 }}
             >
               <p className="text-phoenix-primary/60 text-sm font-orbitron">
-                ©2024 Swarm Resistance - Forging Legendary Assets
+                ©2025 Swarm Resistance - Forging Legendary Assets
               </p>
             </motion.div>
           </div>

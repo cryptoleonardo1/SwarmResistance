@@ -9,9 +9,28 @@ const MissionBriefing = () => {
     offset: ["start end", "end start"]
   });
   
-  // Simplified parallax values
-  const starsY = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
-  const planetY = useTransform(scrollYProgress, [0, 1], ['0%', '10%']);
+  // Enhanced parallax effects
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+  const starsY = useTransform(scrollYProgress, [0, 1], ['0%', '-20%']);
+  const particlesY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
+
+  // Enhanced floating particles
+  const particles = Array.from({ length: 15 }).map((_, i) => ({
+    id: i,
+    delay: i * 0.3,
+    duration: 12 + Math.random() * 6,
+    size: 1.5 + Math.random() * 2.5,
+    left: Math.random() * 100,
+    color: i % 4 === 0 ? "#FF8C00" : i % 4 === 1 ? "#60A5FA" : i % 4 === 2 ? "#8B5CF6" : "#22C55E"
+  }));
+
+  // Phoenix fire particles
+  const fireParticles = Array.from({ length: 8 }).map((_, i) => ({
+    id: i,
+    delay: i * 1.2,
+    duration: 6 + Math.random() * 3,
+    left: 10 + Math.random() * 80,
+  }));
   
   // Updated feature cards with current features and wider styling
   const missionObjectives = [
@@ -65,105 +84,86 @@ const MissionBriefing = () => {
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      {/* Simplified transition from previous section */}
-      <div className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-20">
-        <div className="absolute inset-0" style={{ left: '16rem', top: '160px' }}>
-          {[...Array(4)].map((_, i) => (
-            <motion.div
-              key={`flow-${i}`}
-              className="absolute w-1 h-12 rounded-full"
-              style={{
-                left: `${40 + i * 10}%`,
-                top: '0px',
-                background: `linear-gradient(to bottom, ${i % 2 === 0 ? 'rgba(255, 140, 0, 0.2)' : 'rgba(59, 130, 246, 0.2)'}, transparent)`,
-                filter: 'blur(1px)'
-              }}
-              animate={{
-                y: ['0px', '100px'],
-                opacity: [0, 0.4, 0]
-              }}
-              transition={{
-                duration: 3,
-                delay: i * 0.8,
-                repeat: Infinity,
-                ease: "easeOut"
-              }}
-            />
-          ))}
-        </div>
-      </div>
-      
-      {/* Simplified background */}
-      <div className="absolute inset-0 w-full h-full">
-        {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-void-primary via-void-secondary to-resistance-primary/40" />
-        
-        {/* Reduced background stars */}
+    <div className="full-screen-section relative overflow-hidden bg-void-primary">
+      {/* Enhanced background layers */}
+      <motion.div 
+        className="absolute inset-0 w-full h-full"
+        style={{ y: backgroundY }}
+      >
+        {/* Starfield background */}
         <motion.div 
-          className="absolute inset-0 w-full h-full"
-          style={{ y: starsY }}
-        >
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={`star-${i}`}
-              className="absolute rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${1 + Math.random() * 2}px`,
-                height: `${1 + Math.random() * 2}px`,
-                backgroundColor: i % 3 === 0 ? '#FF8C00' : i % 3 === 1 ? '#3B82F6' : '#FFFFFF',
-              }}
-              animate={{
-                opacity: [0.3, 0.8, 0.3],
-                scale: [1, 1.2, 1]
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                delay: Math.random() * 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          ))}
-        </motion.div>
+          className="absolute inset-0 w-full h-full opacity-40"
+          style={{ 
+            backgroundImage: `radial-gradient(2px 2px at 20px 30px, #FF8C00, transparent),
+                             radial-gradient(2px 2px at 40px 70px, #60A5FA, transparent),
+                             radial-gradient(1px 1px at 90px 40px, #8B5CF6, transparent),
+                             radial-gradient(1px 1px at 130px 80px, #22C55E, transparent),
+                             radial-gradient(2px 2px at 160px 30px, #FF8C00, transparent)`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '200px 100px',
+            y: starsY
+          }}
+        />
         
-        {/* Simplified energy nebula */}
-        <motion.div className="absolute inset-0 w-full h-full opacity-20">
-          {[...Array(3)].map((_, i) => (
-            <motion.div
-              key={`nebula-${i}`}
-              className="absolute rounded-full blur-2xl"
-              style={{
-                left: `${Math.random() * 80}%`,
-                top: `${Math.random() * 80}%`,
-                width: `${200 + Math.random() * 200}px`,
-                height: `${150 + Math.random() * 150}px`,
-                background: `radial-gradient(ellipse, rgba(255, 140, 0, ${0.3 + Math.random() * 0.2}) 0%, transparent 70%)`,
-              }}
-              animate={{
-                scale: [1, 1.15, 1],
-                opacity: [0.2, 0.4, 0.2]
-              }}
-              transition={{
-                duration: 8 + Math.random() * 4,
-                delay: Math.random() * 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          ))}
-        </motion.div>
+        {/* Nebula overlay */}
+        <div className="absolute inset-0 bg-gradient-radial from-cosmic-purple/30 via-transparent to-void-primary/60" />
+        <div className="absolute inset-0 bg-gradient-conic from-phoenix-primary/10 via-resistance-primary/10 to-energy-purple/10 opacity-30" />
+      </motion.div>
+
+      {/* Enhanced floating particles */}
+      <motion.div 
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+        style={{ y: particlesY }}
+      >
+        {particles.map(particle => (
+          <motion.div
+            key={particle.id}
+            className="absolute rounded-full"
+            style={{
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              left: `${particle.left}%`,
+              backgroundColor: particle.color,
+              boxShadow: `0 0 ${particle.size * 6}px ${particle.color}`,
+            }}
+            animate={{
+              y: ['120vh', '-10vh'],
+              x: [0, Math.sin(particle.id * 0.5) * 150],
+              opacity: [0, 0.8, 0.8, 0],
+              scale: [0.5, 1, 1, 0.3]
+            }}
+            transition={{
+              duration: particle.duration,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        ))}
         
-        {/* Simplified planet */}
-        <motion.div 
-          className="absolute -bottom-32 -right-48 w-[600px] h-[600px] pointer-events-none opacity-30"
-          style={{ y: planetY }}
-        >
-          <div className="absolute inset-0 rounded-full bg-gradient-radial from-phoenix-primary/20 via-resistance-primary/30 to-void-secondary/60" />
-        </motion.div>
-      </div>
+        {/* Phoenix fire particles */}
+        {fireParticles.map(particle => (
+          <motion.div
+            key={`fire-${particle.id}`}
+            className="absolute fire-particle"
+            style={{
+              left: `${particle.left}%`,
+              background: 'linear-gradient(to top, #FF8C00, #FFB84D)',
+            }}
+            animate={{
+              y: ['100vh', '-50px'],
+              opacity: [0, 1, 1, 0],
+              scale: [0.8, 1.2, 1, 0.6]
+            }}
+            transition={{
+              duration: particle.duration,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: "easeOut"
+            }}
+          />
+        ))}
+      </motion.div>
 
       {/* Section content */}
       <div className="relative z-10 min-h-screen w-full pt-6 md:pl-64">
@@ -270,15 +270,16 @@ const MissionBriefing = () => {
               </div>
               
               {/* Enhanced command flow with images */}
-              <div className="relative mx-auto" style={{ minHeight: "320px", maxWidth: "1000px" }}>
+              <div className="relative mx-auto" style={{ minHeight: "400px", maxWidth: "1000px" }}>
                 
                 {/* Phase 1 - Connect Wallet */}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center">
                   <motion.div 
-                    className="w-32 h-32 rounded-xl overflow-hidden relative z-20 mb-6"
+                    className="w-32 h-48 rounded-xl overflow-hidden relative z-20 mb-6 bg-gradient-to-b from-void-primary/20 to-transparent"
                     style={{
                       border: '3px solid rgba(59, 130, 246, 0.8)',
-                      boxShadow: '0 0 25px rgba(59, 130, 246, 0.5)'
+                      boxShadow: '0 0 25px rgba(59, 130, 246, 0.5)',
+                      aspectRatio: '1400/2400'
                     }}
                     whileHover={{ 
                       scale: 1.1,
@@ -287,21 +288,23 @@ const MissionBriefing = () => {
                   >
                     <img 
                       src="/portal-city.png" 
-                      alt="Portal City"
-                      className="w-full h-full object-cover"
+                      alt="Connect Wallet Character"
+                      className="w-full h-full object-contain object-bottom"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(59, 130, 246, 0.3))' }}
                     />
                   </motion.div>
-                  <h4 className="text-2xl md:text-3xl font-orbitron font-bold text-stellar-white mb-3">CONNECT WALLET</h4>
+                  <h4 className="text-2xl md:text-3xl font-orbitron font-bold text-stellar-white mb-3">[1] CONNECT WALLET</h4>
                   <p className="text-lg text-neutral-light text-center max-w-40">Join the resistance with your Web3 identity</p>
                 </div>
                 
                 {/* Phase 2 - Join the Fight */}
                 <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                   <motion.div 
-                    className="w-32 h-32 rounded-xl overflow-hidden relative z-20 mb-6"
+                    className="w-32 h-48 rounded-xl overflow-hidden relative z-20 mb-6 bg-gradient-to-b from-void-primary/20 to-transparent"
                     style={{
                       border: '3px solid rgba(255, 140, 0, 0.8)',
-                      boxShadow: '0 0 25px rgba(255, 140, 0, 0.5)'
+                      boxShadow: '0 0 25px rgba(255, 140, 0, 0.5)',
+                      aspectRatio: '1400/2400'
                     }}
                     whileHover={{ 
                       scale: 1.1,
@@ -310,21 +313,23 @@ const MissionBriefing = () => {
                   >
                     <img 
                       src="/telegram-city.png" 
-                      alt="Telegram City"
-                      className="w-full h-full object-cover"
+                      alt="Join the Fight Character"
+                      className="w-full h-full object-contain object-bottom"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(255, 140, 0, 0.3))' }}
                     />
                   </motion.div>
-                  <h4 className="text-2xl md:text-3xl font-orbitron font-bold text-stellar-white mb-3">JOIN THE FIGHT</h4>
+                  <h4 className="text-2xl md:text-3xl font-orbitron font-bold text-stellar-white mb-3">[2] JOIN THE FIGHT</h4>
                   <p className="text-lg text-neutral-light text-center max-w-44">Deploy NFTs, play games, complete missions</p>
                 </div>
                 
                 {/* Phase 3 - Earn Rewards */}
                 <div className="absolute right-0 top-1/2 transform -translate-y-1/2 flex flex-col items-center">
                   <motion.div 
-                    className="w-32 h-32 rounded-xl overflow-hidden relative z-20 mb-6"
+                    className="w-32 h-48 rounded-xl overflow-hidden relative z-20 mb-6 bg-gradient-to-b from-void-primary/20 to-transparent"
                     style={{
                       border: '3px solid rgba(34, 197, 94, 0.8)',
-                      boxShadow: '0 0 25px rgba(34, 197, 94, 0.5)'
+                      boxShadow: '0 0 25px rgba(34, 197, 94, 0.5)',
+                      aspectRatio: '1400/2400'
                     }}
                     whileHover={{ 
                       scale: 1.1,
@@ -333,11 +338,12 @@ const MissionBriefing = () => {
                   >
                     <img 
                       src="/polygon-planet.png" 
-                      alt="Polygon Planet"
-                      className="w-full h-full object-cover"
+                      alt="Earn Rewards Character"
+                      className="w-full h-full object-contain object-bottom"
+                      style={{ filter: 'drop-shadow(0 0 10px rgba(34, 197, 94, 0.3))' }}
                     />
                   </motion.div>
-                  <h4 className="text-2xl md:text-3xl font-orbitron font-bold text-stellar-white mb-3">EARN REWARDS</h4>
+                  <h4 className="text-2xl md:text-3xl font-orbitron font-bold text-stellar-white mb-3">[3] EARN REWARDS</h4>
                   <p className="text-lg text-neutral-light text-center max-w-40">Accumulate Phoenix Essence for token airdrops</p>
                 </div>
               </div>
