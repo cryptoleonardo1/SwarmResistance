@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { User, ShoppingBag, Sword, Book, Bot, Gem } from 'lucide-react';
 import PropTypes from 'prop-types';
 
-// Fire Particle Component
+// Optimized Fire Particle Component - Reduced complexity
 const FireParticle = ({ delay, startX, size = 1 }) => {
   return (
     <motion.div
@@ -12,75 +11,55 @@ const FireParticle = ({ delay, startX, size = 1 }) => {
       style={{
         left: `${startX}%`,
         bottom: '-10px',
-        width: `${4 * size}px`,
-        height: `${8 * size}px`,
+        width: `${3 * size}px`,
+        height: `${6 * size}px`,
       }}
       initial={{ opacity: 0, y: 0, scale: 0.8 }}
       animate={{
-        opacity: [0, 1, 1, 0.8, 0],
-        y: [0, -window.innerHeight * 0.4], // Only go up 1/3 of sidebar height
-        scale: [0.8, size, size * 1.2, 0],
-        x: [0, Math.random() * 20 - 10, Math.random() * 30 - 15],
+        opacity: [0, 1, 0.8, 0],
+        y: [0, -window.innerHeight * 0.35],
+        scale: [0.8, size, size * 1.1, 0],
+        x: [0, Math.random() * 15 - 7],
       }}
       transition={{
-        duration: 4 + Math.random() * 1, // Shorter duration since particles travel less distance
+        duration: 3.5,
         delay: delay,
         repeat: Infinity,
         ease: "easeOut"
       }}
     >
-      {/* Main fire particle */}
+      {/* Simplified fire particle */}
       <div
         className="w-full h-full rounded-full"
         style={{
-          background: 'linear-gradient(to top, #FF8C00, #FFB84D, #FFAA1A)',
+          background: 'linear-gradient(to top, #FF8C00, #FFB84D)',
           filter: 'blur(0.5px)',
-          boxShadow: '0 0 8px rgba(255, 140, 0, 0.8)'
-        }}
-      />
-      
-      {/* Inner white-hot core */}
-      <motion.div
-        className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/2 h-1/3 rounded-full"
-        style={{
-          background: 'linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 220, 77, 0.7))',
-          filter: 'blur(0.3px)'
-        }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.8, 1, 0.8]
-        }}
-        transition={{
-          duration: 0.5,
-          repeat: Infinity,
-          ease: "easeInOut"
+          boxShadow: '0 0 6px rgba(255, 140, 0, 0.8)'
         }}
       />
     </motion.div>
   );
 };
 
-// Add PropTypes for FireParticle
 FireParticle.propTypes = {
   delay: PropTypes.number.isRequired,
   startX: PropTypes.number.isRequired,
   size: PropTypes.number
 };
 
-// Fire Effect Generator
+// Optimized Fire Effect - Reduced particles from 20 to 8
 const FireEffect = () => {
   const [particles, setParticles] = useState([]);
 
   useEffect(() => {
     const generateParticles = () => {
       const newParticles = [];
-      // Generate particles along the sidebar width
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 8; i++) { // Reduced from 20 to 8
         newParticles.push({
           id: i,
-          delay: Math.random() * 6,
-          startX: 5 + Math.random() * 90, // Spread across sidebar width
-          size: 0.6 + Math.random() * 0.8,
+          delay: Math.random() * 4,
+          startX: 10 + Math.random() * 80,
+          size: 0.7 + Math.random() * 0.6,
         });
       }
       setParticles(newParticles);
@@ -88,8 +67,7 @@ const FireEffect = () => {
 
     generateParticles();
     
-    // Regenerate particles periodically for continuous effect
-    const interval = setInterval(generateParticles, 8000);
+    const interval = setInterval(generateParticles, 6000); // Reduced frequency
     return () => clearInterval(interval);
   }, []);
 
@@ -104,53 +82,53 @@ const FireEffect = () => {
         />
       ))}
       
-      {/* Additional flowing energy streams - limited to bottom 1/3 */}
-      {[...Array(4)].map((_, i) => (
+      {/* Reduced energy streams from 4 to 2 */}
+      {[...Array(2)].map((_, i) => (
         <motion.div
           key={`stream-${i}`}
-          className="absolute opacity-40"
+          className="absolute opacity-30"
           style={{
-            left: `${15 + i * 20}%`,
+            left: `${25 + i * 30}%`,
             bottom: '0px',
             width: '2px',
-            height: '60px',
-            background: 'linear-gradient(to top, transparent, var(--phoenix-primary), var(--phoenix-light), transparent)',
+            height: '40px',
+            background: 'linear-gradient(to top, transparent, var(--phoenix-primary), transparent)',
             filter: 'blur(1px)'
           }}
           animate={{
-            y: [0, -window.innerHeight * 0.35], // Limited to bottom 1/3
-            opacity: [0, 0.6, 0.8, 0.4, 0],
-            scaleY: [1, 1.2, 0.8, 0]
+            y: [0, -window.innerHeight * 0.3],
+            opacity: [0, 0.5, 0.3, 0],
+            scaleY: [1, 1.1, 0.8, 0]
           }}
           transition={{
-            duration: 5, // Shorter duration
-            delay: i * 1.5,
+            duration: 4,
+            delay: i * 2,
             repeat: Infinity,
             ease: "easeOut",
           }}
         />
       ))}
       
-      {/* Ember particles - also limited to bottom area */}
-      {[...Array(8)].map((_, i) => (
+      {/* Reduced embers from 8 to 4 */}
+      {[...Array(4)].map((_, i) => (
         <motion.div
           key={`ember-${i}`}
           className="absolute w-1 h-1 rounded-full"
           style={{
-            left: `${10 + Math.random() * 80}%`,
+            left: `${15 + Math.random() * 70}%`,
             bottom: '0px',
             background: '#FFAA1A',
             boxShadow: '0 0 4px rgba(255, 170, 26, 0.8)'
           }}
           animate={{
-            y: [0, -window.innerHeight * 0.4], // Limited to bottom 1/3
-            opacity: [0, 1, 1, 0.6, 0],
+            y: [0, -window.innerHeight * 0.35],
+            opacity: [0, 1, 0.6, 0],
             scale: [0.5, 1, 0.5],
-            x: [0, Math.random() * 40 - 20]
+            x: [0, Math.random() * 30 - 15]
           }}
           transition={{
-            duration: 6 + Math.random() * 2, // Shorter duration
-            delay: i * 0.8,
+            duration: 5,
+            delay: i * 1.2,
             repeat: Infinity,
             ease: "easeOut"
           }}
@@ -160,19 +138,79 @@ const FireEffect = () => {
   );
 };
 
+// Custom futuristic gaming icons
+const FuturisticIcons = {
+  Profile: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L14.5 6.5L20 7L16 11L17 17L12 14.5L7 17L8 11L4 7L9.5 6.5L12 2Z" 
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+    </svg>
+  ),
+  JoinResistance: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" 
+               stroke="currentColor" strokeWidth="2" fill="none"/>
+      <polygon points="12,6 18,9.5 18,14.5 12,18 6,14.5 6,9.5" 
+               stroke="currentColor" strokeWidth="2" fill="none"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M12 2L12 6M18 9.5L22 8.5M18 14.5L22 15.5M12 18L12 22M6 14.5L2 15.5M6 9.5L2 8.5" 
+            stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+    </svg>
+  ),
+  Marketplace: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M3 7L5 2H19L21 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M3 7H21V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V7Z" 
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <rect x="8" y="10" width="8" height="6" stroke="currentColor" strokeWidth="2" rx="1"/>
+      <path d="M10 13H14M12 11V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="7" cy="4.5" r="1" fill="currentColor"/>
+      <circle cx="17" cy="4.5" r="1" fill="currentColor"/>
+    </svg>
+  ),
+  Lore: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L15 8H21L16 12L18 20L12 16L6 20L8 12L3 8H9L12 2Z" 
+            stroke="currentColor" strokeWidth="2" fill="none"/>
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+      <path d="M12 8V16M8 12H16" stroke="currentColor" strokeWidth="1" opacity="0.5"/>
+    </svg>
+  ),
+  Blog: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
+      <path d="M7 8H17M7 12H17M7 16H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <rect x="15" y="14" width="4" height="4" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+      <path d="M3 8H21" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+    </svg>
+  ),
+  AICommander: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2"/>
+      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+      <path d="M12 4V8M20 12H16M12 16V20M8 12H4" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+      <circle cx="12" cy="6" r="1" fill="currentColor"/>
+      <circle cx="18" cy="12" r="1" fill="currentColor"/>
+      <circle cx="12" cy="18" r="1" fill="currentColor"/>
+      <circle cx="6" cy="12" r="1" fill="currentColor"/>
+    </svg>
+  )
+};
+
 const Sidebar = () => {
   const [hoveredItem, setHoveredItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Updated navigation items
+  // Updated navigation items with futuristic icons
   const navItems = [
-    { icon: <User size={24} />, text: 'Profile', path: '/profile' },
-    { icon: <Sword size={24} />, text: 'Join Resistance', path: '/join-resistance' },
-    { icon: <ShoppingBag size={24} />, text: 'Marketplace', path: '/marketplace' },
-    { icon: <Gem size={24} />, text: 'Lore', path: '/story' },
-    { icon: <Book size={24} />, text: 'Blog', path: '/blog' },
-    { icon: <Bot size={24} />, text: 'AI Commander', path: '/ai-commander' },
+    { icon: <FuturisticIcons.Profile />, text: 'Profile', path: '/profile' },
+    { icon: <FuturisticIcons.JoinResistance />, text: 'Resistance Hub', path: '/join-resistance' },
+    { icon: <FuturisticIcons.Marketplace />, text: 'Marketplace', path: '/marketplace' },
+    { icon: <FuturisticIcons.Lore />, text: 'Lore', path: '/story' },
+    { icon: <FuturisticIcons.Blog />, text: 'Blog', path: '/blog' },
+    { icon: <FuturisticIcons.AICommander />, text: 'AI Commander', path: '/ai-commander' },
   ];
 
   // Social icons with enhanced Phoenix styling and updated links
@@ -229,32 +267,20 @@ const Sidebar = () => {
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Fire Effect Background */}
+      {/* Optimized Fire Effect Background */}
       <FireEffect />
       
-      {/* Logo Section with enhanced styling */}
+      {/* Empty header space - logo moved to topbar */}
       <motion.div 
         className="flex justify-center items-center h-16 border-b relative z-10"
         style={{
           borderColor: 'rgba(255, 140, 0, 0.2)'
         }}
-        whileHover={{ 
-          boxShadow: "0 5px 15px -5px rgba(255,140,0,0.3)",
-          borderColor: "rgba(255,140,0,0.4)"
-        }}
       >
-        <motion.img 
-          src="/logo.png" 
-          alt="Swarm Resistance Logo" 
-          className="w-36" 
-          whileHover={{ 
-            scale: 1.05,
-            filter: "drop-shadow(0 0 12px rgba(255,140,0,0.6))"
-          }}
-        />
+        {/* Empty space where logo was - now moved to topbar */}
       </motion.div>
       
-      {/* Navigation Links with holographic effects */}
+      {/* Navigation Links with enhanced futuristic icons */}
       <nav className="mt-6 px-3 flex-grow relative z-10">
         {navItems.map((item, index) => (
           <motion.div
@@ -262,7 +288,7 @@ const Sidebar = () => {
             className={`relative overflow-hidden group cursor-pointer rounded-lg mb-2 transition-all duration-300 ${
               location.pathname === item.path 
                 ? 'text-phoenix-primary' 
-                : 'text-stellar-white' // Changed from text-neutral-light to text-stellar-white
+                : 'text-stellar-white'
             }`}
             style={{
               backgroundColor: location.pathname === item.path 
@@ -280,7 +306,7 @@ const Sidebar = () => {
               boxShadow: "0 0 15px rgba(255,140,0,0.2)"
             }}
           >
-            {/* Holographic background effect */}
+            {/* Enhanced holographic background effect */}
             {hoveredItem === index && (
               <motion.div 
                 className="absolute inset-0 rounded-lg"
@@ -303,12 +329,12 @@ const Sidebar = () => {
               whileHover={{ x: 6 }}
               transition={{ duration: 0.2 }}
             >
-              {/* Icon with enhanced animations */}
+              {/* Enhanced futuristic icon with animations */}
               <motion.div
                 className="relative"
                 whileHover={{ 
                   scale: 1.2,
-                  rotate: [0, -8, 8, -8, 0]
+                  rotate: [0, -5, 5, -5, 0]
                 }}
                 transition={{ 
                   duration: 0.6,
@@ -343,7 +369,7 @@ const Sidebar = () => {
               <span className={`ml-4 text-lg font-orbitron font-medium transition-all duration-300 ${
                 location.pathname === item.path 
                   ? 'text-phoenix-primary' 
-                  : 'group-hover:text-phoenix-light text-stellar-white' // Added text-stellar-white
+                  : 'group-hover:text-phoenix-light text-stellar-white'
               }`}
               style={{
                 textShadow: location.pathname === item.path 
@@ -428,7 +454,7 @@ const Sidebar = () => {
           ))}
         </div>
         
-        {/* Enhanced Resistance motto - Much Larger */}
+        {/* Enhanced Resistance motto */}
         <motion.div
           className="text-center mt-6"
           initial={{ opacity: 0, y: 10 }}

@@ -295,92 +295,451 @@ const HeroSection = () => {
       <div className="relative z-10 min-h-screen w-full pt-20 md:pl-64 flex items-center justify-center">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center h-full">
           
-          {/* Main Guardian Image - Full Size, Bottom Aligned */}
+          {/* Main Guardian Image - Holographic appearance animation - Appears Third */}
           <motion.div
-            initial={{ scale: 0, opacity: 0, rotate: -15 }}
-            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ 
-              duration: 1.5, 
-              delay: 0.8,
-              type: "spring",
-              stiffness: 80,
-              damping: 20
+              duration: 2, 
+              delay: 1.2  // Same timing as smoke
             }}
-            className="absolute bottom-0 z-0"
+            className="absolute z-0"
             style={{
-              left: '16rem', // Start right after sidebar
-              transform: 'translateX(0%)'
+              left: '16rem', // Start after sidebar
+              right: '0',
+              bottom: '130px', // Moved 30px south (was 160px)
+              top: '120px', // Add top positioning to avoid topbar overlap
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center'
             }}
           >
-            {/* Enhanced glow effect behind the image - can extend into sidebar */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-radial from-phoenix-primary/40 via-phoenix-light/25 to-transparent rounded-full blur-3xl"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.4, 0.7, 0.4]
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              style={{
-                width: '200%',
-                height: '200%',
-                left: '-50%',
-                top: '-50%'
-              }}
-            />
-            
-            {/* Main Guardian image - Full Screen Size */}
+            {/* Main Guardian image - Holographic appearance */}
             <motion.img
               src="/main.png"
               alt="Guardian Squad"
-              className="w-[50rem] h-[50rem] sm:w-[60rem] sm:h-[60rem] md:w-[70rem] md:h-[70rem] lg:w-[80rem] lg:h-[80rem] xl:w-[90rem] xl:h-[90rem] 2xl:w-[100rem] 2xl:h-[100rem] object-contain object-bottom"
+              className="object-contain object-bottom"
               style={{
-                filter: 'drop-shadow(0 0 40px rgba(255, 140, 0, 0.8))',
+                filter: 'drop-shadow(0 0 30px rgba(255, 140, 0, 0.6))',
                 maxWidth: 'calc(100vw - 16rem)',
-                maxHeight: 'calc(100vh - 5rem)'
+                maxHeight: 'calc(100vh - 250px + 60px)', // Made 60px bigger (was -280px, now -220px)
+                width: 'auto',
+                height: 'auto'
+              }}
+              initial={{ 
+                opacity: 0,
+                scale: 0.8,
+                filter: 'blur(10px) brightness(0) contrast(2)',
+              }}
+              animate={{ 
+                opacity: [0, 0.3, 0.7, 1],
+                scale: [0.8, 1.02, 0.98, 1],
+                filter: [
+                  'blur(10px) brightness(0) contrast(2)',
+                  'blur(8px) brightness(0.3) contrast(1.8)',
+                  'blur(4px) brightness(0.7) contrast(1.4)',
+                  'blur(2px) brightness(0.9) contrast(1.2)',
+                  'blur(0px) brightness(1) contrast(1)'
+                ]
+              }}
+              transition={{
+                duration: 2.5,
+                delay: 1.2, // Same as container delay
+                ease: "easeOut",
+                opacity: { 
+                  duration: 2.5,
+                  times: [0, 0.3, 0.7, 1]
+                },
+                scale: {
+                  duration: 2.5,
+                  times: [0, 0.6, 0.9, 1],
+                  ease: "easeOut"
+                },
+                filter: {
+                  duration: 2.5,
+                  times: [0, 0.25, 0.5, 0.75, 1],
+                  ease: "easeOut"
+                }
               }}
             />
+            
+            {/* Holographic scan lines effect */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 2,
+                delay: 1.4, // Slightly after main image starts
+                ease: "easeInOut"
+              }}
+            >
+              {/* Vertical scan lines */}
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={`scan-${i}`}
+                  className="absolute w-px h-full bg-gradient-to-b from-transparent via-cyan-400 to-transparent"
+                  style={{
+                    left: `${12.5 + i * 12.5}%`,
+                    opacity: 0.6
+                  }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: [0, 1, 0] }}
+                  transition={{
+                    duration: 1.5,
+                    delay: 1.6 + i * 0.1, // Adjusted for new timing
+                    ease: "easeInOut"
+                  }}
+                />
+              ))}
+              
+              {/* Horizontal scan effect */}
+              <motion.div
+                className="absolute w-full h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+                initial={{ top: '100%' }}
+                animate={{ top: ['100%', '0%', '100%'] }}
+                transition={{
+                  duration: 1.8,
+                  delay: 1.9, // Adjusted for new timing
+                  ease: "linear"
+                }}
+                style={{ opacity: 0.8 }}
+              />
+            </motion.div>
+            
+            {/* Energy materialization particles */}
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 2.5,
+                delay: 1.2, // Same as main image
+                ease: "easeInOut"
+              }}
+            >
+              {[...Array(12)].map((_, i) => (
+                <motion.div
+                  key={`particle-${i}`}
+                  className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    boxShadow: '0 0 6px #00FFFF'
+                  }}
+                  initial={{ 
+                    scale: 0,
+                    opacity: 0
+                  }}
+                  animate={{ 
+                    scale: [0, 1.5, 0],
+                    opacity: [0, 1, 0],
+                    x: [0, Math.random() * 40 - 20],
+                    y: [0, Math.random() * 40 - 20]
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: 1.4 + i * 0.1, // Same as main image particles
+                    ease: "easeOut"
+                  }}
+                />
+              ))}
+            </motion.div>
           </motion.div>
-          
-          {/* Action Buttons - Overlaid on top, positioned lower */}
-          <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}
-            className="absolute z-20 flex flex-col sm:flex-row gap-6 justify-center bottom-32"
-            style={{
-              left: '50%',
-              transform: 'translateX(-50%)'
+
+          {/* Animated Smoke PNG - Middle Layer (z-10) - Full Width */}
+          <motion.div 
+            className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ 
+              duration: 2, 
+              delay: 1.2  // Same timing as main.png
             }}
           >
-            <motion.button 
-              className="btn-phoenix-primary text-xl px-10 py-5 font-orbitron font-bold"
-              onClick={handleConnectWallet}
-              disabled={isLoading}
-              whileHover={{ 
-                scale: isLoading ? 1 : 1.08,
-                boxShadow: isLoading ? undefined : "0 0 40px rgba(255, 140, 0, 0.6)"
-              }}
-              whileTap={{ scale: isLoading ? 1 : 0.95 }}
-            >
-              {isLoading ? 'Initializing...' : 'BEGIN'}
-            </motion.button>
-            
-            <motion.button 
-              className="btn-resistance-secondary text-xl px-10 py-5 font-orbitron font-bold"
-              onClick={handleJoinResistance}
-              whileHover={{ 
-                scale: 1.08,
-                boxShadow: "0 0 40px rgba(59, 130, 246, 0.4)"
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              JOIN THE RESISTANCE
-            </motion.button>
+            <div className="relative w-full h-[500px] overflow-hidden">
+              <motion.img 
+                src="/smoke.png" 
+                alt="Battle Smoke" 
+                className="absolute bottom-0 left-0 w-full h-full object-cover object-bottom"
+                style={{
+                  maxWidth: '100%',
+                  height: '500px',
+                  filter: 'drop-shadow(0 0 20px rgba(255, 140, 0, 0.3))'
+                }}
+                initial={{ 
+                  opacity: 0,
+                  scale: 0.9,
+                  filter: 'blur(8px) brightness(0.3) contrast(1.5)',
+                }}
+                animate={{ 
+                  opacity: [0, 0.4, 0.8, 1],
+                  scale: [0.9, 1.02, 0.99, 1],
+                  filter: [
+                    'blur(8px) brightness(0.3) contrast(1.5)',
+                    'blur(6px) brightness(0.5) contrast(1.3)',
+                    'blur(3px) brightness(0.8) contrast(1.1)',
+                    'blur(0px) brightness(1) contrast(1)'
+                  ]
+                }}
+                transition={{
+                  duration: 2,
+                  delay: 1.2, // Same timing as main.png
+                  ease: "easeOut",
+                  opacity: { 
+                    duration: 2,
+                    times: [0, 0.3, 0.7, 1]
+                  },
+                  scale: {
+                    duration: 2,
+                    times: [0, 0.6, 0.9, 1],
+                    ease: "easeOut"
+                  },
+                  filter: {
+                    duration: 2,
+                    times: [0, 0.3, 0.7, 1],
+                    ease: "easeOut"
+                  }
+                }}
+              />
+              
+              {/* Smoke materialization particles */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{
+                  duration: 2,
+                  delay: 1.2, // Same timing as main.png
+                  ease: "easeInOut"
+                }}
+              >
+                {[...Array(8)].map((_, i) => (
+                  <motion.div
+                    key={`smoke-particle-${i}`}
+                    className="absolute w-2 h-2 bg-orange-400/60 rounded-full"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      bottom: `${Math.random() * 30}%`,
+                      boxShadow: '0 0 8px rgba(255, 140, 0, 0.6)'
+                    }}
+                    initial={{ 
+                      scale: 0,
+                      opacity: 0
+                    }}
+                    animate={{ 
+                      scale: [0, 1.2, 0],
+                      opacity: [0, 0.8, 0],
+                      y: [0, -40 - Math.random() * 20]
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      delay: 1.4 + i * 0.1, // Same timing as main.png particles
+                      ease: "easeOut"
+                    }}
+                  />
+                ))}
+              </motion.div>
+            </div>
           </motion.div>
+          
+          {/* Bottom Section - Title and Buttons - Front Layer (z-20) */}
+          <div className="absolute bottom-0 left-0 right-0 z-20" style={{ paddingLeft: '16rem' }}>
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+              
+              {/* Big Title "GUARDIANS RISE" - Single Line - Appears First */}
+              <motion.div
+                className="text-center mb-12"
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1, delay: 0.5 }} // Earlier delay
+              >
+                <motion.h1 
+                  className="text-5xl md:text-6xl lg:text-7xl font-orbitron font-black text-stellar-white mb-4 whitespace-nowrap"
+                  style={{
+                    textShadow: '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 140, 0, 0.6)',
+                    letterSpacing: '0.05em'
+                  }}
+                  animate={{
+                    textShadow: [
+                      '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 140, 0, 0.6)',
+                      '0 0 25px rgba(255, 255, 255, 1), 0 0 50px rgba(255, 140, 0, 0.8)',
+                      '0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 140, 0, 0.6)'
+                    ]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  GUARDIANS RISE
+                </motion.h1>
+              </motion.div>
+              
+              {/* Action Buttons - Same Size - Appears Second */}
+              <motion.div
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1, delay: 0.8 }} // Earlier delay
+                className="flex flex-col sm:flex-row gap-8 justify-center items-center"
+              >
+                {/* CONNECT & BEGIN Button - Green style like TopBar Connect Wallet */}
+                <motion.button 
+                  className="relative text-2xl font-orbitron font-bold rounded-lg overflow-hidden"
+                  style={{
+                    padding: '2rem 4rem',
+                    minWidth: '300px',
+                    background: 'linear-gradient(45deg, rgba(15, 35, 15, 0.95), rgba(34, 197, 94, 0.9))',
+                    border: '2px solid rgba(34, 197, 94, 0.9)',
+                    color: '#FFFFFF',
+                    boxShadow: '0 0 20px rgba(34, 197, 94, 0.6), inset 0 0 15px rgba(34, 197, 94, 0.1)',
+                    opacity: isLoading ? 0.5 : 1
+                  }}
+                  onClick={handleConnectWallet}
+                  disabled={isLoading}
+                  whileHover={{ 
+                    scale: isLoading ? 1 : 1.05,
+                    boxShadow: isLoading ? undefined : "0 0 30px rgba(34, 197, 94, 0.8), inset 0 0 20px rgba(34, 197, 94, 0.15)"
+                  }}
+                  whileTap={{ scale: isLoading ? 1 : 0.95 }}
+                >
+                  {/* Green shimmer effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-green-400/20 to-transparent rounded-lg"
+                    animate={{
+                      x: ['-100%', '100%']
+                    }}
+                    transition={{
+                      duration: 2.5,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+                  
+                  {/* Button text */}
+                  <span 
+                    className="relative z-10"
+                    style={{
+                      textShadow: '0 0 10px rgba(74, 222, 128, 0.8)'
+                    }}
+                  >
+                    {isLoading ? 'INITIALIZING...' : 'CONNECT & BEGIN'}
+                  </span>
+                  
+                  {/* Green corner indicators */}
+                  <motion.div
+                    className="absolute top-2 left-2 w-2 h-2 rounded-full bg-green-400"
+                    animate={{
+                      opacity: [0.6, 1, 0.6],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    style={{
+                      boxShadow: '0 0 8px rgba(74, 222, 128, 0.8)'
+                    }}
+                  />
+                  
+                  <motion.div
+                    className="absolute bottom-2 right-2 w-1.5 h-1.5 rounded-full bg-green-400"
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: 1,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    style={{
+                      boxShadow: '0 0 6px rgba(74, 222, 128, 0.8)'
+                    }}
+                  />
+                </motion.button>
+                
+                {/* JOIN THE RESISTANCE Button - Blue design, contained shimmer */}
+                <motion.button 
+                  className="relative text-2xl font-orbitron font-bold rounded-lg overflow-hidden"
+                  style={{
+                    padding: '2rem 4rem', // Explicit padding to match
+                    minWidth: '300px', // Same width as CONNECT button
+                    background: 'rgba(30, 58, 138, 0.9)',
+                    border: '2px solid rgba(59, 130, 246, 0.8)',
+                    color: '#FFFFFF',
+                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.6), inset 0 0 20px rgba(59, 130, 246, 0.1)'
+                  }}
+                  onClick={handleJoinResistance}
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 0 30px rgba(59, 130, 246, 0.8), inset 0 0 30px rgba(59, 130, 246, 0.15)",
+                    borderColor: "rgba(96, 165, 250, 1)"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {/* Contained shimmer effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-lg"
+                    animate={{
+                      x: ['-100%', '100%']
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                    style={{
+                      clipPath: 'inset(0)'
+                    }}
+                  />
+                  
+                  {/* Button text */}
+                  <span 
+                    className="relative z-10"
+                    style={{
+                      textShadow: '0 0 10px rgba(255, 255, 255, 0.8)'
+                    }}
+                  >
+                    JOIN THE RESISTANCE
+                  </span>
+                  
+                  {/* Corner indicators - simplified */}
+                  <motion.div
+                    className="absolute top-2 left-2 w-2 h-2 rounded-full bg-resistance-glow"
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    style={{
+                      boxShadow: '0 0 8px rgba(96, 165, 250, 0.8)'
+                    }}
+                  />
+                  
+                  <motion.div
+                    className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-resistance-glow"
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: 1,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    style={{
+                      boxShadow: '0 0 8px rgba(96, 165, 250, 0.8)'
+                    }}
+                  />
+                </motion.button>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
       

@@ -5,12 +5,12 @@ import { Wallet, Menu, ChevronDown, LogOut, User, Settings, Copy, Check } from '
 import { useWeb3Auth } from '../../contexts/Web3AuthContext';
 import HologramTransition from '../effects/HologramTransition';
 
-// Updated section navigation items with new names
+// Updated section navigation items with optimized names
 const sectionItems = [
   { id: 'home', name: 'Headquarters', href: '#home' },
-  { id: 'ecosystem', name: 'Mission Briefing', href: '#ecosystem' },
-  { id: 'metrics', name: 'Battle Status', href: '#metrics' },
-  { id: 'join', name: 'Join the Fight', href: '#join' },
+  { id: 'ecosystem', name: 'Mission', href: '#ecosystem' },
+  { id: 'metrics', name: 'Metrics', href: '#metrics' },
+  { id: 'join', name: 'Recruit', href: '#join' },
 ];
 
 const TopBar = () => {
@@ -107,9 +107,6 @@ const TopBar = () => {
     // Prevent multiple warp transitions
     if (isWarping) return;
     
-    // Allow clicking the same section to scroll to it
-    // if (activeSection === sectionId) return;
-    
     // Ensure we're on the home page
     if (location.pathname !== '/') {
       navigate('/', { replace: true });
@@ -147,8 +144,8 @@ const TopBar = () => {
         transition={{ duration: 0.6, delay: 0.3 }}
       >
         <div className="h-full flex items-center justify-between px-6 md:px-10">
-          {/* Left Section - Logo (Hidden on desktop to make space for centering) */}
-          <div className="flex items-center md:w-0 md:overflow-hidden">
+          {/* Left Section - Logo */}
+          <div className="flex items-center">
             {/* Mobile Menu Button */}
             <motion.button 
               className="text-stellar-white hover:text-phoenix-primary md:hidden mr-4"
@@ -160,8 +157,8 @@ const TopBar = () => {
               <Menu size={28} />
             </motion.button>
             
-            {/* Logo - Only visible on mobile */}
-            <Link to="/" className="flex items-center ml-4 md:hidden">
+            {/* Logo - Now in TopBar */}
+            <Link to="/" className="flex items-center">
               <motion.img 
                 src="/logo.png" 
                 alt="Swarm Resistance" 
@@ -174,8 +171,8 @@ const TopBar = () => {
             </Link>
           </div>
           
-          {/* Center Section - Navigation (Desktop) - Centered in content area */}
-          <nav className="hidden md:flex items-center space-x-10 absolute left-1/2 transform -translate-x-1/2"
+          {/* Center Section - Navigation (Desktop) - Centered accounting for sidebar */}
+          <nav className="hidden md:flex items-center space-x-10 absolute left-1/2 transform -translate-x-1/2" 
                style={{ marginLeft: '8rem' }}> {/* Offset by half of sidebar width (256px / 2 = 8rem) */}
             {sectionItems.map((item) => (
               <motion.button
@@ -376,17 +373,78 @@ const TopBar = () => {
               <motion.button 
                 onClick={login}
                 disabled={isLoading || isWarping}
-                className="hidden sm:flex items-center space-x-3 btn-phoenix-primary text-lg px-8 py-4 disabled:opacity-50"
+                className="hidden sm:flex items-center space-x-3 relative text-lg font-orbitron font-bold rounded-lg overflow-hidden"
+                style={{
+                  padding: '1rem 2rem',
+                  background: 'linear-gradient(45deg, rgba(15, 35, 15, 0.95), rgba(34, 197, 94, 0.9))',
+                  border: '2px solid rgba(34, 197, 94, 0.9)',
+                  color: '#FFFFFF',
+                  boxShadow: '0 0 20px rgba(34, 197, 94, 0.6), inset 0 0 15px rgba(34, 197, 94, 0.1)',
+                  opacity: (isLoading || isWarping) ? 0.5 : 1
+                }}
                 whileHover={{ 
                   scale: (isLoading || isWarping) ? 1 : 1.05,
-                  boxShadow: (isLoading || isWarping) ? undefined : "0 0 30px rgba(255,140,0,0.5)"
+                  boxShadow: (isLoading || isWarping) ? undefined : "0 0 30px rgba(34, 197, 94, 0.8), inset 0 0 20px rgba(34, 197, 94, 0.15)"
                 }}
                 whileTap={{ scale: (isLoading || isWarping) ? 1 : 0.95 }}
               >
-                <Wallet size={18} />
-                <span className="font-bold">
+                {/* Green shimmer effect */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-green-400/20 to-transparent rounded-lg"
+                  animate={{
+                    x: ['-100%', '100%']
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+                
+                {/* Wallet icon */}
+                <Wallet size={18} className="relative z-10" />
+                
+                {/* Button text with green shadows */}
+                <span 
+                  className="font-bold relative z-10"
+                  style={{
+                    textShadow: '0 0 10px rgba(74, 222, 128, 0.8)'
+                  }}
+                >
                   {isLoading ? 'Initializing...' : 'Connect Wallet'}
                 </span>
+                
+                {/* Green corner indicators */}
+                <motion.div
+                  className="absolute top-1 left-1 w-2 h-2 rounded-full bg-green-400"
+                  animate={{
+                    opacity: [0.6, 1, 0.6],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  style={{
+                    boxShadow: '0 0 8px rgba(74, 222, 128, 0.8)'
+                  }}
+                />
+                
+                <motion.div
+                  className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-green-400"
+                  animate={{
+                    opacity: [0.5, 1, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: 1,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  style={{
+                    boxShadow: '0 0 6px rgba(74, 222, 128, 0.8)'
+                  }}
+                />
               </motion.button>
             )}
           </div>

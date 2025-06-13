@@ -168,7 +168,7 @@ const ApocalypticCitySection = () => {
                 </motion.div>
               </div>
 
-              {/* Call to action */}
+              {/* Call to action - Blue JOIN THE RESISTANCE button */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -176,14 +176,81 @@ const ApocalypticCitySection = () => {
                 viewport={{ once: true }}
               >
                 <motion.button 
-                  className="btn-phoenix-primary text-xl px-12 py-6 font-orbitron font-bold"
+                  className="relative text-2xl font-orbitron font-bold rounded-lg overflow-hidden"
+                  style={{
+                    padding: '2rem 4rem',
+                    minWidth: '300px',
+                    background: 'rgba(30, 58, 138, 0.9)',
+                    border: '2px solid rgba(59, 130, 246, 0.8)',
+                    color: '#FFFFFF',
+                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.6), inset 0 0 20px rgba(59, 130, 246, 0.1)'
+                  }}
                   whileHover={{ 
-                    scale: 1.15,
-                    boxShadow: "0 0 40px rgba(255, 140, 0, 0.6)"
+                    scale: 1.05,
+                    boxShadow: "0 0 30px rgba(59, 130, 246, 0.8), inset 0 0 30px rgba(59, 130, 246, 0.15)",
+                    borderColor: "rgba(96, 165, 250, 1)"
                   }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  ENTER THE RESISTANCE
+                  {/* Shimmer effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent rounded-lg"
+                    animate={{
+                      x: ['-100%', '100%']
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                    style={{
+                      clipPath: 'inset(0)'
+                    }}
+                  />
+                  
+                  {/* Button text */}
+                  <span 
+                    className="relative z-10"
+                    style={{
+                      textShadow: '0 0 10px rgba(255, 255, 255, 0.8)'
+                    }}
+                  >
+                    JOIN THE RESISTANCE
+                  </span>
+                  
+                  {/* Blue corner indicators */}
+                  <motion.div
+                    className="absolute top-2 left-2 w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: '#60A5FA',
+                      boxShadow: '0 0 8px rgba(96, 165, 250, 0.8)'
+                    }}
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  
+                  <motion.div
+                    className="absolute bottom-2 right-2 w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: '#60A5FA',
+                      boxShadow: '0 0 8px rgba(96, 165, 250, 0.8)'
+                    }}
+                    animate={{
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 2,
+                      delay: 1,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
                 </motion.button>
               </motion.div>
             </motion.div>
