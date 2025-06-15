@@ -1,8 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useTransform as useMotionTransform, animate } from 'framer-motion';
-import { Shield, Sword, Users, Target, Zap, Award } from 'lucide-react';
+import { Zap, Target, Crosshair, Award, Trophy, Star } from 'lucide-react';
 
-const JoinResistanceComingSoonPage = () => {
+const MedaShooterPage = () => {
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -23,7 +23,7 @@ const JoinResistanceComingSoonPage = () => {
   useEffect(() => {
     if (!hasAnimated) {
       const timer = setTimeout(() => {
-        const controls = animate(count, 92, {
+        const controls = animate(count, 87, {
           duration: 2,
           ease: "easeOut",
           delay: 2 // Start after the progress bar animation begins
@@ -59,14 +59,14 @@ const JoinResistanceComingSoonPage = () => {
     left: 10 + Math.random() * 80,
   }));
 
-  // Resistance/military related icons
-  const resistanceIcons = [
-    { icon: Shield, color: "#FF8C00", delay: 0 },
-    { icon: Sword, color: "#60A5FA", delay: 0.5 },
-    { icon: Users, color: "#22C55E", delay: 1 },
-    { icon: Target, color: "#8B5CF6", delay: 1.5 },
-    { icon: Zap, color: "#FB923C", delay: 2 },
-    { icon: Award, color: "#FFB84D", delay: 2.5 }
+  // Shooter/gaming related icons
+  const shooterIcons = [
+    { icon: Target, color: "#FF8C00", delay: 0 },
+    { icon: Crosshair, color: "#60A5FA", delay: 0.5 },
+    { icon: Zap, color: "#22C55E", delay: 1 },
+    { icon: Award, color: "#8B5CF6", delay: 1.5 },
+    { icon: Trophy, color: "#FB923C", delay: 2 },
+    { icon: Star, color: "#FFB84D", delay: 2.5 }
   ];
 
   return (
@@ -151,7 +151,7 @@ const JoinResistanceComingSoonPage = () => {
         ))}
       </motion.div>
 
-      {/* Main content - FIXED: Added md:pl-64 for sidebar spacing */}
+      {/* Main content */}
       <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col">
           
@@ -170,7 +170,7 @@ const JoinResistanceComingSoonPage = () => {
               transition={{ duration: 1, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              Join Resistance
+              Meda Shooter
             </motion.h2>
             
             <motion.p 
@@ -180,8 +180,29 @@ const JoinResistanceComingSoonPage = () => {
               transition={{ duration: 0.8, delay: 0.5 }}
               viewport={{ once: true }}
             >
-              Guardian recruitment protocols are being calibrated. Your journey to legendary status begins soon.
+              Meda Shooter is an ancient training program to test shooting skills and reflexes where the hero fights endless amounts of Swarm enemies. Deploy hero artifacts and legendary weapons to increase your edge in the game.
             </motion.p>
+            
+            {/* Action Button */}
+            <motion.div
+              className="mt-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <motion.button
+                className="btn-phoenix-primary px-8 py-4 text-xl font-orbitron font-bold"
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: "0 0 30px rgba(255, 140, 0, 0.6)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.open('https://game.cryptomeda.tech', '_blank')}
+              >
+                DEPLOY
+              </motion.button>
+            </motion.div>
           </motion.div>
 
           {/* Main content area - centered */}
@@ -194,7 +215,7 @@ const JoinResistanceComingSoonPage = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1, delay: 1 }}
             >
-              {/* Central hub - Shield as main icon */}
+              {/* Central hub - Target as main icon */}
               <div className="relative w-32 h-32 glass-phoenix rounded-full flex items-center justify-center animate-pulse-phoenix">
                 <motion.div
                   animate={{ 
@@ -203,14 +224,14 @@ const JoinResistanceComingSoonPage = () => {
                   }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <Shield size={48} className="text-phoenix-primary" />
+                  <Target size={48} className="text-phoenix-primary" />
                 </motion.div>
               </div>
 
-              {/* Orbiting resistance icons */}
-              {resistanceIcons.map((item, index) => {
+              {/* Orbiting shooter icons */}
+              {shooterIcons.map((item, index) => {
                 const Icon = item.icon;
-                const angle = (index * 360) / resistanceIcons.length;
+                const angle = (index * 360) / shooterIcons.length;
                 
                 return (
                   <motion.div
@@ -228,7 +249,7 @@ const JoinResistanceComingSoonPage = () => {
                       y: [0, Math.sin((angle * Math.PI) / 180) * 80],
                     }}
                     transition={{
-                      duration: 7, // Faster for military precision feel
+                      duration: 6, // Smooth orbital movement
                       delay: item.delay,
                       repeat: Infinity,
                       ease: "linear"
@@ -251,7 +272,7 @@ const JoinResistanceComingSoonPage = () => {
               <div className="glass-void rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-orbitron font-bold text-phoenix-primary">
-                    Recruitment System Status
+                    Game Development Status
                   </h3>
                   <span className="text-phoenix-light font-mono">
                     <motion.span>{rounded}</motion.span>%
@@ -261,7 +282,7 @@ const JoinResistanceComingSoonPage = () => {
                   <motion.div
                     className="h-full bg-gradient-to-r from-phoenix-primary to-phoenix-light"
                     initial={{ width: 0 }}
-                    animate={{ width: "92%" }}
+                    animate={{ width: "87%" }}
                     transition={{ duration: 2, delay: 2 }}
                   />
                 </div>
@@ -270,10 +291,10 @@ const JoinResistanceComingSoonPage = () => {
               {/* Feature status */}
               <div className="grid md:grid-cols-2 gap-4">
                 {[
-                  { name: "Guardian Training Academy", status: "Complete", color: "text-success-green" },
-                  { name: "Skill Assessment Matrix", status: "Complete", color: "text-success-green" },
-                  { name: "Mission Assignment Engine", status: "Testing", color: "text-phoenix-primary" },
-                  { name: "Rank Progression System", status: "Finalizing", color: "text-warning-orange" }
+                  { name: "Game Integration", status: "Complete", color: "text-success-green" },
+                  { name: "NFT Integration", status: "Complete", color: "text-success-green" },
+                  { name: "In-Game Boosts", status: "Testing", color: "text-phoenix-primary" },
+                  { name: "Meda Gas Utility", status: "Development", color: "text-warning-orange" }
                 ].map((feature, index) => (
                   <motion.div
                     key={index}
@@ -293,14 +314,14 @@ const JoinResistanceComingSoonPage = () => {
               </div>
             </motion.div>
 
-            {/* Call to action */}
+            {/* Leaderboard */}
             <motion.div
               className="text-center"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 3 }}
             >
-              <div className="glass-phoenix rounded-2xl p-8 md:p-12 relative overflow-hidden max-w-2xl">
+              <div className="glass-phoenix rounded-2xl p-8 md:p-12 relative overflow-hidden max-w-4xl">
                 <div className="absolute inset-0 bg-gradient-to-br from-phoenix-primary/10 via-resistance-light/5 to-energy-purple/10" />
                 
                 <div className="relative">
@@ -315,49 +336,85 @@ const JoinResistanceComingSoonPage = () => {
                     }}
                     transition={{ duration: 3, repeat: Infinity }}
                   >
-                    Answer the Call to Greatness
+                    Leaderboard
                   </motion.h3>
                   
-                  <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                    The Resistance needs heroes like you. Our recruitment systems are nearly complete, 
-                    ready to guide you from rookie Guardian to legendary Commander through structured training and real missions.
-                  </p>
+                  <motion.p 
+                    className="text-lg text-gray-300 mb-6 leading-relaxed max-w-3xl mx-auto"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 3.2 }}
+                  >
+                    Players will be able to collect up to 10,000 Meda Gas daily. Currently in the testing phase, 
+                    the Meda Gas rewards will be available soon.
+                  </motion.p>
+                  
+                  {/* Leaderboard Table */}
+                  <div className="glass-void rounded-lg overflow-hidden">
+                    <div className="grid grid-cols-3 gap-4 p-4 border-b border-phoenix-primary/20 bg-phoenix-primary/10">
+                      <div className="text-left font-orbitron font-bold text-phoenix-primary">Rank</div>
+                      <div className="text-left font-orbitron font-bold text-phoenix-primary">Nickname</div>
+                      <div className="text-right font-orbitron font-bold text-phoenix-primary">Meda Gas Reward</div>
+                    </div>
+                    
+                    {[
+                      { rank: 1, medaGas: "10,000" },
+                      { rank: 2, medaGas: "9,000" },
+                      { rank: 3, medaGas: "8,000" },
+                      { rank: 4, medaGas: "7,000" },
+                      { rank: 5, medaGas: "6,000" },
+                      { rank: 6, medaGas: "5,000" },
+                      { rank: 7, medaGas: "4,000" },
+                      { rank: 8, medaGas: "3,000" },
+                      { rank: 9, medaGas: "2,000" },
+                      { rank: 10, medaGas: "1,000" }
+                    ].map((player, index) => (
+                      <motion.div
+                        key={index}
+                        className="grid grid-cols-3 gap-4 p-4 border-b border-gray-700/30 hover:bg-phoenix-primary/5 transition-colors"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 3.5 + index * 0.1 }}
+                      >
+                        <div className="text-left">
+                          <span className={`font-mono font-bold ${
+                            player.rank <= 3 ? 'text-phoenix-primary' : 'text-gray-300'
+                          }`}>
+                            #{player.rank}
+                          </span>
+                        </div>
+                        <div className="text-left">
+                          <span className="text-gray-500 font-medium italic">Coming Soon</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-success-green font-mono font-bold">{player.medaGas}</span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
 
                   <motion.div 
-                    className="flex justify-center space-x-6 text-sm text-gray-400"
+                    className="flex justify-center space-x-6 text-sm text-gray-400 mt-6"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 3.5 }}
+                    transition={{ delay: 4.5 }}
                   >
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 rounded-full bg-phoenix-primary animate-pulse" />
-                      <span>Academy Ready</span>
+                      <span>Testing Phase</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 rounded-full bg-resistance-light animate-pulse" />
-                      <span>Missions Active</span>
+                      <span>Rewards Coming</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
-                      <span>Recruitment Open</span>
+                      <span>Daily Limits</span>
                     </div>
                   </motion.div>
                 </div>
               </div>
             </motion.div>
-
-            {/* Footer section 
-            <motion.div 
-              className="text-center py-8 mt-16"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 4 }}
-            >
-              <p className="text-phoenix-primary/60 text-sm font-orbitron">
-                ©2024 Swarm Resistance - Forging Tomorrow's Heroes
-              </p>
-            </motion.div>
-            */}
           </div>
         </div>
       </div>
@@ -365,4 +422,4 @@ const JoinResistanceComingSoonPage = () => {
   );
 };
 
-export default JoinResistanceComingSoonPage;
+export default MedaShooterPage;

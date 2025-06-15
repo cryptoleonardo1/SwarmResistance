@@ -9,6 +9,7 @@ const ProfilePage = () => {
     userProfile, 
     updateUserProfile, 
     isConnected, 
+    walletAddress,  // ADD THIS LINE
     medaGasBalance, 
     isLoadingBalance, 
     refreshMedaGasBalance,
@@ -17,7 +18,7 @@ const ProfilePage = () => {
     refreshNFTHoldings
   } = useWeb3Auth();
   const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('heroes');
   const [editedProfile, setEditedProfile] = useState({
     nickname: '',
     email: '',
@@ -273,73 +274,7 @@ const ProfilePage = () => {
     };
   };
 
-  // Mock data for NFT Heroes with power stats
-  const mockHeroes = [
-    { 
-      id: 1, 
-      name: 'Elite Warrior', 
-      rarity: 'Revolution', 
-      power: 289,
-      attributes: { security: 95, anonymity: 98, innovation: 96 },
-      image: '/1231.png' // Example image
-    },
-    { 
-      id: 2, 
-      name: 'Cyber Assassin', 
-      rarity: 'Influencer', 
-      power: 234,
-      attributes: { security: 78, anonymity: 82, innovation: 74 },
-      image: '/2341.png' // Example image
-    },
-    { 
-      id: 3, 
-      name: 'Plasma Guardian', 
-      rarity: 'Collectible', 
-      power: 178,
-      attributes: { security: 61, anonymity: 58, innovation: 59 },
-      image: '/3451.png' // Example image
-    },
-  ];
-
-  // Mock data for NFT Weapons with tier stats
-  const mockWeapons = [
-    { 
-      id: 1, 
-      name: 'Plasma Gun', 
-      tier: 'Tier 3', 
-      type: 'Gun',
-      power: 195,
-      attributes: { attribute1: 68, attribute2: 65, attribute3: 62 },
-      video: '/324.mp4' // Example: Tier 3, Gun, Sniper Rifle
-    },
-    { 
-      id: 2, 
-      name: 'Plasma Sword', 
-      tier: 'Tier 2', 
-      type: 'Sword',
-      power: 156,
-      attributes: { attribute1: 52, attribute2: 48, attribute3: 56 },
-      video: '/213.mp4' // Example: Tier 2, Sword, Plasma Sword
-    },
-    { 
-      id: 3, 
-      name: 'Shotgun', 
-      tier: 'Tier 1', 
-      type: 'Gun',
-      power: 210,
-      attributes: { attribute1: 72, attribute2: 69, attribute3: 69 },
-      video: '/122.mp4' // Example: Tier 1, Gun, Shotgun
-    },
-  ];
-
-  // Mock data for NFT Lands with rarity and plots
-  const mockLands = [
-    { id: 1, name: 'Common Land', rarity: 'Common', plots: 1, image: '/land1.png' },
-    { id: 2, name: 'Rare Land', rarity: 'Rare', plots: 3, image: '/land2.png' },
-    { id: 3, name: 'Legendary Land', rarity: 'Legendary', plots: 7, image: '/land3.png' },
-  ];
-
-  // Get real or fallback NFT data
+  // Get real NFT data
   const getNFTData = () => {
     if (isLoadingNFTs) {
       return {
@@ -366,14 +301,14 @@ const ProfilePage = () => {
       };
     }
     
-    // Fallback to mock data
+    // Return empty arrays if no data
     return {
-      heroes: mockHeroes,
-      weapons: mockWeapons,
-      lands: mockLands,
-      heroesCount: mockHeroes.length,
-      weaponsCount: mockWeapons.length,
-      landsCount: mockLands.length,
+      heroes: [],
+      weapons: [],
+      lands: [],
+      heroesCount: 0,
+      weaponsCount: 0,
+      landsCount: 0,
       isLoading: false,
       isReal: false
     };
@@ -387,15 +322,7 @@ const ProfilePage = () => {
     ? ((userProfile.medaGas - (currentRankInfo?.minGas || 0)) / (nextRankInfo.minGas - (currentRankInfo?.minGas || 0))) * 100
     : 100;
 
-  const recentActivities = [
-    { type: 'Daily Login', reward: 150, timestamp: '2 hours ago' },
-    { type: 'Meda Shooter', reward: 75, timestamp: '5 hours ago' },
-    { type: 'Reflex Game', reward: 45, timestamp: '1 day ago' },
-    { type: 'Trivia', reward: 200, timestamp: '2 days ago' },
-  ];
-
   const tabs = [
-    { id: 'overview', name: 'Overview', icon: Trophy },
     { id: 'heroes', name: 'NFT Heroes', icon: Shield },
     { id: 'weapons', name: 'NFT Weapons', icon: Sword },
     { id: 'lands', name: 'NFT Lands', icon: MapPin },
@@ -512,11 +439,11 @@ const ProfilePage = () => {
 
       {/* Main content - properly centered accounting for sidebar */}
       <div className="relative z-10 min-h-screen w-full pt-16 md:pl-64">
-        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col items-center">
           
           {/* Header Section */}
           <motion.div 
-            className="glassmorphism rounded-xl p-8 mb-8"
+            className="glassmorphism rounded-xl p-8 mb-8 w-full"
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}
@@ -627,7 +554,19 @@ const ProfilePage = () => {
                       </motion.button>
                     </div>
                     
-                    <p className="text-gray-400 mb-6 text-lg">{userProfile.email || 'No secure comm channel set'}</p>
+                    {/* Email */}
+                    <p className="text-gray-400 mb-2 text-lg">{userProfile.email || 'No secure comm channel set'}</p>
+                    
+                    {/* Token Address */}
+                    <p className="text-gray-500 mb-4 text-sm font-mono">
+                      Token: {walletAddress ? `${walletAddress.slice(0, 10)}...${walletAddress.slice(-8)}` : 'No wallet connected'}
+                    </p>
+                    
+                    {/* Resistance Member Since */}
+                    <div className="flex items-center gap-2 text-gray-400 justify-center lg:justify-start mb-6">
+                      <Calendar size={16} />
+                      <span>Resistance Member Since {new Date(userProfile.joinDate).toLocaleDateString()}</span>
+                    </div>
                     
                     {/* Key Stats Row - Updated with new categories */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -723,12 +662,6 @@ const ProfilePage = () => {
                         </div>
                       </div>
                     </div>
-
-                    {/* Member Since */}
-                    <div className="flex items-center gap-2 text-gray-400 justify-center lg:justify-start">
-                      <Calendar size={16} />
-                      <span>Resistance Member Since {new Date(userProfile.joinDate).toLocaleDateString()}</span>
-                    </div>
                   </>
                 )}
               </div>
@@ -767,113 +700,116 @@ const ProfilePage = () => {
             )}
           </motion.div>
 
-          {/* Tab Navigation */}
+          {/* Enhanced Tab Navigation */}
           <motion.div 
-            className="glassmorphism rounded-xl p-2 mb-8"
+            className="glassmorphism rounded-2xl p-6 mb-8 w-full"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="flex flex-wrap gap-2">
+            <h2 className="text-2xl font-bold text-stellar-white mb-6 text-center font-orbitron">
+              Resistance Arsenal
+            </h2>
+            <div className="grid md:grid-cols-3 gap-4">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
                   <motion.button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                    className={`relative overflow-hidden rounded-xl p-6 border-2 transition-all duration-300 ${
                       activeTab === tab.id
-                        ? 'bg-meda-gold text-void-black shadow-lg'
-                        : 'text-gray-400 hover:text-stellar-white hover:bg-space-blue/30'
+                        ? 'border-meda-gold bg-meda-gold/10 shadow-phoenix-md'
+                        : 'border-cosmic-purple/30 bg-space-blue/20 hover:border-meda-gold/50 hover:bg-meda-gold/5'
                     }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <Icon size={18} />
-                    {tab.name}
+                    {/* Background glow effect */}
+                    {activeTab === tab.id && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-meda-gold/20 via-meda-gold/10 to-transparent"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
+                    
+                    <div className="relative flex flex-col items-center text-center">
+                      <div className={`p-4 rounded-full mb-3 transition-colors ${
+                        activeTab === tab.id 
+                          ? 'bg-meda-gold/20 text-meda-gold' 
+                          : 'bg-cosmic-purple/20 text-gray-400'
+                      }`}>
+                        <Icon size={32} />
+                      </div>
+                      
+                      <h3 className={`font-bold text-lg mb-2 transition-colors ${
+                        activeTab === tab.id ? 'text-meda-gold' : 'text-stellar-white'
+                      }`}>
+                        {tab.name}
+                      </h3>
+                      
+                      <div className={`text-sm transition-colors ${
+                        activeTab === tab.id ? 'text-meda-gold/80' : 'text-gray-400'
+                      }`}>
+                        {tab.id === 'heroes' && `${nftData.heroesCount} Heroes`}
+                        {tab.id === 'weapons' && `${nftData.weaponsCount} Weapons`}
+                        {tab.id === 'lands' && `${nftData.landsCount} Lands`}
+                      </div>
+                      
+                      {/* Active indicator */}
+{activeTab === tab.id && (
+  <motion.div
+    className="absolute -bottom-1 left-1/2 w-12 h-1 bg-meda-gold rounded-full"
+    initial={{ scaleX: 0, x: '-50%' }}
+    animate={{ scaleX: 1, x: '-50%' }}
+    transition={{ duration: 0.3 }}
+  />
+)}
+                    </div>
                   </motion.button>
                 );
               })}
             </div>
           </motion.div>
 
-          {/* Tab Content */}
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {activeTab === 'overview' && (
-              <div className="grid lg:grid-cols-2 gap-8">
-                {/* Daily Production */}
+          {/* Tab Content - centered */}
+          <div className="w-full max-w-5xl">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              {activeTab === 'heroes' && (
                 <div className="glassmorphism rounded-xl p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <TrendingUp className="text-energy-green" />
-                    Daily Production
-                  </h3>
-                  <div className="text-center">
-                    <div className="text-4xl font-bold text-energy-green mb-2">0</div>
-                    <div className="text-gray-400 mb-4">Meda Gas per Day</div>
-                    <p className="text-sm text-gray-500">Assign NFTs to Meda Wars to start passive production</p>
-                  </div>
-                </div>
-
-                {/* Recent Activities */}
-                <div className="glassmorphism rounded-xl p-6">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                    <Clock className="text-neon-cyan" />
-                    Recent Activities
-                  </h3>
-                  <div className="space-y-3">
-                    {recentActivities.map((activity, index) => (
-                      <div key={index} className="flex justify-between items-center p-3 bg-space-blue/30 rounded-lg">
-                        <div>
-                          <div className="font-medium text-stellar-white">{activity.type}</div>
-                          <div className="text-sm text-gray-400">{activity.timestamp}</div>
-                        </div>
-                        <div className="text-energy-green font-bold">+{activity.reward} MG</div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-2xl font-bold">NFT Heroes</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="text-gray-400">
+                        {nftData.isLoading ? '...' : `${nftData.heroesCount} Heroes`}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'heroes' && (
-              <div className="glassmorphism rounded-xl p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-2xl font-bold">NFT Heroes</h3>
-                  <div className="flex items-center gap-4">
-                    <div className="text-gray-400">
-                      {nftData.isLoading ? '...' : `${nftData.heroesCount} Heroes`}
+                      {nftData.isReal && !nftData.isLoading && (
+                        <motion.button
+                          onClick={refreshNFTHoldings}
+                          className="text-gray-400 hover:text-meda-gold transition-colors p-2"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          title="Refresh Heroes"
+                        >
+                          <RefreshCw size={20} />
+                        </motion.button>
+                      )}
                     </div>
-                    {nftData.isReal && !nftData.isLoading && (
-                      <motion.button
-                        onClick={refreshNFTHoldings}
-                        className="text-gray-400 hover:text-meda-gold transition-colors p-2"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        title="Refresh Heroes"
-                      >
-                        <RefreshCw size={20} />
-                      </motion.button>
-                    )}
                   </div>
-                </div>
-                
-                {nftData.isLoading ? (
-                  <div className="text-center py-12">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-meda-gold mx-auto mb-4"></div>
-                    <p className="text-xl text-gray-400">Loading Heroes from blockchain...</p>
-                  </div>
-                ) : nftData.heroes.length > 0 ? (
-                  <>
-                    {!nftData.isReal && (
-                      <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                        <p className="text-yellow-400 text-sm">⚠️ Showing mock data - blockchain connection unavailable</p>
-                      </div>
-                    )}
+                  
+                  {nftData.isLoading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-meda-gold mx-auto mb-4"></div>
+                      <p className="text-xl text-gray-400">Loading Heroes from blockchain...</p>
+                    </div>
+                  ) : nftData.heroes.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {nftData.heroes.map((hero) => {
                         const heroKey = hero.id || hero.tokenId;
@@ -902,14 +838,12 @@ const ProfilePage = () => {
                             {/* Hero Details */}
                             <div className="space-y-3">
                               <h4 className="font-bold text-stellar-white text-lg">
-                                {nftData.isReal ? `Hero #${hero.tokenId}` : hero.name}
+                                {hero.name || `Hero #${hero.tokenId}`}
                               </h4>
                               
-                              {nftData.isReal && (
-                                <div className="text-xs text-gray-500">
-                                  Token ID: {hero.tokenId}
-                                </div>
-                              )}
+                              <div className="text-xs text-gray-500">
+                                Token ID: {hero.tokenId}
+                              </div>
                               
                               {/* Show attributes if available */}
                               {hero.attributes && (
@@ -952,65 +886,55 @@ const ProfilePage = () => {
                         );
                       })}
                     </div>
-                  </>
-                ) : (
-                  <div className="text-center py-12">
-                    <Shield size={64} className="text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400 mb-4">No heroes detected</p>
-                    <p className="text-sm text-gray-500">
-                      {nftData.isReal ? 
-                        'Your wallet does not contain any Hero NFTs from the resistance collection' :
-                        'Acquire Hero NFTs to build your resistance team'
-                      }
-                    </p>
-                    {nftHoldings?.heroes?.error && (
-                      <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                        <p className="text-red-400 text-sm">Error loading Heroes: {nftHoldings.heroes.error}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'weapons' && (
-              <div className="glassmorphism rounded-xl p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-2xl font-bold">NFT Weapons</h3>
-                  <div className="flex items-center gap-4">
-                    <div className="text-gray-400">
-                      {nftData.isLoading ? '...' : `${nftData.weaponsCount} Weapons`}
+                  ) : (
+                    <div className="text-center py-12">
+                      <Shield size={64} className="text-gray-500 mx-auto mb-4" />
+                      <p className="text-gray-400 mb-4">No heroes detected</p>
+                      <p className="text-sm text-gray-500">
+                        Your wallet does not contain any Hero NFTs from the resistance collection
+                      </p>
+                      {nftHoldings?.heroes?.error && (
+                        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                          <p className="text-red-400 text-sm">Error loading Heroes: {nftHoldings.heroes.error}</p>
+                        </div>
+                      )}
                     </div>
-                    {nftData.isReal && !nftData.isLoading && (
-                      <motion.button
-                        onClick={refreshNFTHoldings}
-                        className="text-gray-400 hover:text-neon-cyan transition-colors p-2"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        title="Refresh Weapons"
-                      >
-                        <RefreshCw size={20} />
-                      </motion.button>
-                    )}
-                  </div>
+                  )}
                 </div>
-                
-                {nftData.isLoading ? (
-                  <div className="text-center py-12">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-neon-cyan mx-auto mb-4"></div>
-                    <p className="text-xl text-gray-400">Loading Weapons from blockchain...</p>
-                  </div>
-                ) : nftData.weapons.length > 0 ? (
-                  <>
-                    {!nftData.isReal && (
-                      <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                        <p className="text-yellow-400 text-sm">⚠️ Showing mock data - blockchain connection unavailable</p>
+              )}
+
+              {activeTab === 'weapons' && (
+                <div className="glassmorphism rounded-xl p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-2xl font-bold">NFT Weapons</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="text-gray-400">
+                        {nftData.isLoading ? '...' : `${nftData.weaponsCount} Weapons`}
                       </div>
-                    )}
+                      {nftData.isReal && !nftData.isLoading && (
+                        <motion.button
+                          onClick={refreshNFTHoldings}
+                          className="text-gray-400 hover:text-neon-cyan transition-colors p-2"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          title="Refresh Weapons"
+                        >
+                          <RefreshCw size={20} />
+                        </motion.button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {nftData.isLoading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-neon-cyan mx-auto mb-4"></div>
+                      <p className="text-xl text-gray-400">Loading Weapons from blockchain...</p>
+                    </div>
+                  ) : nftData.weapons.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {nftData.weapons.map((weapon) => (
                         <motion.div
-                          key={weapon.id}
+                          key={weapon.id || weapon.tokenId}
                           className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
                           whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
                         >
@@ -1041,12 +965,10 @@ const ProfilePage = () => {
                           <div className="space-y-3">
                             <h4 className="font-bold text-stellar-white text-lg">{weapon.name}</h4>
                             
-                            {nftData.isReal && (
-                              <div className="text-xs text-gray-500">
-                                Token ID: {weapon.tokenId}
-                                {weapon.type && <div>Type: {weapon.type}</div>}
-                              </div>
-                            )}
+                            <div className="text-xs text-gray-500">
+                              Token ID: {weapon.tokenId}
+                              {weapon.type && <div>Type: {weapon.type}</div>}
+                            </div>
                             
                             {/* Show attributes if available */}
                             {weapon.attributes && (
@@ -1088,70 +1010,60 @@ const ProfilePage = () => {
                         </motion.div>
                       ))}
                     </div>
-                  </>
-                ) : (
-                  <div className="text-center py-12">
-                    <Sword size={64} className="text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400 mb-4">No weapons detected</p>
-                    <p className="text-sm text-gray-500">
-                      {nftData.isReal ? 
-                        'Your wallet does not contain any Weapon NFTs from the resistance collection' :
-                        'Acquire Weapon NFTs to arm your resistance forces'
-                      }
-                    </p>
-                    {nftHoldings?.weapons?.error && (
-                      <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                        <p className="text-red-400 text-sm">Error loading Weapons: {nftHoldings.weapons.error}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'lands' && (
-              <div className="glassmorphism rounded-xl p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-2xl font-bold">NFT Lands</h3>
-                  <div className="flex items-center gap-4">
-                    <div className="text-gray-400">
-                      {nftData.isLoading ? '...' : `${nftData.landsCount} Territories`}
+                  ) : (
+                    <div className="text-center py-12">
+                      <Sword size={64} className="text-gray-500 mx-auto mb-4" />
+                      <p className="text-gray-400 mb-4">No weapons detected</p>
+                      <p className="text-sm text-gray-500">
+                        Your wallet does not contain any Weapon NFTs from the resistance collection
+                      </p>
+                      {nftHoldings?.weapons?.error && (
+                        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                          <p className="text-red-400 text-sm">Error loading Weapons: {nftHoldings.weapons.error}</p>
+                        </div>
+                      )}
                     </div>
-                    {nftData.isReal && !nftData.isLoading && (
-                      <motion.button
-                        onClick={refreshNFTHoldings}
-                        className="text-gray-400 hover:text-nebula-pink transition-colors p-2"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        title="Refresh Lands"
-                      >
-                        <RefreshCw size={20} />
-                      </motion.button>
-                    )}
-                  </div>
+                  )}
                 </div>
-                
-                {nftData.isLoading ? (
-                  <div className="text-center py-12">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-nebula-pink mx-auto mb-4"></div>
-                    <p className="text-xl text-gray-400">Loading Lands from blockchain...</p>
-                  </div>
-                ) : nftData.lands.length > 0 ? (
-                  <>
-                    {!nftData.isReal && (
-                      <div className="mb-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                        <p className="text-yellow-400 text-sm">⚠️ Showing mock data - blockchain connection unavailable</p>
+              )}
+
+              {activeTab === 'lands' && (
+                <div className="glassmorphism rounded-xl p-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-2xl font-bold">NFT Lands</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="text-gray-400">
+                        {nftData.isLoading ? '...' : `${nftData.landsCount} Territories`}
                       </div>
-                    )}
+                      {nftData.isReal && !nftData.isLoading && (
+                        <motion.button
+                          onClick={refreshNFTHoldings}
+                          className="text-gray-400 hover:text-nebula-pink transition-colors p-2"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          title="Refresh Lands"
+                        >
+                          <RefreshCw size={20} />
+                        </motion.button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {nftData.isLoading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-nebula-pink mx-auto mb-4"></div>
+                      <p className="text-xl text-gray-400">Loading Lands from blockchain...</p>
+                    </div>
+                  ) : nftData.lands.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {nftData.lands.map((land) => (
                         <motion.div
-                          key={land.id}
+                          key={land.id || land.tokenId}
                           className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
                           whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
                         >
                           <div className="aspect-[1909/2664] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                            {nftData.isReal && land.image ? (
+                            {land.image ? (
                               <img 
                                 src={land.image} 
                                 alt={land.name}
@@ -1166,7 +1078,7 @@ const ProfilePage = () => {
                             <MapPin 
                               size={48} 
                               className="text-nebula-pink"
-                              style={{ display: (nftData.isReal && land.image) ? 'none' : 'block' }}
+                              style={{ display: land.image ? 'none' : 'block' }}
                             />
                           </div>
                           
@@ -1174,12 +1086,10 @@ const ProfilePage = () => {
                           <div className="space-y-3">
                             <h4 className="font-bold text-stellar-white text-lg">{land.name}</h4>
                             
-                            {nftData.isReal && (
-                              <div className="text-xs text-gray-500">
-                                Token ID: {land.tokenId}
-                                {land.balance > 1 && ` (x${land.balance})`}
-                              </div>
-                            )}
+                            <div className="text-xs text-gray-500">
+                              Token ID: {land.tokenId}
+                              {land.balance > 1 && ` (x${land.balance})`}
+                            </div>
                             
                             <div className="flex justify-between items-center">
                               <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(land.rarity)}`}>
@@ -1194,27 +1104,24 @@ const ProfilePage = () => {
                         </motion.div>
                       ))}
                     </div>
-                  </>
-                ) : (
-                  <div className="text-center py-12">
-                    <MapPin size={64} className="text-gray-500 mx-auto mb-4" />
-                    <p className="text-gray-400 mb-4">No territories detected</p>
-                    <p className="text-sm text-gray-500">
-                      {nftData.isReal ? 
-                        'Your wallet does not contain any Land NFTs from the resistance collection' :
-                        'Acquire Land NFTs to establish resistance bases'
-                      }
-                    </p>
-                    {nftHoldings?.lands?.error && (
-                      <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                        <p className="text-red-400 text-sm">Error loading Lands: {nftHoldings.lands.error}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </motion.div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <MapPin size={64} className="text-gray-500 mx-auto mb-4" />
+                      <p className="text-gray-400 mb-4">No territories detected</p>
+                      <p className="text-sm text-gray-500">
+                        Your wallet does not contain any Land NFTs from the resistance collection
+                      </p>
+                      {nftHoldings?.lands?.error && (
+                        <div className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                          <p className="text-red-400 text-sm">Error loading Lands: {nftHoldings.lands.error}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

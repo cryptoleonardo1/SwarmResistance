@@ -5,196 +5,194 @@ import CommunityMetrics from '../components/home/CommunityMetrics';
 import OnboardingSteps from '../components/home/OnboardingSteps';
 
 const HomePage = () => {
-  // Use sessionStorage to persist navigation state
-  const getInitialSection = () => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('targetSection') || 'home';
-    }
-    return 'home';
-  };
-
-  const [activeSection, setActiveSection] = useState(getInitialSection);
+  const [activeSection, setActiveSection] = useState('home');
   const [isWheelScrolling, setIsWheelScrolling] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const lastWheelTime = useRef(0);
   const containerRef = useRef(null);
-  const isInitialMount = useRef(true);
+  const navigationTimeout = useRef(null);
 
   // Memoize section order to prevent useEffect dependency issues
   const sectionOrder = useMemo(() => ['home', 'ecosystem', 'metrics', 'join'], []);
-  const WHEEL_THROTTLE = 1000;
+  //const WHEEL_THROTTLE = 1500; // Increased to 1.5 seconds
 
-  // Memoize section titles
-  const getSectionTitle = useMemo(() => {
-    const titles = {
-      home: 'Headquarters',
-      ecosystem: 'Missions', 
-      metrics: 'Metrics',
-      join: 'Recruit'
-    };
-    return (section) => titles[section] || section;
-  }, []);
-
-  // Clear any stored navigation on mount, then check for target
-  useEffect(() => {
-    if (isInitialMount.current) {
-      console.log('Initial mount - checking for target section');
-      
-      const targetSection = sessionStorage.getItem('targetSection');
-      if (targetSection && targetSection !== 'home') {
-        console.log('Found target section:', targetSection);
-        setActiveSection(targetSection);
-        
-        // Clear the target after using it
-        sessionStorage.removeItem('targetSection');
-        
-        // Scroll immediately to target section
-        setTimeout(() => {
-          const element = document.getElementById(targetSection);
-          if (element) {
-            const topBarHeight = 80;
-            const elementPosition = element.offsetTop - topBarHeight;
-            console.log('Immediate scroll to:', targetSection, 'Position:', elementPosition);
-            
-            window.scrollTo({
-              top: elementPosition,
-              behavior: 'instant'
-            });
-            
-            // CRITICAL: Prevent scroll tracking from interfering
-            document.body.classList.add('warping');
-            setTimeout(() => {
-              document.body.classList.remove('warping');
-            }, 2000); // Longer delay to prevent interference
-          }
-        }, 50);
-      }
-      
-      isInitialMount.current = false;
+  // Clear navigation flags after timeout
+  const clearNavigationFlag = () => {
+    if (navigationTimeout.current) {
+      clearTimeout(navigationTimeout.current);
     }
-  }, []);
+    navigationTimeout.current = setTimeout(() => {
+      setIsNavigating(false);
+      document.body.classList.remove('warping');
+    }, 1500);
+  };
 
-  // Handle wheel scrolling
+  // Scroll to section function
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const topBarHeight = 80;
+      window.scrollTo({
+        top: element.offsetTop - topBarHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Handle section change with scroll
+  const handleSectionChange = (targetSection, smooth = true) => {
+    console.log('Changing section to:', targetSection);
+    
+    setActiveSection(targetSection);
+    
+    // Dispatch section change event
+    window.dispatchEvent(new CustomEvent('sectionChange', { 
+      detail: { section: targetSection } 
+    }));
+
+    // Scroll to section
+    if (smooth) {
+      setTimeout(() => {
+        scrollToSection(targetSection);
+      }, 50);
+    }
+  };
+
+  // Handle wheel scrolling - IMMEDIATE RESPONSE WITH NO THROTTLING
   useEffect(() => {
     const handleWheel = (e) => {
+      // Always prevent default scroll behavior on homepage
       e.preventDefault();
       
+      // Don't handle wheel if currently navigating
+      if (isNavigating || isWheelScrolling) {
+        return;
+      }
+
+      // Much more aggressive throttling - only allow one scroll every 1.5 seconds
       const now = Date.now();
-      if (now - lastWheelTime.current < WHEEL_THROTTLE || isWheelScrolling) {
+      if (now - lastWheelTime.current < 1500) {
         return;
       }
 
       const currentIndex = sectionOrder.indexOf(activeSection);
       let nextIndex;
 
+      // Only respond to significant scroll deltas
+      if (Math.abs(e.deltaY) < 10) {
+        return;
+      }
+
       if (e.deltaY > 0) {
+        // Scrolling down - go to next section
         nextIndex = Math.min(currentIndex + 1, sectionOrder.length - 1);
       } else {
+        // Scrolling up - go to previous section
         nextIndex = Math.max(currentIndex - 1, 0);
       }
 
       if (nextIndex !== currentIndex) {
+        const targetSection = sectionOrder[nextIndex];
+        console.log('Wheel scroll: triggering warp navigation to', targetSection);
+        
         lastWheelTime.current = now;
         setIsWheelScrolling(true);
-        const targetSection = sectionOrder[nextIndex];
+        setIsNavigating(true);
         
-        setActiveSection(targetSection);
-        document.body.classList.add('warping');
+        // Immediately block any other scrolling
+        document.body.style.overflow = 'hidden';
         
-        window.dispatchEvent(new CustomEvent('sectionChange', { 
+        // Trigger the same warp navigation as top bar clicks
+        // This will activate the hologram transition
+        window.dispatchEvent(new CustomEvent('warpNavigation', { 
           detail: { section: targetSection } 
         }));
 
+        // Clear flags and restore scrolling after hologram transition completes
         setTimeout(() => {
-          const element = document.getElementById(targetSection);
-          if (element) {
-            const topBarHeight = 80;
-            window.scrollTo({
-              top: element.offsetTop - topBarHeight,
-              behavior: 'smooth'
-            });
-          }
-          
-          setTimeout(() => {
-            document.body.classList.remove('warping');
-            setIsWheelScrolling(false);
-          }, 800);
-        }, 50);
+          setIsWheelScrolling(false);
+          setIsNavigating(false);
+          document.body.style.overflow = '';
+        }, 1500);
       }
     };
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('wheel', handleWheel, { passive: false });
-    }
+    // Add wheel listener to document to catch all scroll events
+    document.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
-      if (container) {
-        container.removeEventListener('wheel', handleWheel);
-      }
+      document.removeEventListener('wheel', handleWheel);
+      // Cleanup - restore scrolling if component unmounts
+      document.body.style.overflow = '';
     };
-  }, [activeSection, isWheelScrolling, sectionOrder]);
+  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder]);
 
-  // Listen for warp navigation - STORE TARGET IN sessionStorage
+  // Listen for warp navigation from TopBar - ENSURE PROPER SCROLL POSITIONING
   useEffect(() => {
     const handleWarpNavigation = (event) => {
       const targetSection = event.detail.section;
-      console.log('Warp navigation - storing target:', targetSection);
+      console.log('Warp navigation to:', targetSection);
       
-      // Store the target section
-      sessionStorage.setItem('targetSection', targetSection);
+      // Set navigation state
+      setIsNavigating(true);
       
-      // Set active section immediately
-      setActiveSection(targetSection);
-      
-      // Add warping class for extended period
+      // Add warping class
       document.body.classList.add('warping');
       
-      // Dispatch section change immediately
-      window.dispatchEvent(new CustomEvent('sectionChange', { 
-        detail: { section: targetSection } 
-      }));
+      // Block scrolling during transition
+      document.body.style.overflow = 'hidden';
       
-      // Scroll immediately
+      // Change section immediately
+      handleSectionChange(targetSection, false); // No smooth scroll for warp
+      
+      // Force scroll to exact position immediately
       setTimeout(() => {
         const element = document.getElementById(targetSection);
         if (element) {
           const topBarHeight = 80;
-          const elementPosition = element.offsetTop - topBarHeight;
-          console.log('Warp scroll to:', targetSection, 'Position:', elementPosition);
-          
           window.scrollTo({
-            top: elementPosition,
-            behavior: 'instant'
+            top: element.offsetTop - topBarHeight,
+            behavior: 'auto' // Instant scroll
           });
         }
-        
-        // Keep warping class longer to prevent scroll tracking interference
-        setTimeout(() => {
-          document.body.classList.remove('warping');
-        }, 2000); // 2 seconds
       }, 10);
+      
+      // Clear navigation flag and restore scrolling
+      setTimeout(() => {
+        setIsNavigating(false);
+        document.body.classList.remove('warping');
+        document.body.style.overflow = '';
+      }, 1500);
     };
 
     window.addEventListener('warpNavigation', handleWarpNavigation);
-    return () => window.removeEventListener('warpNavigation', handleWarpNavigation);
+    return () => {
+      window.removeEventListener('warpNavigation', handleWarpNavigation);
+      if (navigationTimeout.current) {
+        clearTimeout(navigationTimeout.current);
+      }
+      // Cleanup
+      document.body.style.overflow = '';
+      document.body.classList.remove('warping');
+    };
   }, []);
 
-  // Simplified scroll tracking - COMPLETELY DISABLE for longer period
+  // Simplified scroll tracking - only when not navigating
   useEffect(() => {
     const handleScroll = () => {
-      if (document.body.classList.contains('warping') || isWheelScrolling) {
-        console.log('Scroll tracking blocked - warping or wheel scrolling');
+      // Don't track scroll during navigation or wheel scrolling
+      if (isNavigating || isWheelScrolling || document.body.classList.contains('warping')) {
         return;
       }
       
       const topBarHeight = 80;
-      const scrollPosition = window.scrollY + topBarHeight + 50;
+      const scrollPosition = window.scrollY + topBarHeight + 100; // Increased threshold
 
       for (let i = sectionOrder.length - 1; i >= 0; i--) {
         const element = document.getElementById(sectionOrder[i]);
         if (element && element.offsetTop <= scrollPosition) {
           if (activeSection !== sectionOrder[i]) {
-            console.log('Scroll-based section change:', sectionOrder[i]);
+            console.log('Scroll-based section change to:', sectionOrder[i]);
             setActiveSection(sectionOrder[i]);
             window.dispatchEvent(new CustomEvent('sectionChange', { 
               detail: { section: sectionOrder[i] } 
@@ -208,26 +206,25 @@ const HomePage = () => {
     let scrollTimeout;
     const debouncedHandleScroll = () => {
       clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(handleScroll, 200); // Increased delay
+      scrollTimeout = setTimeout(handleScroll, 100);
     };
 
-    // MUCH LONGER delay before enabling scroll tracking
+    // Only enable scroll tracking after a delay
     const setupTimeout = setTimeout(() => {
-      console.log('Setting up scroll tracking');
       window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
-    }, 3000); // 3 seconds delay
+    }, 1000);
 
     return () => {
       clearTimeout(setupTimeout);
       clearTimeout(scrollTimeout);
       window.removeEventListener('scroll', debouncedHandleScroll);
     };
-  }, [activeSection, isWheelScrolling, sectionOrder]);
+  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder]);
 
-  // Keyboard navigation
+  // Keyboard navigation - TRIGGER HOLOGRAM TRANSITION LIKE TOP NAV
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (isWheelScrolling) return;
+      if (isWheelScrolling || isNavigating) return;
 
       const currentIndex = sectionOrder.indexOf(activeSection);
       let nextIndex = currentIndex;
@@ -256,38 +253,38 @@ const HomePage = () => {
       }
 
       if (nextIndex !== currentIndex) {
-        setIsWheelScrolling(true);
         const targetSection = sectionOrder[nextIndex];
+        console.log('Keyboard navigation: triggering warp to', targetSection);
         
-        setActiveSection(targetSection);
-        document.body.classList.add('warping');
+        setIsWheelScrolling(true);
         
-        window.dispatchEvent(new CustomEvent('sectionChange', { 
+        // Trigger the same warp navigation as top bar clicks
+        // This will activate the hologram transition
+        window.dispatchEvent(new CustomEvent('warpNavigation', { 
           detail: { section: targetSection } 
         }));
 
+        // Clear wheel scrolling flag after hologram transition completes
         setTimeout(() => {
-          const element = document.getElementById(targetSection);
-          if (element) {
-            window.scrollTo({
-              top: element.offsetTop - 80,
-              behavior: 'smooth'
-            });
-          }
-          
-          setTimeout(() => {
-            document.body.classList.remove('warping');
-            setIsWheelScrolling(false);
-          }, 800);
-        }, 50);
+          setIsWheelScrolling(false);
+        }, 1500); // Match hologram transition duration
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSection, isWheelScrolling, sectionOrder]);
+  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder]);
 
-  console.log('Rendering HomePage with activeSection:', activeSection);
+  // Get section title for progress indicator
+  const getSectionTitle = (section) => {
+    const titles = {
+      home: 'Headquarters',
+      ecosystem: 'Mission', 
+      metrics: 'Metrics',
+      join: 'Recruit'
+    };
+    return titles[section] || section;
+  };
 
   return (
     <div ref={containerRef} className="w-full hide-scrollbar relative">
@@ -302,25 +299,22 @@ const HomePage = () => {
                 : 'bg-stellar-white/30 hover:bg-stellar-white/60'
             }`}
             onClick={() => {
-              if (!isWheelScrolling && section !== activeSection) {
-                setActiveSection(section);
-                document.body.classList.add('warping');
+              if (!isWheelScrolling && !isNavigating && section !== activeSection) {
+                console.log('Progress indicator clicked:', section);
                 
+                // Trigger warp navigation like top bar
                 window.dispatchEvent(new CustomEvent('warpNavigation', { 
                   detail: { section } 
                 }));
               }
             }}
-            disabled={isWheelScrolling}
+            disabled={isWheelScrolling || isNavigating}
             title={getSectionTitle(section)}
           />
         ))}
       </div>
 
-      {/* Debug info */}
-      <div className="fixed top-20 left-4 z-50 bg-black/50 text-white p-2 text-xs">
-        Active: {activeSection}
-      </div>
+
 
       {/* Sections */}
       <section id="home" className="full-screen-section">

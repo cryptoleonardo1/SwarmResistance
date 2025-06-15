@@ -270,7 +270,7 @@ const BlogPage = () => {
               {/* Feature status */}
               <div className="grid md:grid-cols-2 gap-4">
                 {[
-                  { name: "Content Management System", status: "Complete", color: "text-success-green" },
+                  { name: "Management System", status: "Complete", color: "text-success-green" },
                   { name: "Guardian Stories Archive", status: "In Progress", color: "text-warning-orange" },
                   { name: "Battle Reports Engine", status: "Testing", color: "text-phoenix-primary" },
                   { name: "Community Features", status: "Planning", color: "text-gray-400" }
@@ -346,7 +346,7 @@ const BlogPage = () => {
               </div>
             </motion.div>
 
-            {/* Footer section */}
+            {/* Footer section 
             <motion.div 
               className="text-center py-8 mt-16"
               initial={{ opacity: 0 }}
@@ -357,6 +357,7 @@ const BlogPage = () => {
                 ©2025 Swarm Resistance - Chronicling the Fight for Freedom
               </p>
             </motion.div>
+            */}
           </div>
         </div>
       </div>

@@ -147,6 +147,16 @@ const FuturisticIcons = {
       <circle cx="12" cy="12" r="2" fill="currentColor"/>
     </svg>
   ),
+  MedaShooter: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L4 7L6 14L12 22L18 14L20 7L12 2Z" 
+            stroke="currentColor" strokeWidth="2" fill="none"/>
+      <circle cx="12" cy="8" r="2" stroke="currentColor" strokeWidth="2"/>
+      <path d="M8 12L12 16L16 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M12 2V8M8 7L12 11M16 7L12 11" stroke="currentColor" strokeWidth="1" opacity="0.4"/>
+      <circle cx="12" cy="12" r="1" fill="currentColor" opacity="0.6"/>
+    </svg>
+  ),
   JoinResistance: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" 
@@ -203,11 +213,12 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Updated navigation items with futuristic icons
+  // Updated navigation items with Meda Shooter added below Profile
   const navItems = [
     { icon: <FuturisticIcons.Profile />, text: 'Profile', path: '/profile' },
+    { icon: <FuturisticIcons.MedaShooter />, text: 'Meda Shooter', path: '/meda-shooter' },
     { icon: <FuturisticIcons.JoinResistance />, text: 'Resistance Hub', path: '/join-resistance' },
-    { icon: <FuturisticIcons.Marketplace />, text: 'Marketplace', path: '/marketplace' },
+    { icon: <FuturisticIcons.Marketplace />, text: 'Trading Hub', path: '/marketplace' },
     { icon: <FuturisticIcons.Lore />, text: 'Lore', path: '/story' },
     { icon: <FuturisticIcons.Blog />, text: 'Blog', path: '/blog' },
     { icon: <FuturisticIcons.AICommander />, text: 'AI Commander', path: '/ai-commander' },

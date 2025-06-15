@@ -44,11 +44,10 @@
   box-sizing: border-box;
 }
 
-/* FIXED HTML SCROLL BEHAVIOR */
+/* SIMPLIFIED HTML SCROLL BEHAVIOR */
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  /* REMOVED: scroll-snap-type - was causing excessive re-renders */
   /* Hide scrollbar but keep functionality */
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -57,10 +56,6 @@ html {
 html::-webkit-scrollbar {
   width: 0;
   background: transparent;
-}
-
-body.warping html {
-  scroll-snap-type: none;
 }
 
 body {
@@ -73,14 +68,22 @@ body {
   background-attachment: fixed;
 }
 
+/* Override scroll behavior during warp navigation */
+body.warping {
+  scroll-behavior: auto;
+  pointer-events: none;
+}
+
+body.warping * {
+  pointer-events: none;
+}
+
 /* ===== FULL SCREEN SECTIONS ===== */
 .full-screen-section {
   min-height: 100vh;
   width: 100vw;
   position: relative;
   overflow: hidden;
-  /* REMOVED: scroll-snap-align: start; */
-  /* REMOVED: scroll-snap-stop: always; */
   margin: 0 !important;
   padding: 0 !important;
   left: 0 !important;
@@ -90,7 +93,7 @@ body {
 
 /* Section content with sidebar consideration */
 .section-content {
-  padding-top: 5rem; /* Increased from 4rem to 5rem for bigger top bar */
+  padding-top: 5rem; /* For top bar */
   padding-left: 1rem;
   padding-right: 1rem;
   width: 100%;
@@ -102,7 +105,7 @@ body {
   z-index: 10;
 }
 
-/* Desktop adjustments - REMOVED sidebar background padding */
+/* Desktop adjustments */
 @media (min-width: 768px) {
   .section-content {
     padding-left: 2rem;
@@ -301,17 +304,6 @@ section {
   border-radius: 50%;
   animation: fire-flow 4s ease-in-out infinite;
 }
-
-/* REMOVED - Sidebar transparent overlay that was causing the visual issue */
-/* .sidebar-transparent {
-  background: linear-gradient(135deg, 
-    rgba(15, 15, 35, 0.1) 0%,
-    rgba(26, 26, 46, 0.2) 50%, 
-    rgba(15, 15, 35, 0.1) 100%);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-right: 1px solid rgba(255, 140, 0, 0.1);
-} */
 
 /* Warp Gate Transitions */
 .warp-transition {
@@ -536,67 +528,6 @@ section {
   text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
 }
 
-/* Warp transition effect for sections */
-.warp-transition {
-  position: relative;
-  overflow: hidden;
-}
-
-.warp-transition::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 140, 0, 0.1) 0%,
-    rgba(59, 130, 246, 0.1) 25%,
-    rgba(34, 197, 94, 0.1) 50%,
-    rgba(255, 62, 138, 0.1) 75%,
-    rgba(255, 140, 0, 0.1) 100%
-  );
-  animation: warpPulse 0.8s ease-out;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Hologram transition effect for sections */
-.hologram-transition {
-  position: relative;
-  overflow: hidden;
-}
-
-.hologram-transition::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(0, 240, 255, 0.1) 0%,
-    rgba(255, 140, 0, 0.1) 25%,
-    rgba(34, 197, 94, 0.1) 50%,
-    rgba(255, 62, 138, 0.1) 75%,
-    rgba(0, 240, 255, 0.1) 100%
-  );
-  animation: hologramPulse 1.0s ease-out;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Hologram grid effect */
-.hologram-grid {
-  background-image: 
-    linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-  animation: hologramGrid 2s linear infinite;
-}
-
 /* Enhanced text glow effects */
 .text-shadow-hologram {
   text-shadow: 
@@ -630,11 +561,6 @@ section {
   animation: glitch 0.3s ease-in-out;
 }
 
-body.warping html {
-  /* REMOVED: scroll-snap-type: none; */
-}
-
-/* Keep your existing scroll-related CSS (the code you shared above) */
 /* Smooth transitions for all section changes */
 .section-transition {
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -689,6 +615,16 @@ body.warping html {
   pointer-events: none;
 }
 
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .section-title-phoenix {
@@ -715,21 +651,4 @@ body.warping html {
   .fixed.right-8 {
     display: none;
   }
-}
-
-/* Normal scroll class for other pages */
-.normal-scroll {
-  overflow-y: auto;
-  height: auto;
-}
-
-/* Override scroll behavior and snap during warp navigation */
-body.warping {
-  scroll-behavior: auto;
-  pointer-events: none;
-}
-
-/* Ensure warping class prevents scroll tracking */
-body.warping * {
-  pointer-events: none;
 }

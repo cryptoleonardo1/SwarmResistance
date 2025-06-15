@@ -25,7 +25,7 @@ const StoryPage = () => {
       icon: <Flame size={32} className="text-phoenix-primary" />,
       title: "The Last Days of the Old War",
       subtitle: "Year Zero - The Genesis Catastrophe",
-      content: "For three millennia, the crimson banners of the Renegade Coalition and azure standards of the Goliath Empire painted the stars with blood. Their eternal conflict over Cryptomeda's precious Meda energy had become the galaxy's heartbeat—predictable, brutal, and somehow balanced.\n\nMeda energy flowed through reality's fabric like liquid starlight, harvestable by heroes whose souls resonated with its frequency. When crystallized into TECH tokens, it powered everything from starship engines to quantum computers. The mining worlds of Xerion Prime hummed with extractors pulling this mystical force from planetary ley lines.\n\nBut Dr. Chadwick Newtonian's obsession with immortality would shatter this ancient order forever.",
+      content: "For three millennia, the crimson banners of the Renegade Coalition and the azure standards of the Goliath Empire had painted the stars with blood. Their eternal conflict over Cryptomeda's precious Meda energy had become the heartbeat of the galaxy — predictable, brutal, and somehow… balanced.\n\nMeda was the universe's greatest secret and most precious resource — a mystical energy that flowed through the fabric of reality itself. Only a chosen few could harness its power directly: the legendary heroes whose very souls resonated with Meda's frequency. These champions could channel raw Meda energy into devastating attacks, protective barriers, and miraculous healing.\n\nBut Meda's true value lay in its ability to be crystallized and stored. When properly harvested and refined, Meda energy could be condensed into TECH tokens — the galaxy's unified currency that powered everything from starship engines to quantum computers.",
       gradient: "from-phoenix-primary/20 via-phoenix-light/10 to-transparent",
       borderColor: "border-phoenix-primary/30",
       accentColor: "text-phoenix-primary"
@@ -34,61 +34,61 @@ const StoryPage = () => {
       icon: <Target size={32} className="text-resistance-light" />,
       title: "The Breach",
       subtitle: "Reality Tears Open",
-      content: "In his hidden laboratory on Thanatos VII, the being once known as Dr. Chadwick Newtonian—now Zombie Chad after his horrific transformation—made his final catastrophic breakthrough. The dimensional stabilizers failed at 3:47 galactic standard time. Reality tore open like fabric.\n\nChad's reckless manipulation of pure Meda energy created a beacon—a screaming wound in the universe that called across dimensions to something ancient and hungry. The first Swarm scout emerged not with fanfare, but with a whisper. A chitinous form pulsing with corrupted Meda energy that hurt to look at directly.\n\nWithin hours, the whisper became a scream as The Swarm revealed its true nature.",
+      content: "Deep in his hidden laboratory on the forgotten moon of Thanatos VII, the being once known as Dr. Chadwick Newtonian — now calling himself Zombie Chad after his horrific transformation through Meda energy experimentation — made his final, catastrophic breakthrough. His quest for immortality had led him down paths that violated every natural law. The dimensional stabilizers failed at 3:47 galactic standard time. Reality tore open like fabric.\n\nBut Chad's experiments had done something far worse than merely opening a portal. His reckless manipulation of pure Meda energy had created a beacon — a screaming wound in the universe that called out across dimensions to something ancient and hungry.\n\nThe first Swarm scout emerged not with fanfare, but with a whisper — a chitinous form the size of a starfighter, its carapace pulsing with corrupted Meda energy that hurt to look at directly.",
       gradient: "from-resistance-light/20 via-resistance-glow/10 to-transparent",
       borderColor: "border-resistance-light/30",
       accentColor: "text-resistance-light"
     },
     {
       icon: <Shield size={32} className="text-energy-purple" />,
-      title: "The Swarm Dominion",
+      title: "The Swarm Reveals Itself",
       subtitle: "Ancient Hunger Awakens",
-      content: "The Swarm was ancient beyond measure—a collective consciousness that had devoured galaxies when Cryptomeda was still stellar nursery. They possessed a terrifying ability: absorbing and corrupting Meda energy, turning humanity's greatest strength into their weapon.\n\nHeroes who had mastered Meda manipulation found their powers turned against them. The mystical energy that once flowed like liquid starlight became poison. Worse, the Swarm could metabolize TECH tokens directly, converting crystallized Meda into bio-mechanical constructs of unimaginable power.\n\nXerion Prime fell silent first, its mining facility converted into something alien—a pulsing organic structure radiating corrupted energy so powerfully that rescue ships suffered immediate system failures.",
+      content: "The Swarm was ancient beyond measure — a collective consciousness that had devoured galaxies when the Cryptomeda systems were still stellar nurseries. They were not conquerors seeking territory, nor traders seeking profit. They were harvesters seeking biomass, technology, and something far more precious: Meda energy itself.\n\nThe Swarm possessed a terrifying ability: they could absorb and corrupt Meda energy, feeding on it like an endless hunger. Every fragment of Meda energy they consumed made them stronger, faster, more intelligent — and more desperately addicted to its power. The mystical energy that had sustained civilizations for millennia became an irresistible narcotic that drove the Swarm into feeding frenzies.\n\nWorse still, the Swarm could metabolize TECH tokens directly, converting the crystallized Meda energy into bio-mechanical constructs of unimaginable power. Every economic transaction, every powered device, every weapon that relied on TECH tokens became a potential resource for the enemy.",
       gradient: "from-energy-purple/20 via-cosmic-purple/10 to-transparent",
       borderColor: "border-energy-purple/30",
       accentColor: "text-energy-purple"
     },
     {
       icon: <Users size={32} className="text-success-green" />,
-      title: "The Impossible Alliance",
+      title: "The Impossible Moment",
       subtitle: "Enemies Become Family",
-      content: "Captain Avalanche of the Goliath Elite Guard and Crypto Queen of the Renegade Shadow Fleet had spent five years trying to kill each other. Their personal saga of hatred had added verses to the eternal war.\n\nNow they stood back-to-back in Haven Station's ruins, their Meda energy flickering as Swarm bio-warriors closed in. For the first time in three thousand years, ancient enemies fought as allies, their combined tactics creating something neither could achieve alone.\n\n'The old war is over. The real war begins now,' declared Admiral Link and the legendary Commander, broadcasting simultaneously from hidden bases. 'United, our Meda flows in harmony. Together, we become something they cannot consume.'",
+      content: "Master CZ of the Goliath Engineering Corps and Lunatic of the Renegade Shadow Fleet had spent five years trying to kill each other. Their forces had clashed over the Meda-rich asteroid fields of the Kronos Belt dozens of times, each victory and defeat adding another verse to their personal saga of hatred.\n\nNow they stood back-to-back in the ruins of Haven Station, their Meda energy flickering weakly as Swarm bio-warriors closed in from all sides. The creatures moved like liquid metal, their forms shifting between recognizable shapes and nightmare geometries, and worse — they were draining the Meda energy from everything around them.\n\n'Your plasma rifles,' Master CZ gasped between breaths. 'They're not dependent on pure Meda flow — they might still work.' 'Your shield generators,' Lunatic replied. 'Goliath tech uses contained TECH tokens — they're the only thing keeping us alive.' For the first time in three thousand years, ancient enemies fought as allies.",
       gradient: "from-success-green/20 via-energy-green/10 to-transparent",
       borderColor: "border-success-green/30",
       accentColor: "text-success-green"
     },
     {
       icon: <Sparkles size={32} className="text-meda-gold" />,
-      title: "Phoenix Essence Discovery",
-      subtitle: "Hope from Corruption",
-      content: "In the desperate first months, as the Swarm consumed world after world, the Resistance made a discovery that changed everything. When Swarm bio-constructs were destroyed, the corrupted Meda energy didn't dissipate—it crystallized into something new.\n\nThese formations, called Phoenix Essence, glowed with pure golden light containing not just energy, but hope itself. Unlike TECH tokens that the Swarm could corrupt, Phoenix Essence actively resisted Swarm influence. It could purify corrupted Meda flows, heal damaged technology, and enhance heroes' abilities beyond previous limits.\n\n'The universe itself is fighting back,' reported Master CZ. 'Every victory doesn't just deny them resources—we reclaim something pure from their corruption.'",
+      title: "The Birth of the Resistance",
+      subtitle: "Unity from Division",
+      content: "That moment of shared survival sparked something unprecedented. Underground networks carried the impossible news: when Renegades and Goliaths combined their Meda techniques and technologies, they could create effects that even the Swarm couldn't absorb or corrupt.\n\nThe formal declaration came from an unlikely alliance: Admiral Link, the Goliath Navy's most decorated hero, and the mysterious figure known only as Commander — a Revolution-class hero whose mastery of all forms of Meda energy was considered mythical. Broadcasting simultaneously from hidden bases, they spoke words that would echo through history:\n\n'The old war is over. The real war begins now. The Swarm feeds on our division, grows strong from our hatred. But united, our Meda flows in harmony. Together, we become something they cannot consume. Every ship, every soldier, every survivor who wishes to see tomorrow's dawn — join the Resistance.'",
       gradient: "from-meda-gold/20 via-phoenix-light/10 to-transparent",
       borderColor: "border-meda-gold/30",
       accentColor: "text-meda-gold"
     },
     {
       icon: <Crown size={32} className="text-cosmic-purple" />,
-      title: "The Dark Millennia",
-      subtitle: "One Thousand Years of Resistance",
-      content: "The great heroes are legend now—Commander, Atom, Captain Avalanche, Floki—their names carved into memorial walls throughout the galaxy. The Swarm evolved into a galactic empire with machine efficiency and living adaptability.\n\nYet humanity endures in hidden sanctuaries carved from asteroid fields and hollow worlds. New Haven houses a million souls in converted mining tunnels. Here, children learn ancient stories while engineers maintain fusion reactors by candlelight. Warriors train with weapons that are equal parts technology and art.\n\nMost precious are the Hero Artifacts—crystallized fragments of legendary warriors' souls containing their tactical knowledge, Meda mastery, and battle memories.",
+      title: "The Desperate Measures",
+      subtitle: "A New Currency of Survival",
+      content: "In those first desperate months, as the Swarm consumed world after world, the Resistance faced a terrifying reality: their entire economy was feeding the enemy. Every TECH token the Swarm absorbed made them stronger, every Meda-powered device became a weapon against its former users.\n\nMaster CZ, now serving as the Resistance's chief engineer, worked frantically with Atom — a hero who had fought for both sides and whose unique Meda signature could resonate with any energy frequency — to develop an alternative. The solution was crude but necessary: Meda tokens.\n\nUnlike the crystalline perfection of TECH tokens, Meda tokens were raw, unstable containers of pure Meda energy. They couldn't power the grand technologies of the old empire, but they served one crucial purpose — the Swarm couldn't easily absorb them without risking dangerous feedback loops that could damage their bio-forms.",
       gradient: "from-cosmic-purple/20 via-nebula-pink/10 to-transparent",
       borderColor: "border-cosmic-purple/30",
       accentColor: "text-cosmic-purple"
     },
     {
       icon: <Zap size={32} className="text-neon-cyan" />,
-      title: "The AI Commander",
-      subtitle: "Keeper of All Knowledge",
-      content: "In sanctuary depths stands the AI Commander—not merely a computer, but a living repository of everything humanity has learned. Born from desperation, it absorbs memories from Hero Artifacts, combines tactical manuals, scientific discoveries, and battle lessons from the thousand-year war.\n\nWhen young Guardians approach its shimmering holographic interface, they commune with their species' collective wisdom. The AI can teach rookie pilots Elon's maneuvers, guide engineers through Master CZ's weapon designs, offer Admiral Link's strategic insights.\n\nThe AI Commander speaks with voices of heroes past, but dreams of heroes yet to come.",
+      title: "The Thousand-Year Exile",
+      subtitle: "Beginning of the Dark Millennia",
+      content: "As the last free fleets prepared to flee into the dark spaces between stars, everyone understood the same terrible truth: this wasn't victory — this was the beginning of a thousand-year exile. The real war was yet to come.\n\nThe unity that had sparked hope was now humanity's only shield against complete extinction. The Resistance had learned to fight together, but the Swarm was infinite. For every bio-ship destroyed, ten more emerged from the dimensional rifts. For every world evacuated, three more fell to corruption.\n\nThe great heroes are legend now—Commander, Atom, Master CZ, Admiral Link—their names carved into memorial walls throughout the hidden sanctuaries carved from asteroid fields and hollow worlds. Here, children learn ancient stories while engineers maintain fusion reactors by candlelight. Warriors train with weapons that are equal parts technology and art.",
       gradient: "from-neon-cyan/20 via-resistance-glow/10 to-transparent",
       borderColor: "border-neon-cyan/30",
       accentColor: "text-neon-cyan"
     },
     {
       icon: <BookOpen size={32} className="text-warning-orange" />,
-      title: "The Guardian's Creed",
-      subtitle: "Unity Forged in Fire",
-      content: "Over centuries, survivors developed something unprecedented—a unified culture born from necessity. The Guardian's Creed merges Renegade cunning with Goliath discipline into something greater.\n\nEvery child learns to survive in vacuum and die well if necessary. Every adult knows their life belongs to humanity's future. Ancient heroes are remembered not as Renegade or Goliath, but as First Guardians who showed enemies could become family.\n\n'We are one people, forged from two. Unity is our strength, division our death. From corruption we forge purity. In darkness we are the light. We never kneel, we never yield. The Phoenix rises, as do we.'",
+      title: "The Guardian's Legacy",
+      subtitle: "Forged from Two, United as One",
+      content: "Over centuries, survivors developed something unprecedented—a unified culture born from necessity. The Guardian's Creed merges Renegade cunning with Goliath discipline into something greater than either could achieve alone.\n\nMost precious are the Hero Artifacts—crystallized fragments of legendary warriors' souls containing their tactical knowledge, Meda mastery, and battle memories. In sanctuary depths stands the AI Commander—not merely a computer, but a living repository of everything humanity has learned, speaking with voices of heroes past while dreaming of heroes yet to come.\n\nEvery child learns to survive in vacuum and die well if necessary. Every adult knows their life belongs to humanity's future. Ancient heroes are remembered not as Renegade or Goliath, but as First Guardians who showed enemies could become family.",
       gradient: "from-warning-orange/20 via-phoenix-primary/10 to-transparent",
       borderColor: "border-warning-orange/30",
       accentColor: "text-warning-orange"
@@ -97,7 +97,7 @@ const StoryPage = () => {
       icon: <Sword size={32} className="text-phoenix-primary" />,
       title: "The New Hope",
       subtitle: "Your Legend Begins",
-      content: "As the millennium of darkness draws to a close, a new generation emerges. They carry genetic legacies of ancient heroes, pilot ships blending Renegade innovation with Goliath engineering, fight with Phoenix Essence weapons guided by Hero Artifact wisdom.\n\nLong-range sensors detect impossible signals: Phoenix Essence from dead Cryptomeda core worlds. Ancient defense systems powered by crystallized Meda are awakening. Hidden caches of Hero Artifacts emerge—entire vaults containing civilizations' memories.\n\nThe Swarm believes itself eternal, but has forgotten humans are most dangerous when they have everything to fight for. Every Phoenix Essence crystal holds memory of what was stolen and promise of what can be reclaimed.\n\nWelcome to the Resistance. Your legend begins now.",
+      content: "As the millennium of darkness draws to a close, a new generation emerges. They carry genetic legacies of ancient heroes, pilot ships blending Renegade innovation with Goliath engineering, fight with weapons guided by Hero Artifact wisdom and powered by something the first Resistance could never have imagined.\n\nLong-range sensors detect impossible signals: pure Meda energy from the dead core worlds of Cryptomeda. Ancient defense systems are awakening. Hidden caches of Hero Artifacts emerge—entire vaults containing civilizations' memories. Most miraculous of all, where Swarm bio-constructs fall, their corrupted energy crystallizes into Phoenix Essence—hope made manifest.\n\nThe Swarm believes itself eternal, but has forgotten humans are most dangerous when they have everything to fight for. The universe itself fights back through Phoenix Essence, purifying corruption into something beautiful. Welcome to the Resistance. Your legend begins now.",
       gradient: "from-phoenix-primary/20 via-meda-gold/15 to-phoenix-light/5",
       borderColor: "border-phoenix-primary/40",
       accentColor: "text-phoenix-primary"
@@ -227,7 +227,7 @@ const StoryPage = () => {
             </motion.h2>
             
             <motion.p 
-              className="mt-2 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed text-phoenix-light/80"
+              className="mt-2 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed text-phoenix-light/80 mb-8"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
@@ -236,6 +236,77 @@ const StoryPage = () => {
               From the fall of ancient empires to the rise of the Resistance—witness the thousand-year saga 
               that transformed sworn enemies into humanity's last hope against extinction.
             </motion.p>
+
+            {/* Story Parts Navigation */}
+            <motion.div 
+              className="flex flex-wrap justify-center gap-4 mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              viewport={{ once: true }}
+            >
+              {/* Part I - Active */}
+              <motion.button
+                className="glass-phoenix px-6 py-3 rounded-lg border border-phoenix-primary/40 relative overflow-hidden group"
+                whileHover={{ scale: 1.05, boxShadow: "0 8px 25px rgba(255, 140, 0, 0.4)" }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                {/* Active indicator glow */}
+                <div className="absolute inset-0 bg-gradient-to-r from-phoenix-primary/20 via-phoenix-light/10 to-phoenix-primary/20 animate-pulse-phoenix" />
+                
+                <div className="relative flex items-center space-x-3">
+                  <div className="w-3 h-3 rounded-full bg-phoenix-primary animate-pulse-phoenix" />
+                  <div className="text-left">
+                    <div className="text-sm font-medium text-phoenix-primary font-orbitron">PART I</div>
+                    <div className="text-lg font-bold text-stellar-white font-orbitron">The Fall</div>
+                  </div>
+                  <div className="w-2 h-8 bg-gradient-to-b from-phoenix-primary to-phoenix-light rounded-full" />
+                </div>
+
+                {/* Shimmer effect */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                />
+              </motion.button>
+
+              {/* Part II - Coming Soon */}
+              <motion.button
+                className="glass-void px-6 py-3 rounded-lg border border-resistance-light/20 relative overflow-hidden group cursor-not-allowed"
+                whileHover={{ scale: 1.02, boxShadow: "0 4px 15px rgba(59, 130, 246, 0.2)" }}
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+              >
+                <div className="relative flex items-center space-x-3 opacity-60">
+                  <div className="w-3 h-3 rounded-full bg-resistance-light/50 animate-pulse" />
+                  <div className="text-left">
+                    <div className="text-sm font-medium text-resistance-light/70 font-orbitron">PART II</div>
+                    <div className="text-lg font-bold text-gray-400 font-orbitron">Hide & Seek</div>
+                  </div>
+                  <div className="w-2 h-8 bg-gradient-to-b from-resistance-light/30 to-resistance-glow/20 rounded-full" />
+                </div>
+
+                {/* Coming Soon Badge */}
+                <div className="absolute -top-2 -right-2 bg-gradient-to-r from-neon-cyan to-energy-purple text-xs font-bold px-2 py-1 rounded-full text-void-primary transform rotate-12">
+                  COMING SOON
+                </div>
+
+                {/* Hologram flicker effect */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-resistance-light/5 to-transparent opacity-0 group-hover:opacity-100"
+                  animate={{ 
+                    opacity: [0, 0.3, 0],
+                    scale: [1, 1.02, 1]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              </motion.button>
+            </motion.div>
           </motion.div>
 
           {/* Main content area - centered */}
@@ -319,7 +390,7 @@ const StoryPage = () => {
             ))}
           </motion.div>
 
-            {/* Enhanced call to action section */}
+            {/* Guardian's Creed section */}
             <motion.div
               className="mt-20 text-center relative z-20"
               initial={{ opacity: 0, y: 50 }}
@@ -343,7 +414,7 @@ const StoryPage = () => {
                     }}
                     transition={{ duration: 3, repeat: Infinity }}
                   >
-                    Join the Resistance
+                    The Guardian's Creed
                     <motion.div 
                       className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-phoenix-primary to-transparent rounded-full"
                       initial={{ width: 0 }}
@@ -352,46 +423,91 @@ const StoryPage = () => {
                     />
                   </motion.h2>
                   
-                  <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-                    The galaxy needs new heroes. Will you answer the call to unite former enemies, 
-                    forge Phoenix Essence weapons, and reclaim what the Swarm has stolen?
-                  </p>
+                  <motion.p 
+                    className="text-lg md:text-xl text-phoenix-light/80 font-medium italic mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                    viewport={{ once: true }}
+                  >
+                    This is the Creed we live by:
+                  </motion.p>
+
+                  {/* Creed verses */}
+                  <motion.div 
+                    className="space-y-4 mb-8 max-w-3xl mx-auto"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                    viewport={{ once: true }}
+                  >
+                    {[
+                      "We are one people, forged from two",
+                      "Unity is our strength, division our death", 
+                      "From corruption we forge purity",
+                      "In darkness we are the light",
+                      "We never kneel, we never yield"
+                    ].map((verse, index) => (
+                      <motion.div
+                        key={index}
+                        className="flex items-center justify-center group"
+                        initial={{ x: index % 2 === 0 ? -50 : 50, opacity: 0 }}
+                        whileInView={{ x: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.7 + index * 0.1 }}
+                      >
+                        <div className="flex items-center space-x-3 text-gray-300">
+                          <div className="w-1.5 h-1.5 rounded-full bg-phoenix-primary" />
+                          <span className="text-lg md:text-xl font-medium font-orbitron italic">
+                            {verse}
+                          </span>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </motion.div>
                   
-                  <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                    <motion.button
-                      className="btn-phoenix-primary text-lg font-bold px-10 py-4 relative overflow-hidden group"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="relative z-10">Begin Your Legend</span>
-                    </motion.button>
-                    
-                    <motion.button
-                      className="btn-resistance-secondary text-lg font-bold px-10 py-4 relative overflow-hidden group"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="relative z-10">Explore the Chronicles</span>
-                    </motion.button>
-                  </div>
+                  {/* Final declaration */}
+                  <motion.div
+                    className="mb-8"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                  >
+                    <div className="glass-phoenix rounded-lg p-6 border border-phoenix-primary/30">
+                      <motion.h3 
+                        className="text-2xl md:text-3xl font-bold text-phoenix-primary font-orbitron italic"
+                        animate={{
+                          textShadow: [
+                            "0 0 15px rgba(255, 140, 0, 0.6)",
+                            "0 0 25px rgba(255, 140, 0, 0.8)",
+                            "0 0 15px rgba(255, 140, 0, 0.6)"
+                          ]
+                        }}
+                        transition={{ duration: 2.5, repeat: Infinity }}
+                      >
+                        The Phoenix rises, as do we
+                      </motion.h3>
+                    </div>
+                  </motion.div>
 
                   <motion.div 
                     className="mt-12 flex justify-center space-x-8 text-sm text-gray-400"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: 1.5 }}
                   >
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
-                      <span>Guardians Active: 1,000,000+</span>
+                      <span>Swarm Enemies: 9,000,000+</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 rounded-full bg-phoenix-primary animate-pulse" />
-                      <span>Worlds Liberated: 247</span>
+                      <span>Guardian's Creed: Active</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 rounded-full bg-resistance-light animate-pulse" />
-                      <span>Phoenix Essence: Rising</span>
+                      <span>Phoenix Status: Rising</span>
                     </div>
                   </motion.div>
                 </div>
@@ -407,7 +523,7 @@ const StoryPage = () => {
               viewport={{ once: true }}
             >
               <p className="text-phoenix-primary/60 text-sm font-orbitron">
-                ©2024 Swarm Resistance
+                ©2025 Swarm Resistance
               </p>
             </motion.div>
           </div>

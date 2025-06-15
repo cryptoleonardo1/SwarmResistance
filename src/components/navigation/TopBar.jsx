@@ -56,9 +56,13 @@ const TopBar = () => {
   // Fetch balance when wallet is connected
   useEffect(() => {
     const fetchBalance = async () => {
-      if (isConnected) {
-        const bal = await getBalance();
-        setBalance(bal);
+      if (isConnected && getBalance) {
+        try {
+          const bal = await getBalance();
+          setBalance(bal);
+        } catch (error) {
+          console.error('Error fetching balance:', error);
+        }
       }
     };
     fetchBalance();
@@ -102,38 +106,56 @@ const TopBar = () => {
     return 'Explorer';
   };
 
-  // Handle warp navigation
-  const handleWarpNavigation = (sectionId) => {
-    // Prevent multiple warp transitions
-    if (isWarping) return;
-    
-    // Ensure we're on the home page
-    if (location.pathname !== '/') {
-      navigate('/', { replace: true });
-    }
-    
-    // Determine warp direction
-    const currentIndex = sectionItems.findIndex(item => item.id === activeSection);
-    const targetIndex = sectionItems.findIndex(item => item.id === sectionId);
-    const direction = targetIndex > currentIndex ? 'forward' : 'backward';
-    
-    // Update active section immediately for visual feedback
-    setActiveSection(sectionId);
-    
-    // Start warp effect
-    setWarpDirection(direction);
-    setIsWarping(true);
-    
-    // Dispatch warp navigation event to HomePage
-    window.dispatchEvent(new CustomEvent('warpNavigation', { 
-      detail: { section: sectionId } 
-    }));
-  };
+  // Updated section of TopBar.jsx - Replace the warp navigation logic
 
-  // Handle warp completion
-  const handleWarpComplete = () => {
-    setIsWarping(false);
-  };
+// Handle warp navigation - SIMPLIFIED AND MORE RELIABLE
+const handleWarpNavigation = (sectionId) => {
+  // Prevent multiple warp transitions
+  if (isWarping) return;
+  
+  console.log('Starting warp navigation to:', sectionId);
+  
+  // Only work on homepage
+  if (location.pathname !== '/') {
+    navigate('/');
+    // Add a small delay to ensure navigation completes
+    setTimeout(() => {
+      triggerSectionNavigation(sectionId);
+    }, 200); // Increased delay
+    return;
+  }
+  
+  triggerSectionNavigation(sectionId);
+};
+
+const triggerSectionNavigation = (sectionId) => {
+  console.log('Triggering section navigation to:', sectionId);
+  
+  // Determine warp direction
+  const currentIndex = sectionItems.findIndex(item => item.id === activeSection);
+  const targetIndex = sectionItems.findIndex(item => item.id === sectionId);
+  const direction = targetIndex > currentIndex ? 'forward' : 'backward';
+  
+  // Update active section immediately for visual feedback
+  setActiveSection(sectionId);
+  
+  // Start warp effect
+  setWarpDirection(direction);
+  setIsWarping(true);
+  
+  console.log('Dispatching warp navigation event');
+  
+  // Dispatch warp navigation event to HomePage
+  window.dispatchEvent(new CustomEvent('warpNavigation', { 
+    detail: { section: sectionId } 
+  }));
+};
+
+// Handle warp completion - SIMPLIFIED
+const handleWarpComplete = () => {
+  console.log('Warp transition completed');
+  setIsWarping(false);
+};
 
   return (
     <>
@@ -191,11 +213,12 @@ const TopBar = () => {
               >
                 {item.name}
                 
-                {/* Enhanced active indicator line */}
+                {/* Enhanced active indicator line - REMOVED layoutId to fix framer-motion warnings */}
                 {activeSection === item.id && location.pathname === '/' && (
                   <motion.div
                     className="absolute -bottom-2 left-0 right-0 h-1 bg-phoenix-primary shadow-phoenix rounded-full"
-                    layoutId="activeSection"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -326,12 +349,12 @@ const TopBar = () => {
                           </motion.button>
                         </div>
                         
-                        {/* Phoenix Essence */}
+                        {/* Meda Gas */}
                         {userProfile && (
                           <div className="mt-1 flex items-center justify-between">
-                            <span className="text-xs text-neutral-light">Phoenix Essence:</span>
+                            <span className="text-xs text-neutral-light">Meda Gas:</span>
                             <span className="text-xs text-phoenix-primary font-bold">
-                              {userProfile.medaGas.toLocaleString()}
+                              {userProfile.medaGas?.toLocaleString() || 0}
                             </span>
                           </div>
                         )}

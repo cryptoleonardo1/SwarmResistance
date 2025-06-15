@@ -180,7 +180,7 @@ const MarketplacePage = () => {
               transition={{ duration: 0.8, delay: 0.5 }}
               viewport={{ once: true }}
             >
-              The Phoenix Essence trading hub is under construction. Legendary weapons and Hero Artifacts await.
+              The NFT trading hub is under construction. Legendary weapons, Hero Artifacts and Liberated Lands await.
             </motion.p>
           </motion.div>
 
@@ -267,7 +267,7 @@ const MarketplacePage = () => {
               {/* Feature status */}
               <div className="grid md:grid-cols-2 gap-4">
                 {[
-                  { name: "Phoenix Essence Exchange", status: "Complete", color: "text-success-green" },
+                  { name: "Trading Functionality", status: "Complete", color: "text-success-green" },
                   { name: "Hero Artifact Vault", status: "Testing", color: "text-phoenix-primary" },
                   { name: "Weapon Forge", status: "In Progress", color: "text-warning-orange" },
                   { name: "Trade Security", status: "Finalizing", color: "text-resistance-light" }
@@ -317,7 +317,7 @@ const MarketplacePage = () => {
                   
                   <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                     Master artisans are forging the ultimate trading platform where Heroes and Weapons 
-                    become legendary assets. Powered by Phoenix Essence, secured by Guardian protocols.
+                    become legendary assets. Powered by Meda Gas, secured by Guardian protocols.
                   </p>
 
                   <motion.div 
@@ -343,7 +343,7 @@ const MarketplacePage = () => {
               </div>
             </motion.div>
 
-            {/* Footer section */}
+            {/* Footer section 
             <motion.div 
               className="text-center py-8 mt-16"
               initial={{ opacity: 0 }}
@@ -354,6 +354,7 @@ const MarketplacePage = () => {
                 ©2025 Swarm Resistance - Forging Legendary Assets
               </p>
             </motion.div>
+            */}
           </div>
         </div>
       </div>
