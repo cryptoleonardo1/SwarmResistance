@@ -180,7 +180,7 @@ const AICommanderPage = () => {
               transition={{ duration: 0.8, delay: 0.5 }}
               viewport={{ once: true }}
             >
-              The keeper of all knowledge is being prepared. Soon you'll access the wisdom of ancient heroes.
+              The keeper of all knowledge is being prepared. Soon you will access the wisdom of ancient heroes.
             </motion.p>
           </motion.div>
 
@@ -319,7 +319,7 @@ const AICommanderPage = () => {
                   </motion.h3>
                   
                   <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                    The AI Commander is absorbing the collective wisdom of legendary heroes. Soon you'll 
+                    The AI Commander is absorbing the collective wisdom of legendary heroes. Soon you will 
                     commune with the greatest tactical minds in Guardian history through advanced holographic interface.
                   </p>
 

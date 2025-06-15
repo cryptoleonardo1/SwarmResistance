@@ -234,7 +234,7 @@ const StoryPage = () => {
               viewport={{ once: true }}
             >
               From the fall of ancient empires to the rise of the Resistance—witness the thousand-year saga 
-              that transformed sworn enemies into humanity's last hope against extinction.
+              that transformed sworn enemies into our last hope against extinction.
             </motion.p>
 
             {/* Story Parts Navigation */}

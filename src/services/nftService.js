@@ -142,28 +142,37 @@ class NFTService {
             power = attributes.security + attributes.anonymity + attributes.innovation;
           }
 
-          // Get hero image using tokenIdToCardTypeSznId method
+          // Get hero image and cardTypeSznId using tokenIdToCardTypeSznId method
+          let cardTypeSznId = null;
           try {
-            const cardTypeSznId = await this.heroesContract.tokenIdToCardTypeSznId(tokenId);
-            const imageId = Number(cardTypeSznId).toString();
+            const cardTypeSznIdResult = await this.heroesContract.tokenIdToCardTypeSznId(tokenId);
+            cardTypeSznId = Number(cardTypeSznIdResult);
+            const imageId = cardTypeSznId.toString();
             heroImage = `/${imageId}.png`;
             
-            console.log(`Hero #${tokenId} image ID:`, imageId, 'Image path:', heroImage);
+            console.log(`Hero #${tokenId} cardTypeSznId:`, cardTypeSznId, 'Image path:', heroImage);
             
           } catch (imageError) {
-            console.error(`Could not fetch image ID for Hero token ${tokenId}:`, imageError.message);
+            console.error(`Could not fetch cardTypeSznId for Hero token ${tokenId}:`, imageError.message);
             // No fallback image - will show default icon
             heroImage = null;
+            cardTypeSznId = null;
           }
 
-          // Define hero metadata based on token ID
+          // Define hero metadata based on token ID and cardTypeSznId
           let heroName = `Hero #${tokenId}`;
-          let heroRarity = this.getRandomRarity(); // Default fallback
-          
+          let heroRarity = 'Unknown'; // Will be calculated in frontend
+
+          // Calculate rarity based on cardTypeSznId if available
+          if (cardTypeSznId) {
+            if (cardTypeSznId >= 1000 && cardTypeSznId <= 1999) heroRarity = 'Collectible';
+            else if (cardTypeSznId >= 2000 && cardTypeSznId <= 2999) heroRarity = 'Revolution';
+            else if (cardTypeSznId >= 3000 && cardTypeSznId <= 3999) heroRarity = 'Legacy';
+          }
+
           // Special case for token ID 3686 (you can expand this later)
           if (tokenIdNumber === 3686) {
             heroName = 'Elite Resistance Fighter #3686';
-            heroRarity = 'Revolution';
           }
 
           heroes.push({
@@ -174,6 +183,7 @@ class NFTService {
             power: power,
             attributes: attributes,
             image: heroImage,
+            cardTypeSznId: cardTypeSznId, // The blockchain-fetched 4-digit number
             metadata,
             contractAddress: NFT_CONTRACTS.HEROES,
             type: 'hero'
@@ -435,8 +445,11 @@ class NFTService {
         }
       }
 
-      console.log(`Found ${lands.length} Lands NFTs`);
-      return { nfts: lands, count: lands.length };
+      console.log(`Found ${lands.length} Land types with total ${lands.reduce((sum, land) => sum + land.balance, 0)} territories`);
+      
+      // Return both the unique land types and total count of all tickets
+      const totalLandTickets = lands.reduce((sum, land) => sum + land.balance, 0);
+      return { nfts: lands, count: totalLandTickets };
 
     } catch (error) {
       console.error('Error fetching Lands NFTs:', error);

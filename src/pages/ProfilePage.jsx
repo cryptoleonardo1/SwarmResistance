@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, Clock, TrendingUp, Sword, MapPin, RefreshCw } from 'lucide-react';
+import { Trophy, Zap, Edit2, Save, X, Calendar, Award, Shield, Clock, TrendingUp, Sword, MapPin, RefreshCw, Copy, Check } from 'lucide-react';
 import { useWeb3Auth } from '../contexts/Web3AuthContext';
 import { RANKS } from '../services/userProfile.service';
 
@@ -9,7 +9,7 @@ const ProfilePage = () => {
     userProfile, 
     updateUserProfile, 
     isConnected, 
-    walletAddress,  // ADD THIS LINE
+    walletAddress,
     medaGasBalance, 
     isLoadingBalance, 
     refreshMedaGasBalance,
@@ -24,6 +24,7 @@ const ProfilePage = () => {
     email: '',
   });
   const [imageErrors, setImageErrors] = useState(new Set());
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (userProfile) {
@@ -54,6 +55,15 @@ const ProfilePage = () => {
 
   const handleImageError = (heroId) => {
     setImageErrors(prev => new Set([...prev, heroId]));
+  };
+
+  // Helper function to determine rarity based on the actual cardTypeSznId from blockchain
+  const getHeroRarityFromCardType = (cardTypeSznId) => {
+    const cardType = parseInt(cardTypeSznId);
+    if (cardType >= 1000 && cardType <= 1999) return 'Collectible';
+    if (cardType >= 2000 && cardType <= 2999) return 'Revolution';
+    if (cardType >= 3000 && cardType <= 3999) return 'Legacy';
+    return 'Unknown'; // For debugging
   };
 
   if (!isConnected) {
@@ -332,18 +342,10 @@ const ProfilePage = () => {
     switch (rarity) {
       case 'Revolution':
         return 'text-meda-gold border-meda-gold/30 bg-meda-gold/10';
-      case 'Influencer':
+      case 'Legacy':
         return 'text-nebula-pink border-nebula-pink/30 bg-nebula-pink/10';
       case 'Collectible':
         return 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10';
-      case 'Legendary':
-        return 'text-meda-gold border-meda-gold/30 bg-meda-gold/10';
-      case 'Epic':
-        return 'text-nebula-pink border-nebula-pink/30 bg-nebula-pink/10';
-      case 'Rare':
-        return 'text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10';
-      case 'Common':
-        return 'text-gray-400 border-gray-400/30 bg-gray-400/10';
       default:
         return 'text-gray-400 border-gray-400/30 bg-gray-400/10';
     }
@@ -558,9 +560,30 @@ const ProfilePage = () => {
                     <p className="text-gray-400 mb-2 text-lg">{userProfile.email || 'No secure comm channel set'}</p>
                     
                     {/* Token Address */}
-                    <p className="text-gray-500 mb-4 text-sm font-mono">
-                      Token: {walletAddress ? `${walletAddress.slice(0, 10)}...${walletAddress.slice(-8)}` : 'No wallet connected'}
-                    </p>
+                    <div className="flex items-center gap-2 mb-4 justify-center lg:justify-start">
+                      <span className="text-gray-500 text-sm font-mono">
+                        Token: {walletAddress ? `${walletAddress.slice(0, 10)}...${walletAddress.slice(-8)}` : 'No wallet connected'}
+                      </span>
+                      {walletAddress && (
+                        <motion.button
+                          onClick={() => {
+                            navigator.clipboard.writeText(walletAddress);
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                          }}
+                          className="text-gray-400 hover:text-neon-cyan transition-colors p-1"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          title="Copy full token address"
+                        >
+                          {copied ? (
+                            <Check size={14} className="text-energy-green" />
+                          ) : (
+                            <Copy size={14} />
+                          )}
+                        </motion.button>
+                      )}
+                    </div>
                     
                     {/* Resistance Member Since */}
                     <div className="flex items-center gap-2 text-gray-400 justify-center lg:justify-start mb-6">
@@ -759,14 +782,14 @@ const ProfilePage = () => {
                       </div>
                       
                       {/* Active indicator */}
-{activeTab === tab.id && (
-  <motion.div
-    className="absolute -bottom-1 left-1/2 w-12 h-1 bg-meda-gold rounded-full"
-    initial={{ scaleX: 0, x: '-50%' }}
-    animate={{ scaleX: 1, x: '-50%' }}
-    transition={{ duration: 0.3 }}
-  />
-)}
+                      {activeTab === tab.id && (
+                        <motion.div
+                          className="absolute -bottom-1 left-1/2 w-12 h-1 bg-meda-gold rounded-full"
+                          initial={{ scaleX: 0, x: '-50%' }}
+                          animate={{ scaleX: 1, x: '-50%' }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      )}
                     </div>
                   </motion.button>
                 );
@@ -812,79 +835,115 @@ const ProfilePage = () => {
                   ) : nftData.heroes.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {nftData.heroes.map((hero) => {
-                        const heroKey = hero.id || hero.tokenId;
-                        const hasImageError = imageErrors.has(heroKey);
-                        const shouldShowImage = hero.image && !hasImageError;
-                        
-                        return (
-                          <motion.div
-                            key={heroKey}
-                            className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
-                            whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
-                          >
-                            <div className="aspect-[637/1000] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden relative">
-                              {shouldShowImage ? (
-                                <img 
-                                  src={hero.image} 
-                                  alt={hero.name}
-                                  className="w-full h-full object-contain rounded-lg"
-                                  onError={() => handleImageError(heroKey)}
-                                />
-                              ) : (
-                                <Shield size={48} className="text-meda-gold" />
-                              )}
-                            </div>
-                            
-                            {/* Hero Details */}
-                            <div className="space-y-3">
-                              <h4 className="font-bold text-stellar-white text-lg">
-                                {hero.name || `Hero #${hero.tokenId}`}
-                              </h4>
-                              
-                              <div className="text-xs text-gray-500">
-                                Token ID: {hero.tokenId}
-                              </div>
-                              
-                              {/* Show attributes if available */}
-                              {hero.attributes && (
-                                <div className="space-y-2">
-                                  <div className="grid grid-cols-3 gap-2 text-xs">
-                                    <div className="text-center">
-                                      <div className="text-blue-400 font-semibold">{hero.attributes.security}</div>
-                                      <div className="text-gray-400">Security</div>
-                                    </div>
-                                    <div className="text-center">
-                                      <div className="text-purple-400 font-semibold">{hero.attributes.anonymity}</div>
-                                      <div className="text-gray-400">Anonymity</div>
-                                    </div>
-                                    <div className="text-center">
-                                      <div className="text-cyan-400 font-semibold">{hero.attributes.innovation}</div>
-                                      <div className="text-gray-400">Innovation</div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                              
-                              <div className="flex justify-between items-center">
-                                <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(hero.rarity)}`}>
-                                  {hero.rarity}
-                                </span>
-                                <div className="text-right">
-                                  <div className="text-sm text-gray-400">
-                                    {hero.attributes ? 'Total Power' : 'Power'}
-                                  </div>
-                                  <div className="text-lg font-bold text-energy-green">{hero.power}</div>
-                                  {hero.attributes && (
-                                    <div className="text-xs text-gray-500">
-                                      ({hero.attributes.security + hero.attributes.anonymity + hero.attributes.innovation})
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </motion.div>
-                        );
-                      })}
+  const heroKey = hero.id || hero.tokenId;
+  const hasImageError = imageErrors.has(heroKey);
+  const shouldShowImage = hero.image && !hasImageError;
+  
+  // Use the cardTypeSznId from the NFT service (already fetched from blockchain)
+  const cardTypeSznId = hero.cardTypeSznId || 'Unknown';
+  const heroRarity = hero.cardTypeSznId ? getHeroRarityFromCardType(hero.cardTypeSznId) : 'Unknown';
+  
+  const totalPower = hero.attributes 
+    ? hero.attributes.security + hero.attributes.anonymity + hero.attributes.innovation
+    : hero.power || 0;
+  
+  return (
+    <motion.div
+      key={heroKey}
+      className="bg-space-blue/30 rounded-xl border border-cosmic-purple/30 overflow-hidden"
+      whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
+    >
+      {/* Hero Image - Full Display */}
+      <div className="aspect-[637/1000] bg-gradient-to-br from-cosmic-purple to-space-blue flex items-center justify-center overflow-hidden">
+        {shouldShowImage ? (
+          <img 
+            src={hero.image} 
+            alt={`Hero ${hero.tokenId}`}
+            className="w-full h-full object-contain"
+            onError={() => handleImageError(heroKey)}
+          />
+        ) : (
+          <Shield size={48} className="text-meda-gold" />
+        )}
+      </div>
+      
+      {/* Hero Info Below Image */}
+      <div className="p-4 space-y-4">
+        
+        {/* Power - Same style as weapons (WITH ICON) */}
+        <div className="text-center mb-4">
+          <motion.div 
+            className="inline-flex items-center gap-2 glassmorphism px-6 py-3 rounded-xl border border-energy-green/40"
+            whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34, 197, 94, 0.4)' }}
+          >
+            <Zap size={20} className="text-energy-green" />
+            <span className="text-2xl font-bold text-energy-green font-orbitron">
+              Power {totalPower}
+            </span>
+          </motion.div>
+        </div>
+        
+        {/* Attributes - Enhanced with label and better spacing */}
+        {hero.attributes && (
+          <div className="mb-4">
+            <div className="text-center mb-3">
+              <span className="text-sm font-medium text-gray-300 uppercase tracking-wider">
+                Attributes
+              </span>
+            </div>
+            <div className="flex justify-center gap-2">
+              <motion.div 
+                className="relative glassmorphism px-4 py-3 rounded-lg border border-blue-400/30 text-center min-w-[60px]"
+                whileHover={{ scale: 1.05, borderColor: 'rgba(96, 165, 250, 0.6)' }}
+                title="Security"
+              >
+                <div className="text-xl font-bold text-blue-400">{hero.attributes.security}</div>
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full opacity-60"></div>
+                </div>
+              </motion.div>
+              <motion.div 
+                className="relative glassmorphism px-4 py-3 rounded-lg border border-purple-400/30 text-center min-w-[60px]"
+                whileHover={{ scale: 1.05, borderColor: 'rgba(167, 139, 250, 0.6)' }}
+                title="Anonymity"
+              >
+                <div className="text-xl font-bold text-purple-400">{hero.attributes.anonymity}</div>
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full opacity-60"></div>
+                </div>
+              </motion.div>
+              <motion.div 
+                className="relative glassmorphism px-4 py-3 rounded-lg border border-cyan-400/30 text-center min-w-[60px]"
+                whileHover={{ scale: 1.05, borderColor: 'rgba(34, 211, 238, 0.6)' }}
+                title="Innovation"
+              >
+                <div className="text-xl font-bold text-cyan-400">{hero.attributes.innovation}</div>
+                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full opacity-60"></div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        )}
+        
+        {/* Bottom Row - Enhanced with better spacing and styling (NO CARD TYPE) */}
+        <div className="flex justify-between items-center">
+          <motion.span 
+            className={`text-sm px-3 py-1.5 rounded-full border font-medium ${getRarityColor(heroRarity)}`}
+            whileHover={{ scale: 1.05 }}
+          >
+            {heroRarity}
+          </motion.span>
+          <div className="text-right">
+            <span className="text-sm text-gray-400 font-mono">
+              Token ID #{hero.tokenId}
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+})}
                     </div>
                   ) : (
                     <div className="text-center py-12">
@@ -932,83 +991,118 @@ const ProfilePage = () => {
                     </div>
                   ) : nftData.weapons.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {nftData.weapons.map((weapon) => (
-                        <motion.div
-                          key={weapon.id || weapon.tokenId}
-                          className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
-                          whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
-                        >
-                          <div className="aspect-[637/1000] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                            {weapon.video ? (
-                              <video 
-                                src={weapon.video} 
-                                autoPlay
-                                loop
-                                muted
-                                className="w-full h-full object-contain rounded-lg"
-                                onError={(e) => {
-                                  // Fallback to icon if video fails to load
-                                  e.target.style.display = 'none';
-                                  e.target.nextSibling.style.display = 'flex';
-                                }}
-                              />
-                            ) : null}
-                            <div 
-                              className="w-full h-full flex items-center justify-center"
-                              style={{ display: weapon.video ? 'none' : 'flex' }}
-                            >
-                              <Sword size={48} className="text-neon-cyan" />
-                            </div>
-                          </div>
-                          
-                          {/* Weapon Details */}
-                          <div className="space-y-3">
-                            <h4 className="font-bold text-stellar-white text-lg">{weapon.name}</h4>
-                            
-                            <div className="text-xs text-gray-500">
-                              Token ID: {weapon.tokenId}
-                              {weapon.type && <div>Type: {weapon.type}</div>}
-                            </div>
-                            
-                            {/* Show attributes if available */}
-                            {weapon.attributes && (
-                              <div className="space-y-2">
-                                <div className="grid grid-cols-3 gap-2 text-xs">
-                                  <div className="text-center">
-                                    <div className="text-red-400 font-semibold">{weapon.attributes.attribute1}</div>
-                                    <div className="text-gray-400">Attr 1</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-orange-400 font-semibold">{weapon.attributes.attribute2}</div>
-                                    <div className="text-gray-400">Attr 2</div>
-                                  </div>
-                                  <div className="text-center">
-                                    <div className="text-yellow-400 font-semibold">{weapon.attributes.attribute3}</div>
-                                    <div className="text-gray-400">Attr 3</div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                            
-                            <div className="flex justify-between items-center">
-                              <span className={`text-sm px-2 py-1 rounded border ${getTierColor(weapon.tier)}`}>
-                                {weapon.tier}
-                              </span>
-                              <div className="text-right">
-                                <div className="text-sm text-gray-400">
-                                  {weapon.attributes ? 'Total Power' : 'Power'}
-                                </div>
-                                <div className="text-lg font-bold text-energy-green">{weapon.power}</div>
-                                {weapon.attributes && (
-                                  <div className="text-xs text-gray-500">
-                                    ({weapon.attributes.attribute1 + weapon.attributes.attribute2 + weapon.attributes.attribute3})
-                                  </div>
-                                )}
+                      {nftData.weapons.map((weapon) => {
+                        const totalPower = weapon.attributes 
+                          ? weapon.attributes.attribute1 + weapon.attributes.attribute2 + weapon.attributes.attribute3
+                          : weapon.power || 0;
+                        
+                        return (
+                          <motion.div
+                            key={weapon.id || weapon.tokenId}
+                            className="bg-space-blue/30 rounded-xl border border-cosmic-purple/30 overflow-hidden"
+                            whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
+                          >
+                            {/* Weapon Image/Video - Full Display */}
+                            <div className="aspect-[637/1000] bg-gradient-to-br from-cosmic-purple to-space-blue flex items-center justify-center overflow-hidden">
+                              {weapon.video ? (
+                                <video 
+                                  src={weapon.video} 
+                                  autoPlay
+                                  loop
+                                  muted
+                                  className="w-full h-full object-contain"
+                                  onError={(e) => {
+                                    // Fallback to icon if video fails to load
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'flex';
+                                  }}
+                                />
+                              ) : null}
+                              <div 
+                                className="w-full h-full flex items-center justify-center"
+                                style={{ display: weapon.video ? 'none' : 'flex' }}
+                              >
+                                <Sword size={48} className="text-neon-cyan" />
                               </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      ))}
+                            
+                            {/* Weapon Info Below Image */}
+                            <div className="p-4 space-y-4">
+                              
+                              {/* Power - Top Center with enhanced styling */}
+                              <div className="text-center mb-4">
+                                <motion.div 
+                                  className="inline-flex items-center gap-2 glassmorphism px-6 py-3 rounded-xl border border-energy-green/40"
+                                  whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34, 197, 94, 0.4)' }}
+                                >
+                                  <Zap size={20} className="text-energy-green" />
+                                  <span className="text-2xl font-bold text-energy-green font-orbitron">
+                                    Power {totalPower}
+                                  </span>
+                                </motion.div>
+                              </div>
+                              
+                              {/* Attributes - Enhanced with label and better spacing */}
+                              {weapon.attributes && (
+                                <div className="mb-4">
+                                  <div className="text-center mb-3">
+                                    <span className="text-sm font-medium text-gray-300 uppercase tracking-wider">
+                                      Attributes
+                                    </span>
+                                  </div>
+                                  <div className="flex justify-center gap-2">
+                                    <motion.div 
+                                      className="relative glassmorphism px-4 py-3 rounded-lg border border-red-400/30 text-center min-w-[60px]"
+                                      whileHover={{ scale: 1.05, borderColor: 'rgba(239, 68, 68, 0.6)' }}
+                                      title="Attribute 1"
+                                    >
+                                      <div className="text-xl font-bold text-red-400">{weapon.attributes.attribute1}</div>
+                                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                                        <div className="w-2 h-2 bg-red-400 rounded-full opacity-60"></div>
+                                      </div>
+                                    </motion.div>
+                                    <motion.div 
+                                      className="relative glassmorphism px-4 py-3 rounded-lg border border-orange-400/30 text-center min-w-[60px]"
+                                      whileHover={{ scale: 1.05, borderColor: 'rgba(251, 146, 60, 0.6)' }}
+                                      title="Attribute 2"
+                                    >
+                                      <div className="text-xl font-bold text-orange-400">{weapon.attributes.attribute2}</div>
+                                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                                        <div className="w-2 h-2 bg-orange-400 rounded-full opacity-60"></div>
+                                      </div>
+                                    </motion.div>
+                                    <motion.div 
+                                      className="relative glassmorphism px-4 py-3 rounded-lg border border-yellow-400/30 text-center min-w-[60px]"
+                                      whileHover={{ scale: 1.05, borderColor: 'rgba(250, 204, 21, 0.6)' }}
+                                      title="Attribute 3"
+                                    >
+                                      <div className="text-xl font-bold text-yellow-400">{weapon.attributes.attribute3}</div>
+                                      <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                                        <div className="w-2 h-2 bg-yellow-400 rounded-full opacity-60"></div>
+                                      </div>
+                                    </motion.div>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {/* Bottom Row - Enhanced with better spacing and styling */}
+                              <div className="flex justify-between items-center">
+                                <motion.span 
+                                  className={`text-sm px-3 py-1.5 rounded-full border font-medium ${getTierColor(weapon.tier)}`}
+                                  whileHover={{ scale: 1.05 }}
+                                >
+                                  {weapon.tier}
+                                </motion.span>
+                                <div className="text-right">
+                                  <span className="text-sm text-gray-400 font-mono">
+                                    Token ID #{weapon.tokenId}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="text-center py-12">
@@ -1056,53 +1150,73 @@ const ProfilePage = () => {
                     </div>
                   ) : nftData.lands.length > 0 ? (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {nftData.lands.map((land) => (
-                        <motion.div
-                          key={land.id || land.tokenId}
-                          className="bg-space-blue/30 rounded-lg p-4 border border-cosmic-purple/30"
-                          whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
-                        >
-                          <div className="aspect-[1909/2664] bg-gradient-to-br from-cosmic-purple to-space-blue rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                            {land.image ? (
-                              <img 
-                                src={land.image} 
-                                alt={land.name}
-                                className="w-full h-full object-contain rounded-lg"
-                                onError={(e) => {
-                                  // Fallback to icon if image fails to load
-                                  e.target.style.display = 'none';
-                                  e.target.nextSibling.style.display = 'flex';
-                                }}
+                      {nftData.lands.map((land) => {
+                        // Calculate power based on rarity
+                        let landPower = 100; // Default for Common
+                        if (land.rarity === 'Rare') landPower = 300;
+                        if (land.rarity === 'Legendary') landPower = 700;
+                        
+                        return (
+                          <motion.div
+                            key={land.id || land.tokenId}
+                            className="bg-space-blue/30 rounded-xl border border-cosmic-purple/30 overflow-hidden"
+                            whileHover={{ scale: 1.02, borderColor: 'rgba(255, 182, 30, 0.5)' }}
+                          >
+                            {/* Land Image - Full Display */}
+                            <div className="aspect-[1909/2664] bg-gradient-to-br from-cosmic-purple to-space-blue flex items-center justify-center overflow-hidden">
+                              {land.image ? (
+                                <img 
+                                  src={land.image} 
+                                  alt={land.name}
+                                  className="w-full h-full object-contain"
+                                  onError={(e) => {
+                                    // Fallback to icon if image fails to load
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'flex';
+                                  }}
+                                />
+                              ) : null}
+                              <MapPin 
+                                size={48} 
+                                className="text-nebula-pink"
+                                style={{ display: land.image ? 'none' : 'block' }}
                               />
-                            ) : null}
-                            <MapPin 
-                              size={48} 
-                              className="text-nebula-pink"
-                              style={{ display: land.image ? 'none' : 'block' }}
-                            />
-                          </div>
-                          
-                          {/* Land Details */}
-                          <div className="space-y-3">
-                            <h4 className="font-bold text-stellar-white text-lg">{land.name}</h4>
-                            
-                            <div className="text-xs text-gray-500">
-                              Token ID: {land.tokenId}
-                              {land.balance > 1 && ` (x${land.balance})`}
                             </div>
                             
-                            <div className="flex justify-between items-center">
-                              <span className={`text-sm px-2 py-1 rounded border ${getRarityColor(land.rarity)}`}>
-                                {land.rarity}
-                              </span>
-                              <div className="text-right">
-                                <div className="text-sm text-gray-400">Plots</div>
-                                <div className="text-lg font-bold text-energy-green">{land.plots}</div>
+                            {/* Land Info Below Image */}
+                            <div className="p-4 space-y-4">
+                              
+                              {/* Power - Top Center with enhanced styling */}
+                              <div className="text-center mb-4">
+                                <motion.div 
+                                  className="inline-flex items-center gap-2 glassmorphism px-6 py-3 rounded-xl border border-energy-green/40"
+                                  whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(34, 197, 94, 0.4)' }}
+                                >
+                                  <Zap size={20} className="text-energy-green" />
+                                  <span className="text-2xl font-bold text-energy-green font-orbitron">
+                                    Power {landPower}
+                                  </span>
+                                </motion.div>
+                              </div>
+                              
+                              {/* Bottom Row - Enhanced with better spacing and styling */}
+                              <div className="flex justify-between items-center">
+                                <motion.span 
+                                  className={`text-sm px-3 py-1.5 rounded-full border font-medium ${getRarityColor(land.rarity)}`}
+                                  whileHover={{ scale: 1.05 }}
+                                >
+                                  {land.rarity}
+                                </motion.span>
+                                <div className="text-right">
+                                  <span className="text-sm text-gray-400">
+                                    Land tickets: {land.balance || 1}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      ))}
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="text-center py-12">

@@ -478,7 +478,7 @@ const Sidebar = () => {
               textShadow: '0 0 12px rgba(255, 140, 0, 0.8)'
             }}
           >
-            "United We Rise"
+            United We Rise
           </p>
         </motion.div>
       </div>

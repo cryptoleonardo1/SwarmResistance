@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
 
@@ -8,7 +8,6 @@ import { Web3AuthProvider } from './contexts/Web3AuthContext';
 // Import Components
 import Sidebar from './components/navigation/Sidebar';
 import TopBar from './components/navigation/TopBar';
-import MobileNav from './components/navigation/MobileNav';
 import OptimizedGpuBackground from './components/effects/OptimizedGpuBackground';
 
 // Import Ready Pages
@@ -24,9 +23,6 @@ import AICommanderPage from './pages/AICommanderPage';
 import BlogPage from './pages/BlogPage';
 import JoinResistanceComingSoonPage from './pages/JoinResistanceComingSoonPage';
 import MedaShooterPage from './pages/MedaShooterPage';
-
-// Import existing Join Resistance page (if you want to keep it as backup)
-// import JoinResistancePage from './pages/JoinResistancePage';
 
 // Placeholder for future page components
 const NFTPage = () => <div className="p-8">NFT Explanations & Concepts (Coming Soon)</div>;
@@ -44,13 +40,7 @@ function App() {
 
 // Content component with access to location
 function AppContent() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
 
   useEffect(() => {
     // Detect if device might have performance issues
@@ -84,7 +74,7 @@ function AppContent() {
       {/* Desktop Sidebar - always expanded */}
       <Sidebar />
       
-      {/* Top Navigation Bar */}
+      {/* Top Navigation Bar - Now handles all mobile navigation via hamburger menu */}
       <TopBar />
       
       {/* Main Content - conditional margins based on route */}
@@ -107,9 +97,6 @@ function AppContent() {
           <Route path="/ai-commander" element={<AICommanderPage />} />
         </Routes>
       </main>
-      
-      {/* Mobile Navigation */}
-      <MobileNav isOpen={mobileMenuOpen} toggleMenu={() => setMobileMenuOpen(!mobileMenuOpen)} />
     </div>
   );
 }

@@ -36,6 +36,16 @@
   --spacing-md: 1.5rem;
   --spacing-lg: 2rem;
   --spacing-xl: 3rem;
+
+  /* Mobile Viewport Height Fix */
+  --vh: 1vh;
+}
+
+/* Mobile viewport height fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --vh: 1dvh;
+  }
 }
 
 * {
@@ -44,10 +54,11 @@
   box-sizing: border-box;
 }
 
-/* SIMPLIFIED HTML SCROLL BEHAVIOR */
+/* Enhanced HTML scroll behavior with mobile support */
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  height: -webkit-fill-available;
   /* Hide scrollbar but keep functionality */
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -60,6 +71,7 @@ html::-webkit-scrollbar {
 
 body {
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   overflow-x: hidden;
   background-color: var(--void-primary);
   background-image: 
@@ -78,9 +90,10 @@ body.warping * {
   pointer-events: none;
 }
 
-/* ===== FULL SCREEN SECTIONS ===== */
+/* ===== RESPONSIVE FULL SCREEN SECTIONS ===== */
 .full-screen-section {
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   width: 100vw;
   position: relative;
   overflow: hidden;
@@ -91,13 +104,15 @@ body.warping * {
   scroll-margin-top: 0;
 }
 
-/* Section content with sidebar consideration */
+/* Responsive section content with mobile-first approach */
 .section-content {
-  padding-top: 5rem; /* For top bar */
+  padding-top: 4rem; /* Mobile: 64px for top bar */
   padding-left: 1rem;
   padding-right: 1rem;
+  padding-bottom: 5rem; /* Mobile: space for bottom nav */
   width: 100%;
   height: 100%;
+  min-height: calc(var(--vh, 1vh) * 100);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -105,21 +120,31 @@ body.warping * {
   z-index: 10;
 }
 
-/* Desktop adjustments */
+/* Tablet adjustments */
 @media (min-width: 768px) {
   .section-content {
+    padding-top: 5rem; /* 80px for top bar */
     padding-left: 2rem;
     padding-right: 2rem;
+    padding-bottom: 2rem; /* No bottom nav on tablet+ */
     max-width: 100vw;
   }
 }
 
-/* Container for section content */
+/* Desktop adjustments with sidebar consideration */
+@media (min-width: 1024px) {
+  .section-content {
+    padding-left: calc(256px + 2rem); /* Sidebar width + padding */
+    padding-right: 2rem;
+  }
+}
+
+/* Container for section content - mobile-first */
 .content-wrapper {
   width: 100%;
   max-width: 1536px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -128,6 +153,12 @@ body.warping * {
 }
 
 @media (min-width: 768px) {
+  .content-wrapper {
+    padding: 0 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
   .content-wrapper {
     padding: 0 2rem;
   }
@@ -148,9 +179,9 @@ section {
   margin-right: 0 !important;
 }
 
-/* ===== PHOENIX DESIGN SYSTEM COMPONENTS ===== */
+/* ===== RESPONSIVE PHOENIX DESIGN SYSTEM COMPONENTS ===== */
 
-/* Typography Styles */
+/* Typography Styles - Mobile-first */
 .heading-orbitron {
   font-family: 'Orbitron', monospace;
   font-weight: 700;
@@ -166,13 +197,21 @@ section {
   display: inline-block;
 }
 
-/* Button Components */
+/* Responsive Button Components */
 .btn-phoenix-primary {
-  @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 relative overflow-hidden;
+  @apply px-4 py-2 md:px-6 md:py-3 rounded-lg font-semibold transition-all duration-300 relative overflow-hidden;
   background: linear-gradient(45deg, var(--phoenix-primary), var(--phoenix-light));
   color: var(--void-primary);
   box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
   text-shadow: none;
+  font-size: 0.875rem; /* Mobile: 14px */
+  min-height: 44px; /* Touch-friendly minimum */
+}
+
+@media (min-width: 768px) {
+  .btn-phoenix-primary {
+    font-size: 1rem; /* Desktop: 16px */
+  }
 }
 
 .btn-phoenix-primary::before {
@@ -193,11 +232,19 @@ section {
 }
 
 .btn-resistance-secondary {
-  @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 relative overflow-hidden;
+  @apply px-4 py-2 md:px-6 md:py-3 rounded-lg font-semibold transition-all duration-300 relative overflow-hidden;
   background: transparent;
   color: var(--resistance-light);
   border: 2px solid var(--resistance-light);
   box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+  font-size: 0.875rem;
+  min-height: 44px;
+}
+
+@media (min-width: 768px) {
+  .btn-resistance-secondary {
+    font-size: 1rem;
+  }
 }
 
 .btn-resistance-secondary:hover {
@@ -207,13 +254,20 @@ section {
   transform: translateY(-2px);
 }
 
-/* Holographic Effects */
+/* Responsive Holographic Effects */
 .hologram {
   background: rgba(59, 130, 246, 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px); /* Reduced for mobile performance */
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid rgba(59, 130, 246, 0.2);
   transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .hologram {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
 
 .hologram:hover {
@@ -224,41 +278,62 @@ section {
 }
 
 .hologram-card {
-  @apply hologram rounded-lg p-6 transition-all duration-300;
+  @apply hologram rounded-lg p-4 md:p-6 transition-all duration-300;
 }
 
 .hologram-card:hover {
   transform: translateY(-4px) scale(1.02);
 }
 
-/* Glass Morphism Enhanced */
+/* Mobile-optimized Glass Morphism */
 .glass-phoenix {
   background: rgba(255, 140, 0, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px); /* Reduced for mobile */
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 140, 0, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+@media (min-width: 768px) {
+  .glass-phoenix {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
 .glass-resistance {
   background: rgba(59, 130, 246, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(59, 130, 246, 0.2);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+@media (min-width: 768px) {
+  .glass-resistance {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
 .glass-void {
   background: rgba(15, 15, 35, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-/* Section Title Styling */
+@media (min-width: 768px) {
+  .glass-void {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* Responsive Section Title Styling */
 .section-title-phoenix {
-  @apply text-4xl md:text-5xl font-bold text-center mb-6 relative;
+  @apply text-2xl md:text-4xl lg:text-5xl font-bold text-center mb-4 md:mb-6 relative;
   font-family: 'Orbitron', monospace;
   background: linear-gradient(120deg, var(--phoenix-primary), var(--phoenix-light));
   -webkit-background-clip: text;
@@ -267,29 +342,45 @@ section {
   color: transparent;
   text-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
   letter-spacing: 0.025em;
+  line-height: 1.2;
 }
 
 .section-title-phoenix::after {
   content: '';
   position: absolute;
-  bottom: -0.75rem;
+  bottom: -0.5rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 3px;
+  width: 60px;
+  height: 2px;
   background: linear-gradient(90deg, transparent, var(--phoenix-primary), transparent);
   border-radius: 2px;
 }
 
-/* Sidebar Fire Effects */
+@media (min-width: 768px) {
+  .section-title-phoenix::after {
+    bottom: -0.75rem;
+    width: 100px;
+    height: 3px;
+  }
+}
+
+/* Mobile-optimized Fire Effects */
 .fire-particle {
   position: absolute;
-  width: 4px;
-  height: 8px;
+  width: 3px;
+  height: 6px;
   background: linear-gradient(to top, var(--phoenix-primary), var(--phoenix-light));
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   animation: fire-flow 4s ease-in-out infinite;
   filter: blur(0.5px);
+}
+
+@media (min-width: 768px) {
+  .fire-particle {
+    width: 4px;
+    height: 8px;
+  }
 }
 
 .fire-particle::before {
@@ -298,16 +389,35 @@ section {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 2px;
-  height: 4px;
+  width: 1.5px;
+  height: 3px;
   background: linear-gradient(to top, rgba(255, 255, 255, 0.8), rgba(255, 180, 77, 0.6));
   border-radius: 50%;
   animation: fire-flow 4s ease-in-out infinite;
 }
 
+@media (min-width: 768px) {
+  .fire-particle::before {
+    width: 2px;
+    height: 4px;
+  }
+}
+
 /* Warp Gate Transitions */
 .warp-transition {
   animation: warp-gate 0.8s ease-out;
+}
+
+/* Mobile-optimized animations with reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .fire-particle,
+  .fire-particle::before,
+  .animate-pulse-phoenix,
+  .animate-pulse-resistance,
+  .animate-float,
+  .animate-hologram-flicker {
+    animation: none;
+  }
 }
 
 /* Enhanced Animations */
@@ -498,7 +608,7 @@ section {
   animation: bounce-slow 2s ease-in-out infinite;
 }
 
-/* Enhanced particle effects */
+/* Enhanced particle effects - Mobile optimized */
 .particle-field {
   position: absolute;
   inset: 0;
@@ -528,7 +638,7 @@ section {
   text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
 }
 
-/* Enhanced text glow effects */
+/* Enhanced text glow effects - Mobile optimized */
 .text-shadow-hologram {
   text-shadow: 
     0 0 5px rgba(0, 240, 255, 0.8),
@@ -576,7 +686,13 @@ section {
 
 /* Custom scrollbar styles for other pages */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
+}
+
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
 }
 
 ::-webkit-scrollbar-track {
@@ -625,19 +741,20 @@ section {
   display: none;
 }
 
-/* Responsive adjustments */
+/* Mobile-specific responsive adjustments */
 @media (max-width: 768px) {
   .section-title-phoenix {
-    @apply text-3xl md:text-4xl;
+    @apply text-2xl;
+    line-height: 1.3;
   }
   
   .content-wrapper {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
   
   .fire-particle {
-    width: 3px;
-    height: 6px;
+    width: 2px;
+    height: 4px;
   }
   
   .section-progress {
@@ -650,5 +767,45 @@ section {
   
   .fixed.right-8 {
     display: none;
+  }
+
+  /* Touch-friendly sizing */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Mobile performance optimizations */
+  .hologram {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .glass-phoenix,
+  .glass-resistance,
+  .glass-void {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* Safe area support for devices with home indicators */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .section-content {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+  
+  @media (min-width: 768px) {
+    .section-content {
+      padding-bottom: 2rem;
+    }
+  }
+}
+
+/* Dynamic viewport height setup */
+@media screen and (max-width: 768px) {
+  body {
+    /* iOS Safari fix */
+    height: -webkit-fill-available;
   }
 }

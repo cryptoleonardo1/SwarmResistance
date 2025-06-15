@@ -319,7 +319,7 @@ const BlogPage = () => {
                   </motion.h3>
                   
                   <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                    Our chroniclers are gathering tales from across the galaxy. Soon you'll read firsthand accounts 
+                    Our chroniclers are gathering tales from across the galaxy. Soon you will read firsthand accounts 
                     of legendary battles, Guardian training, and the ongoing fight for freedom.
                   </p>
 

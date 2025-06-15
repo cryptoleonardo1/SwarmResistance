@@ -1,46 +1,47 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import HeroSection from '../components/home/HeroSection';
 import EcosystemOverview from '../components/home/EcosystemOverview';
 import CommunityMetrics from '../components/home/CommunityMetrics';
 import OnboardingSteps from '../components/home/OnboardingSteps';
+import MobileSectionNav from '../components/navigation/MobileSectionNav';
 
 const HomePage = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [isWheelScrolling, setIsWheelScrolling] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const lastWheelTime = useRef(0);
   const containerRef = useRef(null);
-  const navigationTimeout = useRef(null);
 
   // Memoize section order to prevent useEffect dependency issues
   const sectionOrder = useMemo(() => ['home', 'ecosystem', 'metrics', 'join'], []);
-  //const WHEEL_THROTTLE = 1500; // Increased to 1.5 seconds
 
-  // Clear navigation flags after timeout
-  const clearNavigationFlag = () => {
-    if (navigationTimeout.current) {
-      clearTimeout(navigationTimeout.current);
-    }
-    navigationTimeout.current = setTimeout(() => {
-      setIsNavigating(false);
-      document.body.classList.remove('warping');
-    }, 1500);
-  };
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Scroll to section function
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = useCallback((sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const topBarHeight = 80;
+      const topBarHeight = isMobile ? 64 : 80;
       window.scrollTo({
         top: element.offsetTop - topBarHeight,
         behavior: 'smooth'
       });
     }
-  };
+  }, [isMobile]);
 
   // Handle section change with scroll
-  const handleSectionChange = (targetSection, smooth = true) => {
+  const handleSectionChange = useCallback((targetSection, smooth = true) => {
     console.log('Changing section to:', targetSection);
     
     setActiveSection(targetSection);
@@ -56,12 +57,33 @@ const HomePage = () => {
         scrollToSection(targetSection);
       }, 50);
     }
-  };
+  }, [scrollToSection]);
 
-  // Handle wheel scrolling - IMMEDIATE RESPONSE WITH NO THROTTLING
+  // Mobile section change handler for bottom navigation
+  const handleMobileSectionChange = useCallback((targetSection) => {
+    if (!isNavigating && activeSection !== targetSection) {
+      console.log('Mobile navigation: changing to', targetSection);
+      
+      // For mobile, just scroll to section smoothly (no warp effect)
+      setActiveSection(targetSection);
+      
+      // Dispatch section change event
+      window.dispatchEvent(new CustomEvent('sectionChange', { 
+        detail: { section: targetSection } 
+      }));
+      
+      // Smooth scroll to section
+      scrollToSection(targetSection);
+    }
+  }, [isNavigating, activeSection, scrollToSection]);
+
+  // Handle wheel scrolling - Desktop only
   useEffect(() => {
+    // Skip wheel handling on mobile - use standard scrolling
+    if (isMobile) return;
+
     const handleWheel = (e) => {
-      // Always prevent default scroll behavior on homepage
+      // Always prevent default scroll behavior on homepage for desktop
       e.preventDefault();
       
       // Don't handle wheel if currently navigating
@@ -69,7 +91,7 @@ const HomePage = () => {
         return;
       }
 
-      // Much more aggressive throttling - only allow one scroll every 1.5 seconds
+      // Aggressive throttling - only allow one scroll every 1.5 seconds
       const now = Date.now();
       if (now - lastWheelTime.current < 1500) {
         return;
@@ -103,7 +125,6 @@ const HomePage = () => {
         document.body.style.overflow = 'hidden';
         
         // Trigger the same warp navigation as top bar clicks
-        // This will activate the hologram transition
         window.dispatchEvent(new CustomEvent('warpNavigation', { 
           detail: { section: targetSection } 
         }));
@@ -125,9 +146,9 @@ const HomePage = () => {
       // Cleanup - restore scrolling if component unmounts
       document.body.style.overflow = '';
     };
-  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder]);
+  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder, isMobile]);
 
-  // Listen for warp navigation from TopBar - ENSURE PROPER SCROLL POSITIONING
+  // Listen for warp navigation from TopBar
   useEffect(() => {
     const handleWarpNavigation = (event) => {
       const targetSection = event.detail.section;
@@ -149,7 +170,7 @@ const HomePage = () => {
       setTimeout(() => {
         const element = document.getElementById(targetSection);
         if (element) {
-          const topBarHeight = 80;
+          const topBarHeight = isMobile ? 64 : 80;
           window.scrollTo({
             top: element.offsetTop - topBarHeight,
             behavior: 'auto' // Instant scroll
@@ -168,16 +189,13 @@ const HomePage = () => {
     window.addEventListener('warpNavigation', handleWarpNavigation);
     return () => {
       window.removeEventListener('warpNavigation', handleWarpNavigation);
-      if (navigationTimeout.current) {
-        clearTimeout(navigationTimeout.current);
-      }
       // Cleanup
       document.body.style.overflow = '';
       document.body.classList.remove('warping');
     };
-  }, []);
+  }, [isMobile, handleSectionChange]);
 
-  // Simplified scroll tracking - only when not navigating
+  // Standard scroll tracking for mobile - works with normal scrolling
   useEffect(() => {
     const handleScroll = () => {
       // Don't track scroll during navigation or wheel scrolling
@@ -185,8 +203,8 @@ const HomePage = () => {
         return;
       }
       
-      const topBarHeight = 80;
-      const scrollPosition = window.scrollY + topBarHeight + 100; // Increased threshold
+      const topBarHeight = isMobile ? 64 : 80;
+      const scrollPosition = window.scrollY + topBarHeight + 100;
 
       for (let i = sectionOrder.length - 1; i >= 0; i--) {
         const element = document.getElementById(sectionOrder[i]);
@@ -209,20 +227,20 @@ const HomePage = () => {
       scrollTimeout = setTimeout(handleScroll, 100);
     };
 
-    // Only enable scroll tracking after a delay
-    const setupTimeout = setTimeout(() => {
-      window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
-    }, 1000);
+    // Enable scroll tracking for mobile (standard scrolling)
+    window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
 
     return () => {
-      clearTimeout(setupTimeout);
       clearTimeout(scrollTimeout);
       window.removeEventListener('scroll', debouncedHandleScroll);
     };
-  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder]);
+  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder, isMobile]);
 
-  // Keyboard navigation - TRIGGER HOLOGRAM TRANSITION LIKE TOP NAV
+  // Keyboard navigation - Desktop only
   useEffect(() => {
+    // Skip keyboard handling on mobile
+    if (isMobile) return;
+
     const handleKeyDown = (e) => {
       if (isWheelScrolling || isNavigating) return;
 
@@ -259,7 +277,6 @@ const HomePage = () => {
         setIsWheelScrolling(true);
         
         // Trigger the same warp navigation as top bar clicks
-        // This will activate the hologram transition
         window.dispatchEvent(new CustomEvent('warpNavigation', { 
           detail: { section: targetSection } 
         }));
@@ -267,13 +284,13 @@ const HomePage = () => {
         // Clear wheel scrolling flag after hologram transition completes
         setTimeout(() => {
           setIsWheelScrolling(false);
-        }, 1500); // Match hologram transition duration
+        }, 1500);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder]);
+  }, [activeSection, isWheelScrolling, isNavigating, sectionOrder, isMobile]);
 
   // Get section title for progress indicator
   const getSectionTitle = (section) => {
@@ -287,8 +304,11 @@ const HomePage = () => {
   };
 
   return (
-    <div ref={containerRef} className="w-full hide-scrollbar relative">
-      {/* Section Progress Indicator */}
+    <div 
+      ref={containerRef} 
+      className="w-full hide-scrollbar relative"
+    >
+      {/* Section Progress Indicator - Desktop Only */}
       <div className="fixed top-1/2 right-8 transform -translate-y-1/2 z-50 hidden lg:flex flex-col space-y-4">
         {sectionOrder.map((section) => (
           <button
@@ -314,8 +334,6 @@ const HomePage = () => {
         ))}
       </div>
 
-
-
       {/* Sections */}
       <section id="home" className="full-screen-section">
         <HeroSection />
@@ -332,6 +350,15 @@ const HomePage = () => {
       <section id="join" className="full-screen-section">
         <OnboardingSteps />
       </section>
+
+      {/* Mobile Section Navigation - Only show on mobile */}
+      {isMobile && (
+        <MobileSectionNav
+          activeSection={activeSection}
+          onSectionChange={handleMobileSectionChange}
+          isTransitioning={isNavigating}
+        />
+      )}
     </div>
   );
 };
